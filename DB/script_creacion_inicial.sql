@@ -11,6 +11,16 @@ GO
 --				CREAR TABLAS E INSERTAR DATOS
 /****************************************************************/
 
+--TABLA Usuario
+/*
+	Tabla con los usuarios con responsabilidad en el hotel, ya se administrador
+	o recepcionista
+	Id_Usuario: Id_Usuario
+	Password: password encriptada
+	Cantidad_Login: cantidad de login incorrectos
+	Ultima_Fecha: ultima fecha que se logueo
+	Habilitado: Habilitado
+*/
 CREATE TABLE [LA_MINORIA].[Usuario](
 	[Id_Usuario][varchar](20) NOT NULL,
 	[Password][varchar](64) NOT NULL,
@@ -20,6 +30,9 @@ CREATE TABLE [LA_MINORIA].[Usuario](
 	
 	CONSTRAINT UQ_Usuarios_Id_Usuario UNIQUE(Id_Usuario)
 )
+
+--Se agrega usuario admin con contraseña "shadea" w23e
+INSERT INTO LA_MINORIA.Usuario(Id_Usuario,Password) VALUES ('admin','e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7')
 
 --TABLA ROL
 /*
@@ -94,3 +107,7 @@ CREATE TABLE [LA_MINORIA].[Usuario_Rol](
 	CONSTRAINT [FK_Usuario_Rol_Rol_Id_Rol] FOREIGN KEY(Id_Rol)
 		REFERENCES [LA_MINORIA].[Rol] (Id_Rol)
 )
+
+--Se agrega al usuario admin con el rol de administrador
+INSERT INTO LA_MINORIA.Usuario_Rol (Id_Usuario, Id_Rol, Habilitado) values ('admin',1,1)
+
