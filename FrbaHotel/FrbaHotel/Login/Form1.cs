@@ -9,11 +9,17 @@ using System.Windows.Forms;
 
 namespace FrbaHotel.Login
 {
-    public partial class Form1 : Form
+    public partial class Form_Login : Form
     {
-        public Form1()
+        public Form_Login()
         {
             InitializeComponent();
         }
+
+        private void button_salir_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
     }
 }
