@@ -32,7 +32,8 @@ CREATE TABLE [LA_MINORIA].[Usuario](
 )
 
 --Se agrega usuario admin con contraseña "shadea" w23e
-INSERT INTO LA_MINORIA.Usuario(Id_Usuario,Password) VALUES ('admin','e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7')
+INSERT INTO LA_MINORIA.Usuario(Id_Usuario,Password, Cantidad_Login) 
+VALUES ('admin','e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7', 0)
 
 --TABLA ROL
 /*
@@ -68,6 +69,8 @@ CREATE TABLE [LA_MINORIA].[Funcionalidad](
 
 INSERT INTO LA_MINORIA.Funcionalidad(Id_Funcionalidad,Descripcion) VALUES(1,'Login y Seguridad')
 INSERT INTO LA_MINORIA.Funcionalidad(Id_Funcionalidad,Descripcion) VALUES(2,'ABM de Rol')
+INSERT INTO LA_MINORIA.Funcionalidad(Id_Funcionalidad,Descripcion) VALUES(3,'ABM de Usuario')
+INSERT INTO LA_MINORIA.Funcionalidad(Id_Funcionalidad,Descripcion) VALUES(4,'ABM de Hotel')
 
 --TABLA ROL_FUNCIONALIDAD
 /*
@@ -111,3 +114,83 @@ CREATE TABLE [LA_MINORIA].[Usuario_Rol](
 --Se agrega al usuario admin con el rol de administrador
 INSERT INTO LA_MINORIA.Usuario_Rol (Id_Usuario, Id_Rol, Habilitado) values ('admin',1,1)
 
+--TABLA DATOS_USUARIO
+/*
+	Tabla con los datos personales de los usuarios(administrador, recepcionista)
+*/
+CREATE TABLE [LA_MINORIA].[Datos_Usuario](
+	[Id_Usuario][varchar](20) NOT NULL,
+	[Nombre_Apellido][varchar](50) NOT NULL,
+	[Tipo_DNI][varchar](10) NOT NULL,
+	[Nro_DNI][int] NOT NULL,
+	[Telefono][varchar](20) NOT NULL,
+	[Direccion][varchar](50) NOT NULL,
+	[Fecha_Nacimiento][datetime] NOT NULL
+
+	CONSTRAINT [FK_Datos_Usuario_Id_Usuario] FOREIGN KEY (Id_Usuario)
+		REFERENCES [LA_MINORIA].[Usuario](Id_Usuario)
+)
+
+--Ingreso datos del usuario administrador
+INSERT INTO LA_MINORIA.Datos_Usuario (Id_Usuario, Nombre_Apellido, Tipo_DNI, Nro_DNI, Telefono,
+	Direccion, Fecha_Nacimiento)
+VALUES ('admin', 'admin','DNI', 1, '1234-5678','Calle Falsa 123, Algun Pais', getdate())
+
+--TABLA HOTEL
+/*
+	Tabla de los hoteles que se tienen datos
+*/
+CREATE TABLE [LA_MINORIA].[Hotel](
+	[Id_Hotel][Int] IDENTITY(1,1) NOT NULL,
+	[Nombre][varchar](255) NULL,
+	[Mail][varchar](20) NULL,
+	[Telefono][varchar](20) NULL,
+	[Calle_Direccion][varchar](255) NOT NULL,
+	[Calle_Nro][numeric](18,0) NOT NULL,
+	[Ciudad][varchar](255) NOT NULL,
+	[Pais][varchar](255) NULL,
+	[Fecha_Creacion][datetime] NOT NULL,
+	[Habilitado][bit] NOT NULL
+
+	CONSTRAINT UQ_Hotel_Id_Hotel UNIQUE(Id_Hotel),
+	CONSTRAINT [PK_Hotel_Calle_Direccion_Calle_Nro_Ciudad] PRIMARY KEY (Calle_Direccion, Calle_Nro, Ciudad)
+)
+
+INSERT INTO LA_MINORIA.Hotel (Calle_Direccion, Calle_Nro, Ciudad, Pais, Fecha_Creacion, Habilitado)
+SELECT Hotel_Calle,Hotel_Nro_Calle,Hotel_Ciudad,'Argentina',getdate(),1 FROM gd_esquema.Maestra
+	GROUP BY Hotel_Calle,Hotel_Nro_Calle,Hotel_Ciudad
+
+--TABLA HOTEL_ESTRELLAS
+/*
+	Tabla con la cantidad de estrellas y su recargo por hotel
+*/
+CREATE TABLE [LA_MINORIA].[Hotel_Estrellas](
+	[Id_Hotel][Int] NOT NULL,
+	[Cantidad_Estrellas][Int] NOT NULL,
+	[recarga][numeric](18,0) DEFAULT 0
+
+	CONSTRAINT [FK_Hotel_Estrellas_Id_Hotel] FOREIGN KEY (Id_Hotel)
+		REFERENCES [LA_MINORIA].[Hotel](Id_Hotel),
+	CONSTRAINT UQ_Hotel_Estrellas_Id_Hotel UNIQUE (Id_Hotel)
+)
+
+INSERT INTO LA_MINORIA.Hotel_Estrellas (Id_Hotel, Cantidad_Estrellas, recarga)
+SELECT h.Id_Hotel, m.Hotel_CantEstrella, m.Hotel_Recarga_Estrella FROM LA_MINORIA.hotel h LEFT JOIN gd_esquema.Maestra m
+	ON h.Calle_Direccion = m.Hotel_Calle AND h.Calle_Nro = m.Hotel_Nro_Calle AND h.Ciudad = m.Hotel_Ciudad
+	GROUP BY h.Id_Hotel, h.Calle_Direccion, h.Calle_Nro, h.Ciudad, m.Hotel_CantEstrella, m.Hotel_Recarga_Estrella
+
+--TABLA USUARIO_HOTEL
+/*
+	Tabla con los hoteles a los cuales esta asignado cada usuario
+*/
+CREATE TABLE [LA_MINORIA].[Usuario_Hotel](
+	[Id_Usuario][varchar](20) NOT NULL,
+	[Id_Hotel][Int] NOT NULL,
+	[Habilitado][bit] NOT NULL
+
+	CONSTRAINT [FK_Usuario_Hotel_Id_Usuario] FOREIGN KEY (Id_Usuario)
+		REFERENCES [LA_MINORIA].[Usuario](Id_Usuario),
+	CONSTRAINT [FK_Usuario_Hotel_Id_Hotel] FOREIGN KEY (Id_Hotel)
+		REFERENCES [LA_MINORIA].[Hotel](Id_Hotel),
+	CONSTRAINT UQ_Usuario_Hotel_Id_Usuario_Id_Hotel UNIQUE(Id_Usuario, Id_Hotel)
+)
