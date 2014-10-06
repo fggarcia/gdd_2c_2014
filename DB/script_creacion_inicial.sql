@@ -28,6 +28,7 @@ CREATE TABLE [LA_MINORIA].[Usuario](
 	[Ultima_Fecha][datetime] NULL,
 	[Habilitado][bit] NULL
 	
+	CONSTRAINT [PK_Usuario_Id_Usuario] PRIMARY KEY(Id_Usuario),
 	CONSTRAINT UQ_Usuarios_Id_Usuario UNIQUE(Id_Usuario)
 )
 
@@ -47,6 +48,7 @@ CREATE TABLE [LA_MINORIA].[Rol](
 	[Descripcion][varchar](20) NOT NULL,
 	[Habilitado][bit] NULL
 
+	CONSTRAINT [PK_Rol_Id_Rol] PRIMARY KEY(Id_Rol),
 	CONSTRAINT UQ_Rol_Id_Rol UNIQUE(Id_Rol)
 )
 
@@ -64,6 +66,7 @@ CREATE TABLE [LA_MINORIA].[Funcionalidad](
 	[Id_Funcionalidad][Int] NOT NULL,
 	[Descripcion][varchar](40) NOT NULL
 
+	CONSTRAINT [PK_Funcionalidad_Id_Funcionalidad] PRIMARY KEY(Id_Funcionalidad),
 	CONSTRAINT UQ_Funcionalidad_Id_Funcionalidad UNIQUE(Id_Funcionalidad)
 )
 
@@ -104,7 +107,7 @@ CREATE TABLE [LA_MINORIA].[Usuario_Rol](
 	[Id_Rol][Int] NOT NULL,
 	[Habilitado][bit] NULL
 
-	CONSTRAINT UQ_Usuario_Rol_Id_Usuario UNIQUE(Id_Usuario),
+	CONSTRAINT UQ_Usuario_Rol_Id_Usuario_Id_Rol UNIQUE(Id_Usuario, Id_Rol),
 	CONSTRAINT [FK_Usuario_Rol_Usuario_Id_Usuario] FOREIGN KEY(Id_Usuario)
 		REFERENCES [LA_MINORIA].[Usuario] (Id_Usuario),
 	CONSTRAINT [FK_Usuario_Rol_Rol_Id_Rol] FOREIGN KEY(Id_Rol)
@@ -194,3 +197,91 @@ CREATE TABLE [LA_MINORIA].[Usuario_Hotel](
 		REFERENCES [LA_MINORIA].[Hotel](Id_Hotel),
 	CONSTRAINT UQ_Usuario_Hotel_Id_Usuario_Id_Hotel UNIQUE(Id_Usuario, Id_Hotel)
 )
+
+
+--TABLA REGIMEN
+/*
+	Tabla con todos los regimen disponibles
+	NOTA: En la base de datos todos los regimenes son iguales para los hoteles,
+	no es que hay un codigo de regimen en dos hoteles distintos con distintos valores
+*/
+CREATE TABLE [LA_MINORIA].[Regimen](
+	[Id_Regimen][Int]IDENTITY(1,1) NOT NULL,
+	[Descripcion][varchar](255) NOT NULL,
+	[Precio][numeric](18,2) NOT NULL,
+	[Habilitado][bit] NOT NULL
+
+	CONSTRAINT [PK_Regimen_Id_Regimen] PRIMARY KEY (Id_Regimen),
+	CONSTRAINT UQ_Regimen_Descripcion UNIQUE(Descripcion)
+)
+
+INSERT INTO LA_MINORIA.Regimen (Descripcion,Precio,Habilitado)
+SELECT UPPER(LTRIM(RTRIM(Regimen_Descripcion))), Regimen_Precio, 1 FROM gd_esquema.Maestra WHERE Regimen_Descripcion IS NOT NULL
+GROUP BY Regimen_Descripcion, Regimen_Precio
+
+--TABLA REGIMEN_HOTEL
+/*
+	Tabla que almancena los regimenes disponibles para cada hotel
+*/
+
+CREATE TABLE [LA_MINORIA].[Regimen_Hotel](
+	[Id_Hotel][Int] NOT NULL,
+	[Id_Regimen][Int] NOT NULL
+
+	CONSTRAINT [FK_Regimen_Hotel_Id_Hotel] FOREIGN KEY (Id_Hotel)
+		REFERENCES [LA_MINORIA].[Hotel](Id_Hotel),
+	CONSTRAINT [FK_Regimen_Hotel_Id_Regimen] FOREIGN KEY (Id_Regimen)
+		REFERENCES [LA_MINORIA].[Regimen](Id_Regimen),
+	CONSTRAINT UQ_Regimen_Hotel_Id_Hotel_Id_Regimen UNIQUE(Id_Hotel, Id_Regimen)
+)
+
+INSERT INTO LA_MINORIA.Regimen_Hotel (Id_Hotel, Id_Regimen)
+SELECT h.Id_Hotel, r.Id_Regimen FROM LA_MINORIA.Hotel h INNER JOIN gd_esquema.Maestra m
+	ON h.Calle_Direccion = m.Hotel_Calle AND h.Calle_Nro = m.Hotel_Nro_Calle
+	AND h.Ciudad = m.Hotel_Ciudad
+	AND m.Regimen_Descripcion IS NOT NULL
+	INNER JOIN LA_MINORIA.Regimen r ON UPPER(LTRIM(RTRIM(m.Regimen_Descripcion))) = UPPER(LTRIM(RTRIM(r.Descripcion)))
+	GROUP BY h.Id_Hotel, r.Id_Regimen
+
+
+--TABLA TIPO_HABITACION
+/*
+	Tabla con los distintos tipos de habitaciones que existen
+*/
+CREATE TABLE [LA_MINORIA].[Tipo_Habitacion](
+	[Id_Tipo_Habitacion][numeric](18,0) NOT NULL,
+	[Descripcion][varchar](255) NOT NULL,
+	[Porcentual][numeric](18,2) NOT NULL
+
+	CONSTRAINT UQ_Tipo_Habitacion_Id_Tipo_Habitacion UNIQUE (Id_Tipo_Habitacion)
+)
+
+INSERT INTO LA_MINORIA.Tipo_Habitacion (Id_Tipo_Habitacion, Descripcion, Porcentual)
+SELECT m.Habitacion_Tipo_Codigo, UPPER(LTRIM(RTRIM(m.Habitacion_Tipo_Descripcion))), m.Habitacion_Tipo_Porcentual
+	FROM gd_esquema.Maestra m WHERE 
+	m.Habitacion_Tipo_Descripcion IS NOT NULL
+	GROUP BY m.Habitacion_Tipo_Codigo,m.Habitacion_Tipo_Descripcion, m.Habitacion_Tipo_Porcentual
+
+
+--TABLA HABITACION
+/*
+	Tabla con cada habitacion dependiendo del hotel
+*/
+CREATE TABLE [LA_MINORIA].[Habitacion](
+	[Id_Hotel][Int] NOT NULL,
+	[Nro][Int] NOT NULL,
+	[Piso][Int] NOT NULL,
+	[Frente][char](1) NOT NULL,
+	[Habilitado][bit] NOT NULL
+
+	CONSTRAINT [FK_Habitacion_Id_Hotel] FOREIGN KEY (Id_Hotel)
+		REFERENCES [LA_MINORIA].[Hotel](Id_Hotel),
+	CONSTRAINT [PK_Habitacion_Id_Hotel_Nro_Piso] PRIMARY KEY(Id_Hotel, Nro, Piso)
+)
+
+INSERT INTO LA_MINORIA.Habitacion (Id_Hotel, Nro, Piso, Frente, Habilitado)
+SELECT h.Id_Hotel, m.Habitacion_Numero, m.Habitacion_Piso, m.Habitacion_Frente, 1 
+	FROM LA_MINORIA.Hotel h INNER JOIN gd_esquema.Maestra m
+		ON h.Calle_Direccion = m.Hotel_Calle AND h.Calle_Nro = m.Hotel_Nro_Calle
+		AND h.Ciudad = m.Hotel_Ciudad AND m.Habitacion_Numero IS NOT NULL
+	GROUP BY h.Id_Hotel, m.Habitacion_Numero, m.Habitacion_Piso, m.Habitacion_Frente
