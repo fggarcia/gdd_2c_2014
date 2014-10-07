@@ -1,0 +1,4 @@
+C:\Documents and Settings\Nicolas\Escritorio\Repositorio\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Release\ResolveAssemblyReference.cache
+C:\Documents and Settings\Nicolas\Escritorio\Repositorio\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Release\FrbaHotel.Login.Form1.resources
+C:\Documents and Settings\Nicolas\Escritorio\Repositorio\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Release\FrbaHotel.Properties.Resources.resources
+C:\Documents and Settings\Nicolas\Escritorio\Repositorio\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Release\FrbaHotel.csproj.GenerateResource.Cache
