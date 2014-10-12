@@ -285,3 +285,100 @@ SELECT h.Id_Hotel, m.Habitacion_Numero, m.Habitacion_Piso, m.Habitacion_Frente, 
 		ON h.Calle_Direccion = m.Hotel_Calle AND h.Calle_Nro = m.Hotel_Nro_Calle
 		AND h.Ciudad = m.Hotel_Ciudad AND m.Habitacion_Numero IS NOT NULL
 	GROUP BY h.Id_Hotel, m.Habitacion_Numero, m.Habitacion_Piso, m.Habitacion_Frente
+
+--TABLA DOCUMENTOS
+/*
+	Tabla de parametria de tipos de documentos
+*/
+CREATE TABLE [LA_MINORIA].[Tipo_Identificacion](
+	[Id_Tipo_Identificacion][Int]IDENTITY(1,1) NOT NULL,
+	[Descripcion][varchar](255) NOT NULL
+
+	CONSTRAINT [PK_Tipo_Identificacion_Id_Tipo_Identificacion] PRIMARY KEY (Id_Tipo_Identificacion),
+	CONSTRAINT UQ_Tipo_Identificacion_Descripcion UNIQUE (Descripcion)
+)
+
+INSERT INTO LA_MINORIA.Tipo_Identificacion (Descripcion)
+VALUES ('PASAPORTE ARGENTINA')
+
+--TABLA NACIONALIDAD
+/*
+	Tabla de parametria de las nacionalidades
+*/
+CREATE TABLE [LA_MINORIA].[Nacionalidad](
+	[Id_Nacionalidad][Int]IDENTITY(1,1) NOT NULL,
+	[Descripcion][varchar](255) NOT NULL
+
+	CONSTRAINT [PK_Nacionalidad_Id_Nacionalidad] PRIMARY KEY (Id_Nacionalidad),
+	CONSTRAINT UQ_Nacionalidad_Descripcion UNIQUE (Descripcion)
+)
+
+INSERT INTO LA_MINORIA.Nacionalidad (Descripcion)
+SELECT DISTINCT(UPPER(LTRIM(RTRIM(m.Cliente_Nacionalidad)))) 
+	FROM gd_esquema.Maestra m
+	WHERE m.Cliente_Nacionalidad IS NOT NULL
+
+--TABLA TEMP_CLIENTES
+/*
+	Tabla temporal para migrar los clientes
+*/
+CREATE TABLE [LA_MINORIA].[Temp_Clientes](
+	[Nombre][varchar](255) NOT NULL,
+	[Apellido][varchar](255) NOT NULL,
+	[Nro_Identificacion][numeric](18,0) NOT NULL,
+	[Mail][varchar](255) NOT NULL,
+	[Telefono][varchar](255),
+	[Calle_Direccion][varchar](255) NOT NULL,
+	[Calle_Nro][numeric](18,0) NOT NULL,
+	[Calle_Piso][numeric](18,0),
+	[Calle_Depto][varchar](50),
+	[Nacionalidad][varchar](255) NOT NULL,
+	[Fecha_Nacimiento][datetime] NOT NULL,
+)
+INSERT INTO LA_MINORIA.Temp_Clientes (Nombre, Apellido, Nro_Identificacion, Mail, Calle_Direccion, Calle_Nro,
+	Calle_Piso, Calle_Depto, Nacionalidad, Fecha_Nacimiento)
+SELECT Cliente_Nombre, Cliente_Apellido, Cliente_Pasaporte_Nro, Cliente_Mail, Cliente_Dom_Calle, Cliente_Nro_Calle,
+	Cliente_Piso, Cliente_Depto, Cliente_Nacionalidad, Cliente_Fecha_Nac FROM gd_esquema.Maestra WHERE Cliente_Nombre IS NOT NULL
+GROUP BY Cliente_Pasaporte_Nro, Cliente_Nombre, Cliente_Apellido, Cliente_Mail, Cliente_Dom_Calle, Cliente_Nro_Calle,
+	Cliente_Piso, Cliente_Depto, Cliente_Nacionalidad, Cliente_Fecha_Nac
+
+--TABLA CLIENTES
+/*
+	Tabla con los datos personales de los clientes registrados en el sistema
+*/
+CREATE TABLE [LA_MINORIA].[Clientes](
+	[Id_Cliente][Int]IDENTITY(1,1) NOT NULL,
+	[Nombre][varchar](255) NOT NULL,
+	[Apellido][varchar](255) NOT NULL,
+	[Tipo_Identificacion][Int] NOT NULL,
+	[Nro_Identificacion][numeric](18,0) NOT NULL,
+	[Mail][varchar](255) NOT NULL,
+	[Telefono][varchar](255),
+	[Calle_Direccion][varchar](255) NOT NULL,
+	[Calle_Nro][numeric](18,0) NOT NULL,
+	[Calle_Piso][numeric](18,0),
+	[Calle_Depto][varchar](50),
+	[Nacionalidad][Int] NOT NULL,
+	[Fecha_Nacimiento][datetime] NOT NULL,
+	[Habilitado][bit] NOT NULL
+
+	CONSTRAINT [FK_Clientes_Tipo_Identificacion] FOREIGN KEY (Tipo_Identificacion)
+		REFERENCES [LA_MINORIA].[Tipo_Identificacion](Id_Tipo_Identificacion),
+	CONSTRAINT [FK_Clientes_Nacionalidad] FOREIGN KEY (Nacionalidad)
+		REFERENCES [LA_MINORIA].[Nacionalidad](Id_Nacionalidad),
+	CONSTRAINT [PK_Clientes_Tipo_Identificacion_Nro_Identificacion] PRIMARY KEY (Tipo_Identificacion, Nro_Identificacion),
+	CONSTRAINT UQ_Clientes_Mail UNIQUE (Mail)
+)
+
+INSERT INTO LA_MINORIA.Clientes (Nombre, Apellido, Tipo_Identificacion, Nro_Identificacion, Mail, Telefono, Calle_Direccion, Calle_Nro,
+	Calle_Piso, Calle_Depto, Nacionalidad, Fecha_Nacimiento, Habilitado)
+SELECT tc.Nombre, tc.Apellido, ti.Id_Tipo_Identificacion, tc.Nro_Identificacion, tc.Mail, tc.Telefono, tc.Calle_Direccion,
+	tc.Calle_Nro, tc.Calle_Piso, tc.Calle_Depto, n.Id_Nacionalidad, tc.Fecha_Nacimiento, 1
+	FROM LA_MINORIA.Temp_Clientes tc
+		INNER JOIN LA_MINORIA.Tipo_Identificacion ti ON ti.Descripcion = 'PASAPORTE ARGENTINA'
+		INNER JOIN LA_MINORIA.Nacionalidad n ON UPPER(LTRIM(RTRIM(tc.Nacionalidad))) = UPPER(n.Descripcion)
+
+/* TODO: Pensar un fix para el nro de pasaporte = 1652782 */
+
+--ELIMINO TABLA TEMPORAL DE CLIENTES
+DROP TABLE LA_MINORIA.Temp_Clientes

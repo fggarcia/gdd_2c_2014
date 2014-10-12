@@ -12,6 +12,8 @@ DROP TABLE LA_MINORIA.Regimen_Hotel
 
 --PRINCIPALES/BASE
 
+DROP TABLE LA_MINORIA.Tipo_Identificacion
+
 DROP TABLE LA_MINORIA.Funcionalidad
 
 DROP TABLE LA_MINORIA.Tipo_Habitacion
