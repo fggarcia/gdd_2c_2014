@@ -263,29 +263,6 @@ SELECT m.Habitacion_Tipo_Codigo, UPPER(LTRIM(RTRIM(m.Habitacion_Tipo_Descripcion
 	GROUP BY m.Habitacion_Tipo_Codigo,m.Habitacion_Tipo_Descripcion, m.Habitacion_Tipo_Porcentual
 
 
---TABLA HABITACION
-/*
-	Tabla con cada habitacion dependiendo del hotel
-*/
-CREATE TABLE [LA_MINORIA].[Habitacion](
-	[Id_Hotel][Int] NOT NULL,
-	[Nro][Int] NOT NULL,
-	[Piso][Int] NOT NULL,
-	[Frente][char](1) NOT NULL,
-	[Habilitado][bit] NOT NULL
-
-	CONSTRAINT [FK_Habitacion_Id_Hotel] FOREIGN KEY (Id_Hotel)
-		REFERENCES [LA_MINORIA].[Hotel](Id_Hotel),
-	CONSTRAINT [PK_Habitacion_Id_Hotel_Nro_Piso] PRIMARY KEY(Id_Hotel, Nro, Piso)
-)
-
-INSERT INTO LA_MINORIA.Habitacion (Id_Hotel, Nro, Piso, Frente, Habilitado)
-SELECT h.Id_Hotel, m.Habitacion_Numero, m.Habitacion_Piso, m.Habitacion_Frente, 1 
-	FROM LA_MINORIA.Hotel h INNER JOIN gd_esquema.Maestra m
-		ON h.Calle_Direccion = m.Hotel_Calle AND h.Calle_Nro = m.Hotel_Nro_Calle
-		AND h.Ciudad = m.Hotel_Ciudad AND m.Habitacion_Numero IS NOT NULL
-	GROUP BY h.Id_Hotel, m.Habitacion_Numero, m.Habitacion_Piso, m.Habitacion_Frente
-
 --TABLA DOCUMENTOS
 /*
 	Tabla de parametria de tipos de documentos
@@ -396,4 +373,3 @@ CREATE TABLE [LA_MINORIA].[Historial_Baja_Hotel](
 	CONSTRAINT [FK_Historial_Baja_Hotel_Id_Hotel] FOREIGN KEY (Id_Hotel)
 		REFERENCES [LA_MINORIA].[Hotel](Id_Hotel)
 )
-

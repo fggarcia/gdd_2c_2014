@@ -12,6 +12,8 @@ DROP TABLE LA_MINORIA.Regimen_Hotel
 
 DROP TABLE LA_MINORIA.Historial_Baja_Hotel
 
+DROP TABLE LA_MINORIA.Historial_Baja_Habitacion
+
 --PRINCIPALES/BASE
 
 DROP TABLE LA_MINORIA.Clientes
