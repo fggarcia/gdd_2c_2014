@@ -382,3 +382,18 @@ SELECT tc.Nombre, tc.Apellido, ti.Id_Tipo_Identificacion, tc.Nro_Identificacion,
 
 --ELIMINO TABLA TEMPORAL DE CLIENTES
 DROP TABLE LA_MINORIA.Temp_Clientes
+
+--TABLA HISTORIAL_BAJA_HOTEL
+/*
+	Tabla con los registros de baja momentanea del hotel, con sus respectivos momentos
+*/
+CREATE TABLE [LA_MINORIA].[Historial_Baja_Hotel](
+	[Id_Hotel][Int] NOT NULL,
+	[Fecha_Inicio][datetime] NOT NULL,
+	[Fecha_Fin][datetime] NOT NULL,
+	[Motivo][varchar](255) NOT NULL
+
+	CONSTRAINT [FK_Historial_Baja_Hotel_Id_Hotel] FOREIGN KEY (Id_Hotel)
+		REFERENCES [LA_MINORIA].[Hotel](Id_Hotel)
+)
+

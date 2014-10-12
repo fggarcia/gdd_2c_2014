@@ -10,7 +10,13 @@ DROP TABLE LA_MINORIA.Rol_Funcionalidad
 
 DROP TABLE LA_MINORIA.Regimen_Hotel
 
+DROP TABLE LA_MINORIA.Historial_Baja_Hotel
+
 --PRINCIPALES/BASE
+
+DROP TABLE LA_MINORIA.Clientes
+
+DROP TABLE LA_MINORIA.Nacionalidad
 
 DROP TABLE LA_MINORIA.Tipo_Identificacion
 
