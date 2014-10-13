@@ -421,3 +421,141 @@ SELECT tc.Nombre, tc.Apellido, ti.Id_Tipo_Identificacion, tc.Nro_Identificacion,
 
 --ELIMINO TABLA TEMPORAL DE CLIENTES
 DROP TABLE LA_MINORIA.Temp_Clientes
+
+--TABLA ESTADO_RESERVA
+/*
+	Tabla con la parametria de los estados de las reservas
+*/
+
+CREATE TABLE [LA_MINORIA].[Estado_Reserva](
+	[Id_Estado][Int]IDENTITY(1,1) NOT NULL,
+	[Descripcion][varchar](50) NOT NULL
+	
+	CONSTRAINT [PK_Estado_Reserva_Id_Estado] PRIMARY KEY (Id_Estado),
+	CONSTRAINT UQ_Estado_Reserva_Descripcion UNIQUE (Descripcion)
+)
+
+INSERT INTO LA_MINORIA.Estado_Reserva (Descripcion) VALUES ('Reserva Correcta')
+INSERT INTO LA_MINORIA.Estado_Reserva (Descripcion) VALUES ('Reserva Modificada')
+INSERT INTO LA_MINORIA.Estado_Reserva (Descripcion) VALUES ('Reserva Cancelada Por Recepcion')
+INSERT INTO LA_MINORIA.Estado_Reserva (Descripcion) VALUES ('Reserva Cancelada Por Cliente')
+INSERT INTO LA_MINORIA.Estado_Reserva (Descripcion) VALUES ('Reserva Cancelada Por No-Show')
+INSERT INTO LA_MINORIA.Estado_Reserva (Descripcion) VALUES ('Reserva con ingreso')
+
+--TABLA TEMPORAL DE RESERVAS
+
+CREATE TABLE [LA_MINORIA].[Temp_Reservas](
+	[Hotel_Ciudad] [varchar](255) NULL,
+	[Hotel_Calle] [varchar](255) NULL,
+	[Hotel_Nro_Calle] [numeric](18, 0) NULL,
+	[Hotel_CantEstrella] [numeric](18, 0) NULL,
+	[Hotel_Recarga_Estrella] [numeric](18, 0) NULL,
+	[Habitacion_Numero] [numeric](18, 0) NULL,
+	[Habitacion_Piso] [numeric](18, 0) NULL,
+	[Habitacion_Frente] [varchar](50) NULL,
+	[Habitacion_Tipo_Codigo] [numeric](18, 0) NULL,
+	[Habitacion_Tipo_Descripcion] [varchar](255) NULL,
+	[Habitacion_Tipo_Porcentual] [numeric](18, 2) NULL,
+	[Regimen_Descripcion] [varchar](255) NULL,
+	[Regimen_Precio] [numeric](18, 2) NULL,
+	[Reserva_Fecha_Inicio] [datetime] NULL,
+	[Reserva_Codigo] [numeric](18, 0) NULL,
+	[Reserva_Cant_Noches] [numeric](18, 0) NULL,
+	[Estadia_Fecha_Inicio] [datetime] NULL,
+	[Estadia_Cant_Noches] [numeric](18, 0) NULL,
+	[Consumible_Codigo] [numeric](18, 0) NULL,
+	[Consumible_Descripcion] [varchar](255) NULL,
+	[Consumible_Precio] [numeric](18, 2) NULL,
+	[Item_Factura_Cantidad] [numeric](18, 0) NULL,
+	[Item_Factura_Monto] [numeric](18, 2) NULL,
+	[Factura_Nro] [numeric](18, 0) NULL,
+	[Factura_Fecha] [datetime] NULL,
+	[Factura_Total] [numeric](18, 2) NULL,
+	[Cliente_Pasaporte_Nro] [numeric](18, 0) NULL,
+	[Cliente_Apellido] [varchar](255) NULL,
+	[Cliente_Nombre] [varchar](255) NULL,
+	[Cliente_Fecha_Nac] [datetime] NULL,
+	[Cliente_Mail] [varchar](255) NULL,
+	[Cliente_Dom_Calle] [varchar](255) NULL,
+	[Cliente_Nro_Calle] [numeric](18, 0) NULL,
+	[Cliente_Piso] [numeric](18, 0) NULL,
+	[Cliente_Depto] [varchar](50) NULL,
+	[Cliente_Nacionalidad] [varchar](255) NULL
+)
+
+INSERT INTO LA_MINORIA.Temp_Reservas 
+SELECT * FROM gd_esquema.Maestra WHERE Reserva_Codigo IS NOT NULL
+
+--TABLA RESERVA
+/*
+	Tabla con todas las reservas hasta la fecha
+*/
+CREATE TABLE [LA_MINORIA].[Reserva](
+	[Id_Reserva][numeric](18,0) NOT NULL,
+	[Fecha_Inicio][datetime] NOT NULL,
+	[Estadia][Int] NOT NULL,
+	[Tipo_Regimen][Int] NOT NULL,
+	[Estado][Int] NOT NULL
+
+	CONSTRAINT [FK_Reserva_Tipo_Regimen] FOREIGN KEY (Tipo_Regimen)
+		REFERENCES [LA_MINORIA].[Regimen](Id_Regimen),
+	CONSTRAINT [FK_Reserva_Estado] FOREIGN KEY (Estado)
+		REFERENCES [LA_MINORIA].[Estado_Reserva](Id_Estado),
+	CONSTRAINT [PK_Reservar_Id_Reserva] PRIMARY KEY (Id_Reserva)
+)
+
+INSERT INTO LA_MINORIA.Reserva(Id_Reserva, Fecha_Inicio, Estadia, Tipo_Regimen, Estado)
+SELECT tr.Reserva_Codigo, tr.Reserva_Fecha_Inicio, tr.Reserva_Cant_Noches, r.Id_Regimen, 1 FROM LA_MINORIA.Temp_Reservas tr 
+	INNER JOIN LA_MINORIA.Regimen r
+	ON UPPER(LTRIM(RTRIM(tr.Regimen_Descripcion))) = UPPER(LTRIM(RTRIM(r.Descripcion)))
+	GROUP BY tr.Reserva_Codigo, tr.Reserva_Fecha_Inicio, tr.Reserva_Cant_Noches, r.Id_Regimen
+
+--ACTUALIZO A ESTADO 'Reserva con ingreso' a todas aquellas reservas ques se facturaron
+
+UPDATE LA_MINORIA.Reserva
+SET Estado = (SELECT Id_Estado FROM LA_MINORIA.Estado_Reserva 
+WHERE UPPER(LTRIM(RTRIM(Descripcion))) = UPPER(LTRIM(RTRIM('Reserva con ingreso'))))
+WHERE EXISTS(SELECT 1 FROM LA_MINORIA.Temp_Reservas
+	WHERE Id_Reserva = Reserva_Codigo AND Factura_Nro IS NOT NULL AND Consumible_Codigo IS NULL)
+
+--ACTUALIZO A ESTADO 'Reserva Cancelada Por Cliente' a aquellas que paso la fecha de incio y el periodo de estadia y no tiene facturacion
+UPDATE LA_MINORIA.Reserva
+SET Estado = (SELECT Id_Estado FROM LA_MINORIA.Estado_Reserva 
+	WHERE UPPER(LTRIM(RTRIM(Descripcion))) = UPPER(LTRIM(RTRIM('Reserva Cancelada Por Cliente'))))
+WHERE EXISTS(SELECT 1 FROM LA_MINORIA.Temp_Reservas
+	WHERE Id_Reserva = Reserva_Codigo AND DATEADD(DAY, Reserva_Cant_Noches, Reserva_Fecha_Inicio) > GETDATE()
+	AND Factura_Nro IS NULL
+)
+
+--TABLA HABITACION_RESERVA
+/*
+	Tabla con las habitaciones reservadas en cada hotel por reserva
+*/
+CREATE TABLE [LA_MINORIA].[Habitacion_Reserva](
+	[Id_Hotel][Int] NOT NULL,
+	[Id_Reserva][numeric](18,0) NOT NULL,
+	[Habitacion_Nro][Int] NOT NULL,
+	[Habitacion_Piso][Int] NOT NULL
+
+	CONSTRAINT [FK_Habitacion_Reserva_Id_Reserva] FOREIGN KEY (Id_Reserva)
+		REFERENCES [LA_MINORIA].[Reserva](Id_Reserva),
+	CONSTRAINT [FK_Habitacion_Reserva_Id_Hotel_Habitacion_Nro_Habitacion_Piso] FOREIGN KEY (Id_Hotel,Habitacion_Nro, Habitacion_Piso)
+		REFERENCES [LA_MINORIA].[Habitacion](Id_Hotel,Nro,Piso)
+)
+/*
+Comprobado por la query 
+SELECT Reserva_Codigo, COUNT(Reserva_Codigo) FROM LA_MINORIA.Temp_Reservas
+WHERE Estadia_Fecha_Inicio IS NULL
+GROUP BY Reserva_Codigo
+HAVING COUNT(*) > 1
+
+No existen reservas con mas de una habitacion
+*/
+INSERT INTO LA_MINORIA.Habitacion_Reserva (Id_Hotel, Id_Reserva, Habitacion_Nro, Habitacion_Piso)
+SELECT h.Id_Hotel, tr.Reserva_Codigo, tr.Habitacion_Numero, tr.Habitacion_Piso FROM LA_MINORIA.Temp_Reservas tr 
+	INNER JOIN LA_MINORIA.Hotel h
+	ON tr.Hotel_Ciudad = h.Ciudad AND tr.Hotel_Calle = h.Calle_Direccion AND tr.Hotel_Nro_Calle = h.Calle_Nro
+	GROUP BY tr.Reserva_Codigo, tr.Habitacion_Numero, tr.Habitacion_Piso, h.Id_Hotel
+
+--ELIMINO TABLA TEMPORAL DE RESERVAS
+DROP TABLE LA_MINORIA.Temp_Reservas
