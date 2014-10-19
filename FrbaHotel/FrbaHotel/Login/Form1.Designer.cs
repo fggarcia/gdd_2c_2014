@@ -123,6 +123,7 @@
             this.Controls.Add(this.textBox_usuario);
             this.Name = "Form_Login";
             this.Text = "Form1";
+            this.Load += new System.EventHandler(this.Form_Login_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
