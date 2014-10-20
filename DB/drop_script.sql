@@ -4,7 +4,7 @@ DROP TABLE LA_MINORIA.Usuario_Hotel
 
 DROP TABLE LA_MINORIA.Hotel_Estrellas
 
-DROP TABLE La_MINORIA.Usuario_Rol
+DROP TABLE LA_MINORIA.Usuario_Rol
 
 DROP TABLE LA_MINORIA.Rol_Funcionalidad
 
@@ -13,6 +13,10 @@ DROP TABLE LA_MINORIA.Regimen_Hotel
 DROP TABLE LA_MINORIA.Historial_Baja_Hotel
 
 DROP TABLE LA_MINORIA.Historial_Baja_Habitacion
+
+DROP TABLE LA_MINORIA.Historial_Cancelacion_Reserva
+
+DROP TABLE LA_MINORIA.Estadia
 
 --PRINCIPALES/BASE
 
@@ -31,6 +35,8 @@ DROP TABLE LA_MINORIA.Habitacion_Reserva
 DROP TABLE LA_MINORIA.Reserva
 
 DROP TABLE LA_MINORIA.Regimen
+
+DROP TABLE LA_MINORIA.Consumible
 
 DROP TABLE LA_MINORIA.Habitacion
 

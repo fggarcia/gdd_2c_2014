@@ -582,6 +582,51 @@ SELECT tr.Reserva_Codigo, c.Id_Cliente FROM LA_MINORIA.Temp_Reservas tr
 --ELIMINO TABLA TEMPORAL DE RESERVAS
 DROP TABLE LA_MINORIA.Temp_Reservas
 
+--TABLA HISTORIAL_CANCELACION_RESERVA
+/*
+	Tabla con los registros de las cancelaciones realizadas, con fecha y motivo de la misma
+*/
+CREATE TABLE [LA_MINORIA].[Historial_Cancelacion_Reserva](
+	[Id_Reserva][numeric](18,0) NOT NULL,
+	[Motivo][varchar](200),
+	[Fecha_Cancelacion][datetime] NOT NULL,
+	[Id_Usuario][varchar](20) NOT NULL
+
+	CONSTRAINT [FK_Historial_Cancelacion_Reserva] FOREIGN KEY (Id_Reserva)
+		REFERENCES [LA_MINORIA].[Reserva](Id_Reserva)
+)
+
+--TABLA ESTADIA
+/*
+	Tabla con las fechas de check in y check out de cada reserva y con los respectivos usuarios que la llevaron a cabo
+*/
+CREATE TABLE [LA_MINORIA].[Estadia](
+	[Id_Reserva][numeric](18,0) NOT NULL,
+	[Check_In][datetime],
+	[Id_Usuario_Check_In][varchar](20),
+	[Check_Out][datetime],
+	[Id_Usuario_Check_Out][varchar](20)
+
+	CONSTRAINT [FK_Estadia_Id_Reserva] FOREIGN KEY (Id_Reserva)
+		REFERENCES [LA_MINORIA].[Reserva](Id_Reserva)
+)
+
+--TABLA CONSUMIBLE
+/*
+	Tabla con todos los productos consumibles disponibles
+*/
+CREATE TABLE [LA_MINORIA].[Consumible](
+	[Id_Codigo][numeric](18,0) NOT NULL,
+	[Descripcion][varchar](255) NOT NULL,
+	[Precio][numeric](18,2) NOT NULL
+
+	CONSTRAINT [PK_Consumible_Id_Codigo] PRIMARY KEY (Id_Codigo)
+)
+
+INSERT INTO LA_MINORIA.Consumible (Id_Codigo, Descripcion, Precio)
+SELECT DISTINCT Consumible_Codigo, UPPER(LTRIM(RTRIM(Consumible_Descripcion))), Consumible_Precio FROM gd_esquema.Maestra
+	WHERE Consumible_Codigo IS NOT NULL AND Consumible_Precio IS NOT NULL AND Consumible_Descripcion IS NOT NULL
+
 /*
 	Despues de correr todos los scripts nos dimos cuenta que hay un cliente con codigo de documento: para el nro de pasaporte = 1652782
 	por lo cual consideramos no checkear todavia los datos de clientes y marca ese error y esperar que se modifique la primera vez
