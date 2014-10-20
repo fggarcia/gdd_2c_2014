@@ -401,12 +401,11 @@ CREATE TABLE [LA_MINORIA].[Clientes](
 	[Fecha_Nacimiento][datetime] NOT NULL,
 	[Habilitado][bit] NOT NULL
 
+	CONSTRAINT [PK_Clientes_Id_Cliente] PRIMARY KEY (Id_Cliente),
 	CONSTRAINT [FK_Clientes_Tipo_Identificacion] FOREIGN KEY (Tipo_Identificacion)
 		REFERENCES [LA_MINORIA].[Tipo_Identificacion](Id_Tipo_Identificacion),
 	CONSTRAINT [FK_Clientes_Nacionalidad] FOREIGN KEY (Nacionalidad)
-		REFERENCES [LA_MINORIA].[Nacionalidad](Id_Nacionalidad),
-	CONSTRAINT [PK_Clientes_Tipo_Identificacion_Nro_Identificacion] PRIMARY KEY (Tipo_Identificacion, Nro_Identificacion),
-	CONSTRAINT UQ_Clientes_Mail UNIQUE (Mail)
+		REFERENCES [LA_MINORIA].[Nacionalidad](Id_Nacionalidad)
 )
 
 INSERT INTO LA_MINORIA.Clientes (Nombre, Apellido, Tipo_Identificacion, Nro_Identificacion, Mail, Telefono, Calle_Direccion, Calle_Nro,
@@ -557,5 +556,41 @@ SELECT h.Id_Hotel, tr.Reserva_Codigo, tr.Habitacion_Numero, tr.Habitacion_Piso F
 	ON tr.Hotel_Ciudad = h.Ciudad AND tr.Hotel_Calle = h.Calle_Direccion AND tr.Hotel_Nro_Calle = h.Calle_Nro
 	GROUP BY tr.Reserva_Codigo, tr.Habitacion_Numero, tr.Habitacion_Piso, h.Id_Hotel
 
+--TABLA RESERVA_CLIENTE
+/*
+	Tabña que almacena la relacion entre la reserva y el cliente que la realizo
+*/
+CREATE TABLE [LA_MINORIA].[Reserva_Cliente](
+	[Id_Reserva][numeric](18,0) NOT NULL,
+	[Id_Cliente][Int] NOT NULL,
+
+	CONSTRAINT [FK_Reserva_Cliente_Id_Reserva] FOREIGN KEY (Id_Reserva)
+		REFERENCES [LA_MINORIA].[Reserva](Id_Reserva),
+	CONSTRAINT [FK_Reserva_Cliente_Id_Cliente] FOREIGN KEY (Id_Cliente)
+		REFERENCES [LA_MINORIA].[Clientes](Id_Cliente)
+)
+
+INSERT INTO LA_MINORIA.Reserva_Cliente (Id_Reserva,Id_Cliente)
+SELECT tr.Reserva_Codigo, c.Id_Cliente FROM LA_MINORIA.Temp_Reservas tr
+	INNER JOIN LA_MINORIA.Clientes c 
+	ON tr.Cliente_Pasaporte_Nro = c.Nro_Identificacion AND tr.Cliente_Nombre = c.Nombre
+		AND tr.Cliente_Apellido = Apellido AND tr.Cliente_Mail = c.Mail
+		AND  tr.Reserva_Codigo IS NOT NULL 
+		AND tr.Estadia_Fecha_Inicio IS NULL 
+		AND tr.Factura_Nro IS NULL
+
 --ELIMINO TABLA TEMPORAL DE RESERVAS
 DROP TABLE LA_MINORIA.Temp_Reservas
+
+/*
+	Despues de correr todos los scripts nos dimos cuenta que hay un cliente con codigo de documento: para el nro de pasaporte = 1652782
+	por lo cual consideramos no checkear todavia los datos de clientes y marca ese error y esperar que se modifique la primera vez
+	que se ejecute la aplicacion
+*/
+ALTER TABLE LA_MINORIA.Clientes 
+	ADD CONSTRAINT [PK_Clientes_Tipo_Identificacion_Nro_Identificacion] PRIMARY KEY (Tipo_Identificacion, Nro_Identificacion)
+/*
+	Al igual que el caso anterior, descubrimos el caso del mail "aaron_Blanco@gmail.com"
+	Al igual que el caso anterior, se debe resolver al arrancar la aplicacion
+*/
+ALTER TABLE LA_MINORIA.Clientes ADD CONSTRAINT UQ_Clientes_Mail UNIQUE (Mail)

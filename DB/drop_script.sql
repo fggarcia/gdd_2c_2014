@@ -16,6 +16,8 @@ DROP TABLE LA_MINORIA.Historial_Baja_Habitacion
 
 --PRINCIPALES/BASE
 
+DROP TABLE LA_MINORIA.Reserva_Cliente
+
 DROP TABLE LA_MINORIA.Clientes
 
 DROP TABLE LA_MINORIA.Nacionalidad
