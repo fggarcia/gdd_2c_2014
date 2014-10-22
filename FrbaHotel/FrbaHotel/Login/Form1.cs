@@ -6,6 +6,8 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Security.Cryptography;
+
 
 using System.Data.SqlClient;
 namespace FrbaHotel.Login
@@ -25,7 +27,7 @@ namespace FrbaHotel.Login
         private void Form_Login_Load(object sender, EventArgs e)
         {
             SqlConnection DBSql;
-            string ConnectionString="Server=localhost\\SQLSERVER2008;Initial Catalog=GD2C2014;User ID=gd;Password=gd2014";
+            string ConnectionString = "Server=localhost\\SQLSERVER2008;Initial Catalog=GD2C2014;User ID=gd;Password=gd2014";
             DBSql = new SqlConnection(ConnectionString);
             try
             {
@@ -39,5 +41,28 @@ namespace FrbaHotel.Login
             }
         }
 
+        private void button_Login_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(textBox_usuario.Text);
+            MessageBox.Show(textBox1.Text);
+            MessageBox.Show(SHA256Encrypt(textBox1.Text));
+
+
+        }
+
+        public string SHA256Encrypt(string password)
+        {
+            SHA256CryptoServiceProvider provider = new SHA256CryptoServiceProvider();
+
+            byte[] passBytes = Encoding.UTF8.GetBytes(password);
+            byte[] hashedpass = provider.ComputeHash(passBytes);
+
+            StringBuilder resultado = new StringBuilder();
+
+            for (int i = 0; i < hashedpass.Length; i++)
+                resultado.Append(hashedpass[i].ToString("x2").ToLower());
+
+            return resultado.ToString();
+        }  
     }
 }
