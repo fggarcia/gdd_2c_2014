@@ -75,3 +75,34 @@ group by Cantidad_Login,Habilitado,Password
 	end
 go
 
+create procedure SP_Retrieve_Roles_Quantity @usuario varchar (20), @cantidad int output
+as
+begin
+	select @cantidad=count (*)
+	from 	LA_MINORIA.Usuario_Rol
+	where	Id_Usuario=@usuario
+	
+end
+go
+
+create procedure SP_Retrieve_Roles_Names @usuario varchar (20)
+as
+begin
+	select	R.Descripcion
+	from 	LA_MINORIA.Usuario_Rol UR, LA_MINORIA.Rol R
+	where	UR.Id_Rol=R.Id_Rol
+	and		UR.Id_Usuario=@usuario
+	and		R.Habilitado=1
+end
+GO
+
+create procedure SP_Retrieve_Hotel_Quantity @usuario varchar (20), @cant int output
+as
+begin
+	select		@cant=count(*)
+	from		LA_MINORIA.Usuario_Hotel UH, LA_MINORIA.Hotel H
+	where		UH.Id_Usuario=@usuario
+	and			UH.Id_Hotel=H.Id_Hotel
+end
+go
+
