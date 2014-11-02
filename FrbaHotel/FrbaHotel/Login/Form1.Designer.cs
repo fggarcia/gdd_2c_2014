@@ -31,7 +31,7 @@
             this.textBox_usuario = new System.Windows.Forms.TextBox();
             this.lbl_usuario = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.textbox_password = new System.Windows.Forms.TextBox();
             this.label_Title = new System.Windows.Forms.Label();
             this.button_Login = new System.Windows.Forms.Button();
             this.button_salir = new System.Windows.Forms.Button();
@@ -63,12 +63,14 @@
             this.label1.TabIndex = 3;
             this.label1.Text = "Contraseña";
             // 
-            // textBox1
+            // textbox_password
             // 
-            this.textBox1.Location = new System.Drawing.Point(117, 82);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 20);
-            this.textBox1.TabIndex = 2;
+            this.textbox_password.Location = new System.Drawing.Point(117, 82);
+            this.textbox_password.Name = "textbox_password";
+            this.textbox_password.PasswordChar = '*';
+            this.textbox_password.Size = new System.Drawing.Size(100, 20);
+            this.textbox_password.TabIndex = 2;
+            this.textbox_password.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
             // label_Title
             // 
@@ -119,12 +121,11 @@
             this.Controls.Add(this.button_Login);
             this.Controls.Add(this.label_Title);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.textbox_password);
             this.Controls.Add(this.lbl_usuario);
             this.Controls.Add(this.textBox_usuario);
             this.Name = "Form_Login";
             this.Text = "Form1";
-            this.Load += new System.EventHandler(this.Form_Login_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -135,7 +136,7 @@
         private System.Windows.Forms.TextBox textBox_usuario;
         private System.Windows.Forms.Label lbl_usuario;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox textbox_password;
         private System.Windows.Forms.Label label_Title;
         private System.Windows.Forms.Button button_Login;
         private System.Windows.Forms.Button button_salir;

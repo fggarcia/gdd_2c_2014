@@ -55,23 +55,23 @@ group by Cantidad_Login,Habilitado,Password
 
 	
 	
-			if (@password=@passDB) 
+			if  (@habilitado=0) /* si esta inhabilitado, devuelvo 1*/
+				set @codigo=1
+			else
 				begin
-					if (@habilitado=0) /* si esta inhabilitado, devuelvo 1*/
-						set @codigo=1 
-					else
+					if (@password=@passDB) 
 						 /*si los datos estan correctos, devuelvo 2, 
 						 borro los intentos fallidos y registro la fecha*/
 						begin
 						exec SP_Login_Sucess @usuario
 						set @codigo=2
 						end
-				end
-			else
-				begin
-					exec SP_Login_Failed @usuario
-					set @codigo=3
+					else
+						begin
+						exec SP_Login_Failed @usuario
+						set @codigo=3
 				end
 		end
+	end
 go
 
