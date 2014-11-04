@@ -84,6 +84,7 @@
     <Compile Include="Cancelar Reserva\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Common\AppConnections.cs" />
     <Compile Include="Form_Main.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -108,6 +109,12 @@
     <Compile Include="Login\Form_Login.Designer.cs">
       <DependentUpon>Form_Login.cs</DependentUpon>
     </Compile>
+    <Compile Include="Login\Form_Seleccion_Hotel.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Login\Form_Seleccion_Hotel.Designer.cs">
+      <DependentUpon>Form_Seleccion_Hotel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Login\Form_Seleccion_Rol.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -122,6 +129,9 @@
     <EmbeddedResource Include="Login\Form_Login.resx">
       <DependentUpon>Form_Login.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Login\Form_Seleccion_Hotel.resx">
+      <DependentUpon>Form_Seleccion_Hotel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Login\Form_Seleccion_Rol.resx">
       <DependentUpon>Form_Seleccion_Rol.cs</DependentUpon>
