@@ -696,6 +696,11 @@ CREATE TABLE [LA_MINORIA].[Facturacion_Detalle](
 	[Descripcion][varchar](50) NOT NULL,
 	[Precio][numeric](18,2) NOT NULL DEFAULT 0.0,
 	[Cantidad][Int] NOT NULL DEFAULT 1
+
+	CONSTRAINT [FK_Facturacion_Detalle_Id_Factura] FOREIGN KEY (Id_Factura)
+		REFERENCES [LA_MINORIA].[Facturacion](Id_Factura),
+	CONSTRAINT [FK_Facturacion_Detalle_Id_Reserva] FOREIGN KEY (Id_Reserva)
+		REFERENCES [LA_MINORIA].[Reserva](Id_Reserva)
 )
 
 --Migro la factura de la estancia
