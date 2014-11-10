@@ -251,13 +251,15 @@ SELECT h.Id_Hotel, r.Id_Regimen FROM LA_MINORIA.Hotel h INNER JOIN gd_esquema.Ma
 CREATE TABLE [LA_MINORIA].[Tipo_Habitacion](
 	[Id_Tipo_Habitacion][numeric](18,0) NOT NULL,
 	[Descripcion][varchar](255) NOT NULL,
+	[Cupo][Int] NOT NULL,
 	[Porcentual][numeric](18,2) NOT NULL
 
 	CONSTRAINT UQ_Tipo_Habitacion_Id_Tipo_Habitacion UNIQUE (Id_Tipo_Habitacion)
 )
 
-INSERT INTO LA_MINORIA.Tipo_Habitacion (Id_Tipo_Habitacion, Descripcion, Porcentual)
-SELECT m.Habitacion_Tipo_Codigo, UPPER(LTRIM(RTRIM(m.Habitacion_Tipo_Descripcion))), m.Habitacion_Tipo_Porcentual
+INSERT INTO LA_MINORIA.Tipo_Habitacion (Id_Tipo_Habitacion, Descripcion, Cupo, Porcentual)
+SELECT m.Habitacion_Tipo_Codigo, UPPER(LTRIM(RTRIM(m.Habitacion_Tipo_Descripcion))), 
+	SUBSTRING(LTRIM(RTRIM(STR(m.Habitacion_Tipo_Codigo))),4,1), m.Habitacion_Tipo_Porcentual
 	FROM gd_esquema.Maestra m WHERE 
 	m.Habitacion_Tipo_Descripcion IS NOT NULL
 	GROUP BY m.Habitacion_Tipo_Codigo,m.Habitacion_Tipo_Descripcion, m.Habitacion_Tipo_Porcentual
@@ -376,10 +378,9 @@ CREATE TABLE [LA_MINORIA].[Temp_Clientes](
 )
 INSERT INTO LA_MINORIA.Temp_Clientes (Nombre, Apellido, Nro_Identificacion, Mail, Calle_Direccion, Calle_Nro,
 	Calle_Piso, Calle_Depto, Nacionalidad, Fecha_Nacimiento)
-SELECT Cliente_Nombre, Cliente_Apellido, Cliente_Pasaporte_Nro, Cliente_Mail, Cliente_Dom_Calle, Cliente_Nro_Calle,
+SELECT DISTINCT Cliente_Nombre, Cliente_Apellido, Cliente_Pasaporte_Nro, Cliente_Mail, Cliente_Dom_Calle, Cliente_Nro_Calle,
 	Cliente_Piso, Cliente_Depto, Cliente_Nacionalidad, Cliente_Fecha_Nac FROM gd_esquema.Maestra WHERE Cliente_Nombre IS NOT NULL
-GROUP BY Cliente_Pasaporte_Nro, Cliente_Nombre, Cliente_Apellido, Cliente_Mail, Cliente_Dom_Calle, Cliente_Nro_Calle,
-	Cliente_Piso, Cliente_Depto, Cliente_Nacionalidad, Cliente_Fecha_Nac
+	AND Estadia_Fecha_Inicio IS NULL
 
 --TABLA CLIENTES
 /*
@@ -405,8 +406,11 @@ CREATE TABLE [LA_MINORIA].[Clientes](
 	CONSTRAINT [FK_Clientes_Tipo_Identificacion] FOREIGN KEY (Tipo_Identificacion)
 		REFERENCES [LA_MINORIA].[Tipo_Identificacion](Id_Tipo_Identificacion),
 	CONSTRAINT [FK_Clientes_Nacionalidad] FOREIGN KEY (Nacionalidad)
-		REFERENCES [LA_MINORIA].[Nacionalidad](Id_Nacionalidad)
+		REFERENCES [LA_MINORIA].[Nacionalidad](Id_Nacionalidad),
+	--CONSTRAINT [UQ_Clientes_Tipo_Identificacion_Nro_Identificacion] UNIQUE (Tipo_Identificacion, Nro_Identificacion),
+	--CONSTRAINT UQ_Clientes_Mail UNIQUE (Mail)
 )
+
 
 INSERT INTO LA_MINORIA.Clientes (Nombre, Apellido, Tipo_Identificacion, Nro_Identificacion, Mail, Telefono, Calle_Direccion, Calle_Nro,
 	Calle_Piso, Calle_Depto, Nacionalidad, Fecha_Nacimiento, Habilitado)
@@ -420,6 +424,19 @@ SELECT tc.Nombre, tc.Apellido, ti.Id_Tipo_Identificacion, tc.Nro_Identificacion,
 
 --ELIMINO TABLA TEMPORAL DE CLIENTES
 DROP TABLE LA_MINORIA.Temp_Clientes
+
+/*
+	Despues de correr todos los scripts nos dimos cuenta que hay un cliente con codigo de documento: para el nro de pasaporte = 1652782
+	por lo cual consideramos crear la constraint pero no checkear todavia. 
+	Los datos de clientes y marca ese error y esperar que se modifique la primera vez que se ejecute la aplicacion
+*/
+--ALTER TABLE LA_MINORIA.Clientes WITH NOCHECK
+--	ADD CONSTRAINT [UQ_Clientes_Tipo_Identificacion_Nro_Identificacion] UNIQUE (Tipo_Identificacion, Nro_Identificacion)
+/*
+	Al igual que el caso anterior, descubrimos el caso del mail "aaron_Blanco@gmail.com"
+	Al igual que el caso anterior, se debe resolver al arrancar la aplicacion
+*/
+--ALTER TABLE LA_MINORIA.Clientes WITH NOCHECK ADD CONSTRAINT UQ_Clientes_Mail UNIQUE (Mail)
 
 --TABLA ESTADO_RESERVA
 /*
@@ -441,50 +458,6 @@ INSERT INTO LA_MINORIA.Estado_Reserva (Descripcion) VALUES ('Reserva Cancelada P
 INSERT INTO LA_MINORIA.Estado_Reserva (Descripcion) VALUES ('Reserva Cancelada Por No-Show')
 INSERT INTO LA_MINORIA.Estado_Reserva (Descripcion) VALUES ('Reserva con ingreso')
 
---TABLA TEMPORAL DE RESERVAS
-
-CREATE TABLE [LA_MINORIA].[Temp_Reservas](
-	[Hotel_Ciudad] [varchar](255) NULL,
-	[Hotel_Calle] [varchar](255) NULL,
-	[Hotel_Nro_Calle] [numeric](18, 0) NULL,
-	[Hotel_CantEstrella] [numeric](18, 0) NULL,
-	[Hotel_Recarga_Estrella] [numeric](18, 0) NULL,
-	[Habitacion_Numero] [numeric](18, 0) NULL,
-	[Habitacion_Piso] [numeric](18, 0) NULL,
-	[Habitacion_Frente] [varchar](50) NULL,
-	[Habitacion_Tipo_Codigo] [numeric](18, 0) NULL,
-	[Habitacion_Tipo_Descripcion] [varchar](255) NULL,
-	[Habitacion_Tipo_Porcentual] [numeric](18, 2) NULL,
-	[Regimen_Descripcion] [varchar](255) NULL,
-	[Regimen_Precio] [numeric](18, 2) NULL,
-	[Reserva_Fecha_Inicio] [datetime] NULL,
-	[Reserva_Codigo] [numeric](18, 0) NULL,
-	[Reserva_Cant_Noches] [numeric](18, 0) NULL,
-	[Estadia_Fecha_Inicio] [datetime] NULL,
-	[Estadia_Cant_Noches] [numeric](18, 0) NULL,
-	[Consumible_Codigo] [numeric](18, 0) NULL,
-	[Consumible_Descripcion] [varchar](255) NULL,
-	[Consumible_Precio] [numeric](18, 2) NULL,
-	[Item_Factura_Cantidad] [numeric](18, 0) NULL,
-	[Item_Factura_Monto] [numeric](18, 2) NULL,
-	[Factura_Nro] [numeric](18, 0) NULL,
-	[Factura_Fecha] [datetime] NULL,
-	[Factura_Total] [numeric](18, 2) NULL,
-	[Cliente_Pasaporte_Nro] [numeric](18, 0) NULL,
-	[Cliente_Apellido] [varchar](255) NULL,
-	[Cliente_Nombre] [varchar](255) NULL,
-	[Cliente_Fecha_Nac] [datetime] NULL,
-	[Cliente_Mail] [varchar](255) NULL,
-	[Cliente_Dom_Calle] [varchar](255) NULL,
-	[Cliente_Nro_Calle] [numeric](18, 0) NULL,
-	[Cliente_Piso] [numeric](18, 0) NULL,
-	[Cliente_Depto] [varchar](50) NULL,
-	[Cliente_Nacionalidad] [varchar](255) NULL
-)
-
-INSERT INTO LA_MINORIA.Temp_Reservas 
-SELECT * FROM gd_esquema.Maestra WHERE Reserva_Codigo IS NOT NULL
-
 --TABLA RESERVA
 /*
 	Tabla con todas las reservas hasta la fecha
@@ -504,24 +477,25 @@ CREATE TABLE [LA_MINORIA].[Reserva](
 )
 
 INSERT INTO LA_MINORIA.Reserva(Id_Reserva, Fecha_Inicio, Estadia, Tipo_Regimen, Estado)
-SELECT tr.Reserva_Codigo, tr.Reserva_Fecha_Inicio, tr.Reserva_Cant_Noches, r.Id_Regimen, 1 FROM LA_MINORIA.Temp_Reservas tr 
+SELECT m.Reserva_Codigo, m.Reserva_Fecha_Inicio, m.Reserva_Cant_Noches, r.Id_Regimen, 1 
+	FROM gd_esquema.Maestra m 
 	INNER JOIN LA_MINORIA.Regimen r
-	ON UPPER(LTRIM(RTRIM(tr.Regimen_Descripcion))) = UPPER(LTRIM(RTRIM(r.Descripcion)))
-	GROUP BY tr.Reserva_Codigo, tr.Reserva_Fecha_Inicio, tr.Reserva_Cant_Noches, r.Id_Regimen
+	ON UPPER(LTRIM(RTRIM(m.Regimen_Descripcion))) = UPPER(LTRIM(RTRIM(r.Descripcion)))
+	GROUP BY m.Reserva_Codigo, m.Reserva_Fecha_Inicio, m.Reserva_Cant_Noches, r.Id_Regimen
 
 --ACTUALIZO A ESTADO 'Reserva con ingreso' a todas aquellas reservas ques se facturaron
 
 UPDATE LA_MINORIA.Reserva
 SET Estado = (SELECT Id_Estado FROM LA_MINORIA.Estado_Reserva 
 WHERE UPPER(LTRIM(RTRIM(Descripcion))) = UPPER(LTRIM(RTRIM('Reserva con ingreso'))))
-WHERE EXISTS(SELECT 1 FROM LA_MINORIA.Temp_Reservas
+WHERE EXISTS(SELECT 1 FROM gd_esquema.Maestra
 	WHERE Id_Reserva = Reserva_Codigo AND Factura_Nro IS NOT NULL AND Consumible_Codigo IS NULL)
 
 --ACTUALIZO A ESTADO 'Reserva Cancelada Por Cliente' a aquellas que paso la fecha de incio y el periodo de estadia y no tiene facturacion
 UPDATE LA_MINORIA.Reserva
 SET Estado = (SELECT Id_Estado FROM LA_MINORIA.Estado_Reserva 
 	WHERE UPPER(LTRIM(RTRIM(Descripcion))) = UPPER(LTRIM(RTRIM('Reserva Cancelada Por Cliente'))))
-WHERE EXISTS(SELECT 1 FROM LA_MINORIA.Temp_Reservas
+WHERE EXISTS(SELECT 1 FROM gd_esquema.Maestra
 	WHERE Id_Reserva = Reserva_Codigo AND DATEADD(DAY, Reserva_Cant_Noches, Reserva_Fecha_Inicio) > GETDATE()
 	AND Factura_Nro IS NULL
 )
@@ -551,10 +525,10 @@ HAVING COUNT(*) > 1
 No existen reservas con mas de una habitacion
 */
 INSERT INTO LA_MINORIA.Habitacion_Reserva (Id_Hotel, Id_Reserva, Habitacion_Nro, Habitacion_Piso)
-SELECT h.Id_Hotel, tr.Reserva_Codigo, tr.Habitacion_Numero, tr.Habitacion_Piso FROM LA_MINORIA.Temp_Reservas tr 
+SELECT h.Id_Hotel, m.Reserva_Codigo, m.Habitacion_Numero, m.Habitacion_Piso FROM gd_esquema.Maestra m 
 	INNER JOIN LA_MINORIA.Hotel h
-	ON tr.Hotel_Ciudad = h.Ciudad AND tr.Hotel_Calle = h.Calle_Direccion AND tr.Hotel_Nro_Calle = h.Calle_Nro
-	GROUP BY tr.Reserva_Codigo, tr.Habitacion_Numero, tr.Habitacion_Piso, h.Id_Hotel
+	ON m.Hotel_Ciudad = h.Ciudad AND m.Hotel_Calle = h.Calle_Direccion AND m.Hotel_Nro_Calle = h.Calle_Nro
+	GROUP BY m.Reserva_Codigo, m.Habitacion_Numero, m.Habitacion_Piso, h.Id_Hotel
 
 --TABLA RESERVA_CLIENTE
 /*
@@ -571,16 +545,13 @@ CREATE TABLE [LA_MINORIA].[Reserva_Cliente](
 )
 
 INSERT INTO LA_MINORIA.Reserva_Cliente (Id_Reserva,Id_Cliente)
-SELECT tr.Reserva_Codigo, c.Id_Cliente FROM LA_MINORIA.Temp_Reservas tr
+SELECT m.Reserva_Codigo, c.Id_Cliente FROM gd_esquema.Maestra m
 	INNER JOIN LA_MINORIA.Clientes c 
-	ON tr.Cliente_Pasaporte_Nro = c.Nro_Identificacion AND tr.Cliente_Nombre = c.Nombre
-		AND tr.Cliente_Apellido = Apellido AND tr.Cliente_Mail = c.Mail
-		AND  tr.Reserva_Codigo IS NOT NULL 
-		AND tr.Estadia_Fecha_Inicio IS NULL 
-		AND tr.Factura_Nro IS NULL
-
---ELIMINO TABLA TEMPORAL DE RESERVAS
-DROP TABLE LA_MINORIA.Temp_Reservas
+	ON m.Cliente_Pasaporte_Nro = c.Nro_Identificacion AND m.Cliente_Nombre = c.Nombre
+		AND m.Cliente_Apellido = Apellido AND m.Cliente_Mail = c.Mail
+		AND  m.Reserva_Codigo IS NOT NULL 
+		AND m.Estadia_Fecha_Inicio IS NULL 
+		AND m.Factura_Nro IS NULL
 
 --TABLA HISTORIAL_CANCELACION_RESERVA
 /*
@@ -611,6 +582,23 @@ CREATE TABLE [LA_MINORIA].[Estadia](
 		REFERENCES [LA_MINORIA].[Reserva](Id_Reserva)
 )
 
+--Migro las estadias que solo tienen check-in
+/*
+	SE EJECUTO LA SIGUIENTE QUERY Y NO EXISTEN REGISTROS DE ESE TIPO DE CONDICION
+	SELECT * FROM gd_esquema.Maestra m
+		WHERE m.Estadia_Fecha_Inicio IS NOT NULL
+		AND NOT EXISTS (SELECT 1 FROM gd_esquema.Maestra m2 WHERE m2.Reserva_Codigo = m.Reserva_Codigo
+			AND m2.Factura_Fecha IS NOT NULL)
+*/
+
+--Migro las reservas completadas
+INSERT INTO LA_MINORIA.Estadia (Id_Reserva, Check_In, Id_Usuario_Check_In, Check_Out, Id_Usuario_Check_Out)
+SELECT m.Reserva_Codigo, m.Estadia_Fecha_Inicio, 'admin', m.Factura_Fecha, 'admin' 
+	FROM gd_esquema.Maestra m
+	WHERE m.Estadia_Fecha_Inicio IS NOT NULL 
+	AND m.Factura_Fecha IS NOT NULL
+	
+
 --TABLA CONSUMIBLE
 /*
 	Tabla con todos los productos consumibles disponibles
@@ -627,15 +615,132 @@ INSERT INTO LA_MINORIA.Consumible (Id_Codigo, Descripcion, Precio)
 SELECT DISTINCT Consumible_Codigo, UPPER(LTRIM(RTRIM(Consumible_Descripcion))), Consumible_Precio FROM gd_esquema.Maestra
 	WHERE Consumible_Codigo IS NOT NULL AND Consumible_Precio IS NOT NULL AND Consumible_Descripcion IS NOT NULL
 
+--TABLA CONSUMIBLE_RESERVA
 /*
-	Despues de correr todos los scripts nos dimos cuenta que hay un cliente con codigo de documento: para el nro de pasaporte = 1652782
-	por lo cual consideramos no checkear todavia los datos de clientes y marca ese error y esperar que se modifique la primera vez
-	que se ejecute la aplicacion
+	Tabla que almacena los gastos de consumibles por reserva
 */
-ALTER TABLE LA_MINORIA.Clientes 
-	ADD CONSTRAINT [PK_Clientes_Tipo_Identificacion_Nro_Identificacion] PRIMARY KEY (Tipo_Identificacion, Nro_Identificacion)
+CREATE TABLE [LA_MINORIA].[Consumible_Reserva](
+	[Id_Reserva][numeric](18,0) NOT NULL,
+	[Id_Codigo][numeric](18,0) NOT NULL,
+	[Cantidad][int] NOT NULL,
+	[Fecha][datetime] NOT NULL,
+	[Id_Usuario][varchar](20) NOT NULL
+
+	CONSTRAINT [FK_Consumible_Reserva_Id_Reserva] FOREIGN KEY (Id_Reserva)
+		REFERENCES [LA_MINORIA].[Reserva](Id_Reserva),
+	CONSTRAINT [FK_Consumible_Reserva_Id_Codigo] FOREIGN KEY (Id_Codigo)
+		REFERENCES [LA_MINORIA].[Consumible](Id_Codigo),
+	CONSTRAINT [FK_Consumible_Reserva_Id_Usuario] FOREIGN KEY (Id_Usuario)
+		REFERENCES [LA_MINORIA].[Usuario](Id_Usuario)
+)
+
+INSERT INTO LA_MINORIA.Consumible_Reserva (Id_Reserva, Id_Codigo, Cantidad, Fecha, Id_Usuario)
+SELECT Reserva_Codigo, Consumible_Codigo, Item_Factura_Cantidad, Estadia_Fecha_Inicio, 'admin' FROM gd_esquema.Maestra 
+	WHERE Consumible_Codigo IS NOT NULL
+
+--TABLA FACTURACION
 /*
-	Al igual que el caso anterior, descubrimos el caso del mail "aaron_Blanco@gmail.com"
-	Al igual que el caso anterior, se debe resolver al arrancar la aplicacion
+	Tabla con el registro completa de la factura, sin el detalle
 */
-ALTER TABLE LA_MINORIA.Clientes ADD CONSTRAINT UQ_Clientes_Mail UNIQUE (Mail)
+CREATE TABLE [LA_MINORIA].[Facturacion](
+	[Id_Factura][numeric](18,0) NOT NULL,
+	[Id_Reserva][numeric](18,0) NOT NULL,
+	[Id_Cliente][Int] NOT NULL,
+	[Total_Factura][numeric](18,2) NOT NULL DEFAULT 0.0,
+	[Total_Estadia][numeric](18,2) NOT NULL DEFAULT 0.0,
+	[Total_Consumibles][numeric](18,2) NOT NULL DEFAULT 0.0,
+	[Fecha_Facturacion] datetime NOT NULL
+
+	CONSTRAINT [PK_Facturacion_Id_Factura] PRIMARY KEY(Id_Factura),
+	CONSTRAINT [FK_Facturacion_Id_Cliente] FOREIGN KEY(Id_Cliente)
+		REFERENCES [LA_MINORIA].[Clientes](Id_Cliente)
+)
+
+--INSERTO LA FACTURAS DE LOS QUE SON NO ALL INCLUSIVE
+INSERT INTO LA_MINORIA.Facturacion (Id_Factura, Id_Reserva, Id_Cliente, Total_Factura, Total_Estadia,
+	Total_Consumibles,Fecha_Facturacion)
+SELECT m.Factura_Nro, m.Reserva_Codigo, c.Id_Cliente, m.Factura_Total + m.Item_Factura_Monto, 
+	m.Item_Factura_Monto, m.Factura_Total, m.Factura_Fecha 
+	FROM gd_esquema.Maestra m 
+	INNER JOIN LA_MINORIA.Clientes c
+		ON m.Cliente_Pasaporte_Nro = c.Nro_Identificacion
+		AND UPPER(m.Cliente_Nombre) = UPPER(c.Nombre)
+		AND UPPER(m.Cliente_Apellido) = UPPER(c.Apellido)
+		AND UPPER(m.Cliente_Mail) = UPPER(c.Mail)
+	WHERE m.Factura_Total IS NOT NULL
+		AND m.Consumible_Codigo IS NULL
+		AND UPPER(m.Regimen_Descripcion) != UPPER('All Inclusive')
+
+--INSERTO LA FACTURAS DE LOS QUE SON ALL INCLUSIVE
+INSERT INTO LA_MINORIA.Facturacion (Id_Factura, Id_Reserva, Id_Cliente, Total_Factura, Total_Estadia,
+	Total_Consumibles,Fecha_Facturacion)
+SELECT m.Factura_Nro, m.Reserva_Codigo, c.Id_Cliente, 0 + m.Item_Factura_Monto, 
+	0, m.Factura_Total, m.Factura_Fecha 
+	FROM gd_esquema.Maestra m 
+	INNER JOIN LA_MINORIA.Clientes c
+		ON m.Cliente_Pasaporte_Nro = c.Nro_Identificacion
+		AND UPPER(m.Cliente_Nombre) = UPPER(c.Nombre)
+		AND UPPER(m.Cliente_Apellido) = UPPER(c.Apellido)
+		AND UPPER(m.Cliente_Mail) = UPPER(c.Mail)
+	WHERE m.Factura_Total IS NOT NULL
+		AND m.Consumible_Codigo IS NULL
+		AND UPPER(m.Regimen_Descripcion) = UPPER('All Inclusive')
+
+--TABLA FACTURACION_DETALLE
+/*
+	Tabla con los items de cada factura
+*/
+CREATE TABLE [LA_MINORIA].[Facturacion_Detalle](
+	[Id_Factura][numeric](18,0) NOT NULL,
+	[Id_Reserva][numeric](18,0) NOT NULL,
+	[Descripcion][varchar](50) NOT NULL,
+	[Precio][numeric](18,2) NOT NULL DEFAULT 0.0,
+	[Cantidad][Int] NOT NULL DEFAULT 1
+)
+
+--Migro la factura de la estancia
+INSERT INTO LA_MINORIA.Facturacion_Detalle (Id_Factura, Id_Reserva, Descripcion, Precio, Cantidad)
+SELECT m.Factura_Nro, m.Reserva_Codigo, 'Estadia', m.Item_Factura_Monto, m.Item_Factura_Cantidad
+	FROM gd_esquema.Maestra m
+	WHERE m.Consumible_Codigo IS NULL
+		AND m.Item_Factura_Monto IS NOT NULL
+
+--Migro los consumibles de cada factura
+INSERT INTO LA_MINORIA.Facturacion_Detalle (Id_Factura, Id_Reserva, Descripcion, Precio, Cantidad)
+SELECT m.Factura_Nro, m.Reserva_Codigo, m.Consumible_Descripcion , m.Item_Factura_Monto, m.Item_Factura_Cantidad
+	FROM gd_esquema.Maestra m
+	WHERE m.Consumible_Codigo IS NOT NULL
+		AND m.Item_Factura_Monto IS NOT NULL
+
+--Migro los consumibles que deben ser descontados por All Inclusive
+INSERT INTO LA_MINORIA.Facturacion_Detalle (Id_Factura, Id_Reserva, Descripcion, Precio, Cantidad)
+SELECT m.Factura_Nro, m.Reserva_Codigo, 'Devolucion Regimen All Inclusive' , 0 - m.Factura_Total, m.Item_Factura_Cantidad
+	FROM gd_esquema.Maestra m
+	WHERE UPPER(m.Regimen_Descripcion) = UPPER('All Inclusive')
+		AND m.Consumible_Codigo IS NULL
+		AND m.Item_Factura_Monto IS NOT NULL
+
+--INSERTO LAS SUPUESTAS NOCHES FACTURAS
+/* TODO REVISAR COMO CARAJO CALCULA LA FACTURACION TOTAL*/
+/*
+INSERT INTO LA_MINORIA.Facturacion_Detalle (Id_Factura, Id_Reserva, Id_Regimen, Regimen_Precio, Hotel_Recarga_Estrella, 
+	Habitacion_Tipo_Porcentual, Cantidad)
+SELECT m.Factura_Nro, m.Reserva_Codigo, r.Regimen_Id, m.Regimen_Precio, m.Hotel_Recarga_Estrella, 
+	m.Habitacion_Tipo_Porcentual, m.Reserva_Cant_Noches 
+	FROM gd_esquema.Maestra m
+	INNER JOIN LA_MINORIA.Regimen r
+		ON UPPER(LTRIM(RTRIM(m.Regimen_Descripcion))) = UPPER(LTRIM(RTRIM(r.Regimen_Descripcion)))
+	WHERE Factura_Nro IS NOT NULL
+		AND Consumible_Codigo IS NULL 
+		AND Consumible_Descripcion IS NULL
+*/
+--INSERTO LOS SUPUESTOS CONSUMIBLES
+/* TODO MISMO TODO QUE EL DE ARRIBA*/
+/*
+INSERT INTO LA_MINORIA.Facturacion_Detalle (Id_Factura, Id_Reserva, Consumible_Codigo)
+SELECT Factura_Nro, Reserva_Codigo, Regimen_Precio, Hotel_Recarga_Estrella, Habitacion_Tipo_Porcentual, Reserva_Cant_Noches 
+	FROM gd_esquema.Maestra
+	WHERE Factura_Nro IS NOT NULL 
+		AND Consumible_Codigo IS NOT NULL 
+		AND Consumible_Descripcion IS NOT NULL
+*/
