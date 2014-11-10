@@ -70,7 +70,7 @@
             this.textbox_password.PasswordChar = '*';
             this.textbox_password.Size = new System.Drawing.Size(100, 20);
             this.textbox_password.TabIndex = 2;
-            this.textbox_password.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+            //this.textbox_password.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
             // label_Title
             // 
