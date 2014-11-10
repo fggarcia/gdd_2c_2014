@@ -720,27 +720,53 @@ SELECT m.Factura_Nro, m.Reserva_Codigo, 'Devolucion Regimen All Inclusive' , 0 -
 		AND m.Consumible_Codigo IS NULL
 		AND m.Item_Factura_Monto IS NOT NULL
 
---INSERTO LAS SUPUESTAS NOCHES FACTURAS
-/* TODO REVISAR COMO CARAJO CALCULA LA FACTURACION TOTAL*/
+--TABLA Tipo De Pago
 /*
-INSERT INTO LA_MINORIA.Facturacion_Detalle (Id_Factura, Id_Reserva, Id_Regimen, Regimen_Precio, Hotel_Recarga_Estrella, 
-	Habitacion_Tipo_Porcentual, Cantidad)
-SELECT m.Factura_Nro, m.Reserva_Codigo, r.Regimen_Id, m.Regimen_Precio, m.Hotel_Recarga_Estrella, 
-	m.Habitacion_Tipo_Porcentual, m.Reserva_Cant_Noches 
-	FROM gd_esquema.Maestra m
-	INNER JOIN LA_MINORIA.Regimen r
-		ON UPPER(LTRIM(RTRIM(m.Regimen_Descripcion))) = UPPER(LTRIM(RTRIM(r.Regimen_Descripcion)))
-	WHERE Factura_Nro IS NOT NULL
-		AND Consumible_Codigo IS NULL 
-		AND Consumible_Descripcion IS NULL
+	Parametrizacion de los distintos tipos de pagos que se pueden elegir a la hora de pagar la facturacion
 */
---INSERTO LOS SUPUESTOS CONSUMIBLES
-/* TODO MISMO TODO QUE EL DE ARRIBA*/
+CREATE TABLE [LA_MINORIA].[Tipo_Pago](
+	[Id_Tipo_Pago][int]IDENTITY(1,1),
+	[Descripcion][varchar](255),
+
+	CONSTRAINT [PK_Tipo_Pago_Id_Tipo_Pago] PRIMARY KEY(Id_Tipo_Pago),
+	CONSTRAINT [UQ_Tipo_Pago_Descripcion] UNIQUE(Descripcion)
+)
+
+INSERT INTO LA_MINORIA.Tipo_Pago(Descripcion) VALUES('Efectivo')
+INSERT INTO LA_MINORIA.Tipo_Pago(Descripcion) VALUES('Tarjeta Credito')
+
+--TABLA DETALLE TARJETA
 /*
-INSERT INTO LA_MINORIA.Facturacion_Detalle (Id_Factura, Id_Reserva, Consumible_Codigo)
-SELECT Factura_Nro, Reserva_Codigo, Regimen_Precio, Hotel_Recarga_Estrella, Habitacion_Tipo_Porcentual, Reserva_Cant_Noches 
-	FROM gd_esquema.Maestra
-	WHERE Factura_Nro IS NOT NULL 
-		AND Consumible_Codigo IS NOT NULL 
-		AND Consumible_Descripcion IS NOT NULL
+	Tabla de detalles de las tarjetas de credito
 */
+CREATE TABLE [LA_MINORIA].[Detalle_Tarjeta](
+	[Id_Detalle_Tarjeta][Int]IDENTITY(1,1) NOT NULL,
+	[Nro_Tarjeta][numeric](16,0) NOT NULL,
+	[Cant_Cuota][Int] NOT NULL,
+
+	CONSTRAINT [PK_Detalle_Tarjeta_Id_Detalle_Tarjeta] PRIMARY KEY (Id_Detalle_Tarjeta),
+	CONSTRAINT [UQ_Detalle_Tarjeta_Nro_Tarjeta] UNIQUE (Nro_Tarjeta)
+)
+
+--TABLA FORMA PAGO
+/*
+	Tabla donde se almacenan los tipos de pagos respecto de cada factura
+*/
+CREATE TABLE [LA_MINORIA].[Forma_Pago](
+	[Id_Factura][numeric](18,0) NOT NULL,
+	[Id_Detalle_Tarjeta][Int] NULL,
+	[Id_Tipo_Pago][Int] NOT NULL,
+
+	CONSTRAINT [FK_Forma_Pago_Id_Factura] FOREIGN KEY(Id_Factura)
+	REFERENCES [LA_MINORIA].[Facturacion](Id_Factura),
+	CONSTRAINT [FK_Forma_Pago_Id_Detalle_Tarjeta] FOREIGN KEY(Id_Detalle_Tarjeta)
+	REFERENCES [LA_MINORIA].[Detalle_Tarjeta](Id_Detalle_Tarjeta),
+	CONSTRAINT [FK_Forma_Pago_Id_Tipo_Pago] FOREIGN KEY(Id_Tipo_Pago)
+	REFERENCES [LA_MINORIA].[Tipo_Pago](Id_Tipo_Pago)
+)
+
+--COMO NO SE ESPECIFICA EN LA TABLA MAESTRA NINGUN TIPO DE PAGO, CONSIDERAMOS QUE TODOS ESTOS SE REALIZARON MEDIANTE EFECTIVO
+INSERT INTO LA_MINORIA.Forma_Pago(Id_Factura,Id_Tipo_Pago)
+SELECT f.Id_Factura, tp.Id_Tipo_Pago  FROM LA_MINORIA.Facturacion f
+	INNER JOIN LA_MINORIA.Tipo_Pago tp
+	ON UPPER(tp.Descripcion) = UPPER('efectivo')

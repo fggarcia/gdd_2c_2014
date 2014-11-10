@@ -18,7 +18,18 @@ DROP TABLE LA_MINORIA.Historial_Cancelacion_Reserva
 
 DROP TABLE LA_MINORIA.Estadia
 
+DROP TABLE LA_MINORIA.Consumible_Reserva
+
+DROP TABLE LA_MINORIA.Facturacion_Detalle
+
+DROP TABLE LA_MINORIA.Forma_Pago
+
 --PRINCIPALES/BASE
+DROP TABLE LA_MINORIA.Tipo_Pago
+
+DROP TABLE LA_MINORIA.Detalle_Tarjeta
+
+DROP TABLE LA_MINORIA.Facturacion
 
 DROP TABLE LA_MINORIA.Reserva_Cliente
 
