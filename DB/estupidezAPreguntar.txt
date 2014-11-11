@@ -1,0 +1,34 @@
+DE:
+
+SELECT DISTINCT Cliente_Nombre, Cliente_Apellido, Cliente_Pasaporte_Nro, Cliente_Mail, Cliente_Dom_Calle, Cliente_Nro_Calle,
+	Cliente_Piso, Cliente_Depto, Cliente_Nacionalidad, Cliente_Fecha_Nac FROM gd_esquema.Maestra WHERE Cliente_Nombre IS NOT NULL
+	AND Estadia_Fecha_Inicio IS NULL
+
+Me fijo los :
+
+SELECT m1.*  FROM LA_MINORIA.Temp_Clientes m1 INNER JOIN LA_MINORIA.Temp_Clientes m2 ON
+	(
+		m1.Nro_Identificacion = m2.Nro_Identificacion
+		AND (m1.Nombre != m2.Nombre OR m1.Apellido != m2.Apellido)
+	)
+ORDER BY m1.Nro_Identificacion
+
+y:
+
+SELECT *  FROM LA_MINORIA.Temp_Clientes m1 INNER JOIN LA_MINORIA.Temp_Clientes m2 ON
+	(
+		m1.Nro_Identificacion != m2.Nro_Identificacion
+		AND m1.Mail = m2.Mail
+		AND (m1.Nombre = m2.Nombre OR m1.Apellido = m2.Apellido)
+	)
+ORDER BY m1.Mail
+
+--BASE DE DATOS
+	-> Aislamiento
+	-> Base de datos principal
+
+--OBJETOS
+
+--DATAWAREHOUSE
+
+--FUNCIONES DE UN DBA
