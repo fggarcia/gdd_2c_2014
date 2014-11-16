@@ -85,6 +85,8 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Common\AppConnections.cs" />
+    <Compile Include="Db\Connection.cs" />
+    <Compile Include="Db\ProcedurenHelper.cs" />
     <Compile Include="Form_Main.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -121,6 +123,8 @@
     <Compile Include="Login\Form_Seleccion_Rol.Designer.cs">
       <DependentUpon>Form_Seleccion_Rol.cs</DependentUpon>
     </Compile>
+    <Compile Include="Menu\Menu.cs" />
+    <Compile Include="Menu\MenuHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form_Main.resx">
@@ -145,6 +149,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -166,6 +171,11 @@
     <Compile Include="Registrar Estadia\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Utils\CheckBoxHelper.cs" />
+    <Compile Include="Utils\ComboBoxHelper.cs" />
+    <Compile Include="Utils\DataGridViewHelper.cs" />
+    <Compile Include="Utils\DateConverter.cs" />
+    <Compile Include="Utils\TextBoxHelper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
