@@ -175,6 +175,7 @@
     <Compile Include="Utils\ComboBoxHelper.cs" />
     <Compile Include="Utils\DataGridViewHelper.cs" />
     <Compile Include="Utils\DateConverter.cs" />
+    <Compile Include="Utils\Encrypt.cs" />
     <Compile Include="Utils\TextBoxHelper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
