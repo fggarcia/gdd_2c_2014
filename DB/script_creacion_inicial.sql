@@ -572,12 +572,14 @@ CREATE TABLE [LA_MAYORIA].[Historial_Cancelacion_Reserva](
 	Tabla con las fechas de check in y check out de cada reserva y con los respectivos usuarios que la llevaron a cabo
 */
 CREATE TABLE [LA_MAYORIA].[Estadia](
+	[Id_Estadia][int]IDENTITY(1,1) NOT NULL,
 	[Id_Reserva][numeric](18,0) NOT NULL,
 	[Check_In][datetime],
 	[Id_Usuario_Check_In][varchar](20),
 	[Check_Out][datetime],
 	[Id_Usuario_Check_Out][varchar](20)
 
+	CONSTRAINT [PK_Estadia_Id_Estadia] PRIMARY KEY (Id_Estadia),
 	CONSTRAINT [FK_Estadia_Id_Reserva] FOREIGN KEY (Id_Reserva)
 		REFERENCES [LA_MAYORIA].[Reserva](Id_Reserva)
 )
@@ -593,7 +595,7 @@ CREATE TABLE [LA_MAYORIA].[Estadia](
 
 --Migro las reservas completadas
 INSERT INTO LA_MAYORIA.Estadia (Id_Reserva, Check_In, Id_Usuario_Check_In, Check_Out, Id_Usuario_Check_Out)
-SELECT m.Reserva_Codigo, m.Estadia_Fecha_Inicio, 'admin', m.Factura_Fecha, 'admin' 
+SELECT DISTINCT m.Reserva_Codigo, m.Estadia_Fecha_Inicio, 'admin', m.Factura_Fecha, 'admin' 
 	FROM gd_esquema.Maestra m
 	WHERE m.Estadia_Fecha_Inicio IS NOT NULL 
 	AND m.Factura_Fecha IS NOT NULL
@@ -620,22 +622,25 @@ SELECT DISTINCT Consumible_Codigo, UPPER(LTRIM(RTRIM(Consumible_Descripcion))), 
 	Tabla que almacena los gastos de consumibles por reserva
 */
 CREATE TABLE [LA_MAYORIA].[Consumible_Reserva](
-	[Id_Reserva][numeric](18,0) NOT NULL,
+	[Id_Estadia][int] NOT NULL,
 	[Id_Codigo][numeric](18,0) NOT NULL,
 	[Cantidad][int] NOT NULL,
 	[Fecha][datetime] NOT NULL,
 	[Id_Usuario][varchar](20) NOT NULL
 
-	CONSTRAINT [FK_Consumible_Reserva_Id_Reserva] FOREIGN KEY (Id_Reserva)
-		REFERENCES [LA_MAYORIA].[Reserva](Id_Reserva),
+	CONSTRAINT [FK_Consumible_Reserva_Id_Estadia] FOREIGN KEY (Id_Estadia)
+		REFERENCES [LA_MAYORIA].[Estadia](Id_Estadia),
 	CONSTRAINT [FK_Consumible_Reserva_Id_Codigo] FOREIGN KEY (Id_Codigo)
 		REFERENCES [LA_MAYORIA].[Consumible](Id_Codigo),
 	CONSTRAINT [FK_Consumible_Reserva_Id_Usuario] FOREIGN KEY (Id_Usuario)
 		REFERENCES [LA_MAYORIA].[Usuario](Id_Usuario)
 )
 
-INSERT INTO LA_MAYORIA.Consumible_Reserva (Id_Reserva, Id_Codigo, Cantidad, Fecha, Id_Usuario)
-SELECT Reserva_Codigo, Consumible_Codigo, Item_Factura_Cantidad, Estadia_Fecha_Inicio, 'admin' FROM gd_esquema.Maestra 
+INSERT INTO LA_MAYORIA.Consumible_Reserva (Id_Estadia, Id_Codigo, Cantidad, Fecha, Id_Usuario)
+SELECT Id_Estadia, Consumible_Codigo, Item_Factura_Cantidad, Estadia_Fecha_Inicio, 'admin' 
+	FROM gd_esquema.Maestra m
+	INNER JOIN LA_MAYORIA.Estadia e 
+		ON m.Reserva_Codigo = e.Id_Reserva
 	WHERE Consumible_Codigo IS NOT NULL
 
 --TABLA FACTURACION
@@ -644,7 +649,7 @@ SELECT Reserva_Codigo, Consumible_Codigo, Item_Factura_Cantidad, Estadia_Fecha_I
 */
 CREATE TABLE [LA_MAYORIA].[Facturacion](
 	[Id_Factura][numeric](18,0) NOT NULL,
-	[Id_Reserva][numeric](18,0) NOT NULL,
+	[Id_Estadia][Int] NOT NULL,
 	[Id_Cliente][Int] NOT NULL,
 	[Total_Factura][numeric](18,2) NOT NULL DEFAULT 0.0,
 	[Total_Estadia][numeric](18,2) NOT NULL DEFAULT 0.0,
@@ -652,14 +657,16 @@ CREATE TABLE [LA_MAYORIA].[Facturacion](
 	[Fecha_Facturacion] datetime NOT NULL
 
 	CONSTRAINT [PK_Facturacion_Id_Factura] PRIMARY KEY(Id_Factura),
+	CONSTRAINT [FK_Facturacion_Id_Estadia] FOREIGN KEY(Id_Estadia)
+		REFERENCES [LA_MAYORIA].[Estadia](Id_Estadia),
 	CONSTRAINT [FK_Facturacion_Id_Cliente] FOREIGN KEY(Id_Cliente)
 		REFERENCES [LA_MAYORIA].[Clientes](Id_Cliente)
 )
 
 --INSERTO LA FACTURAS DE LOS QUE SON NO ALL INCLUSIVE
-INSERT INTO LA_MAYORIA.Facturacion (Id_Factura, Id_Reserva, Id_Cliente, Total_Factura, Total_Estadia,
+INSERT INTO LA_MAYORIA.Facturacion (Id_Factura, Id_Estadia, Id_Cliente, Total_Factura, Total_Estadia,
 	Total_Consumibles,Fecha_Facturacion)
-SELECT m.Factura_Nro, m.Reserva_Codigo, c.Id_Cliente, m.Factura_Total + m.Item_Factura_Monto, 
+SELECT m.Factura_Nro, e.Id_Estadia, c.Id_Cliente, m.Factura_Total + m.Item_Factura_Monto, 
 	m.Item_Factura_Monto, m.Factura_Total, m.Factura_Fecha 
 	FROM gd_esquema.Maestra m 
 	INNER JOIN LA_MAYORIA.Clientes c
@@ -667,14 +674,16 @@ SELECT m.Factura_Nro, m.Reserva_Codigo, c.Id_Cliente, m.Factura_Total + m.Item_F
 		AND UPPER(m.Cliente_Nombre) = UPPER(c.Nombre)
 		AND UPPER(m.Cliente_Apellido) = UPPER(c.Apellido)
 		AND UPPER(m.Cliente_Mail) = UPPER(c.Mail)
+	INNER JOIN LA_MAYORIA.Estadia e
+		ON m.Reserva_Codigo = e.Id_Reserva
 	WHERE m.Factura_Total IS NOT NULL
 		AND m.Consumible_Codigo IS NULL
 		AND UPPER(m.Regimen_Descripcion) != UPPER('All Inclusive')
 
 --INSERTO LA FACTURAS DE LOS QUE SON ALL INCLUSIVE
-INSERT INTO LA_MAYORIA.Facturacion (Id_Factura, Id_Reserva, Id_Cliente, Total_Factura, Total_Estadia,
+INSERT INTO LA_MAYORIA.Facturacion (Id_Factura, Id_Estadia, Id_Cliente, Total_Factura, Total_Estadia,
 	Total_Consumibles,Fecha_Facturacion)
-SELECT m.Factura_Nro, m.Reserva_Codigo, c.Id_Cliente, 0 + m.Item_Factura_Monto, 
+SELECT m.Factura_Nro, e.Id_Estadia, c.Id_Cliente, 0 + m.Item_Factura_Monto, 
 	0, m.Factura_Total, m.Factura_Fecha 
 	FROM gd_esquema.Maestra m 
 	INNER JOIN LA_MAYORIA.Clientes c
@@ -682,6 +691,8 @@ SELECT m.Factura_Nro, m.Reserva_Codigo, c.Id_Cliente, 0 + m.Item_Factura_Monto,
 		AND UPPER(m.Cliente_Nombre) = UPPER(c.Nombre)
 		AND UPPER(m.Cliente_Apellido) = UPPER(c.Apellido)
 		AND UPPER(m.Cliente_Mail) = UPPER(c.Mail)
+	INNER JOIN LA_MAYORIA.Estadia e
+		ON m.Reserva_Codigo = e.Id_Reserva
 	WHERE m.Factura_Total IS NOT NULL
 		AND m.Consumible_Codigo IS NULL
 		AND UPPER(m.Regimen_Descripcion) = UPPER('All Inclusive')
@@ -692,35 +703,41 @@ SELECT m.Factura_Nro, m.Reserva_Codigo, c.Id_Cliente, 0 + m.Item_Factura_Monto,
 */
 CREATE TABLE [LA_MAYORIA].[Facturacion_Detalle](
 	[Id_Factura][numeric](18,0) NOT NULL,
-	[Id_Reserva][numeric](18,0) NOT NULL,
+	[Id_Estadia][Int] NOT NULL,
 	[Descripcion][varchar](50) NOT NULL,
 	[Precio][numeric](18,2) NOT NULL DEFAULT 0.0,
 	[Cantidad][Int] NOT NULL DEFAULT 1
 
 	CONSTRAINT [FK_Facturacion_Detalle_Id_Factura] FOREIGN KEY (Id_Factura)
 		REFERENCES [LA_MAYORIA].[Facturacion](Id_Factura),
-	CONSTRAINT [FK_Facturacion_Detalle_Id_Reserva] FOREIGN KEY (Id_Reserva)
-		REFERENCES [LA_MAYORIA].[Reserva](Id_Reserva)
+	CONSTRAINT [FK_Facturacion_Detalle_Id_Estadia] FOREIGN KEY (Id_Estadia)
+		REFERENCES [LA_MAYORIA].[Estadia](Id_Estadia)
 )
 
 --Migro la factura de la estancia
-INSERT INTO LA_MAYORIA.Facturacion_Detalle (Id_Factura, Id_Reserva, Descripcion, Precio, Cantidad)
-SELECT m.Factura_Nro, m.Reserva_Codigo, 'Estadia', m.Item_Factura_Monto, m.Item_Factura_Cantidad
+INSERT INTO LA_MAYORIA.Facturacion_Detalle (Id_Factura, Id_Estadia, Descripcion, Precio, Cantidad)
+SELECT m.Factura_Nro, e.Id_Estadia, 'Estadia', m.Item_Factura_Monto, m.Item_Factura_Cantidad
 	FROM gd_esquema.Maestra m
+	INNER JOIN LA_MAYORIA.Estadia e
+		ON m.Reserva_Codigo = e.Id_Reserva
 	WHERE m.Consumible_Codigo IS NULL
 		AND m.Item_Factura_Monto IS NOT NULL
 
 --Migro los consumibles de cada factura
-INSERT INTO LA_MAYORIA.Facturacion_Detalle (Id_Factura, Id_Reserva, Descripcion, Precio, Cantidad)
-SELECT m.Factura_Nro, m.Reserva_Codigo, m.Consumible_Descripcion , m.Item_Factura_Monto, m.Item_Factura_Cantidad
+INSERT INTO LA_MAYORIA.Facturacion_Detalle (Id_Factura, Id_Estadia, Descripcion, Precio, Cantidad)
+SELECT m.Factura_Nro, e.Id_Estadia, m.Consumible_Descripcion , m.Item_Factura_Monto, m.Item_Factura_Cantidad
 	FROM gd_esquema.Maestra m
+	INNER JOIN LA_MAYORIA.Estadia e
+		ON m.Reserva_Codigo = e.Id_Reserva
 	WHERE m.Consumible_Codigo IS NOT NULL
 		AND m.Item_Factura_Monto IS NOT NULL
 
 --Migro los consumibles que deben ser descontados por All Inclusive
-INSERT INTO LA_MAYORIA.Facturacion_Detalle (Id_Factura, Id_Reserva, Descripcion, Precio, Cantidad)
-SELECT m.Factura_Nro, m.Reserva_Codigo, 'Devolucion Regimen All Inclusive' , 0 - m.Factura_Total, m.Item_Factura_Cantidad
+INSERT INTO LA_MAYORIA.Facturacion_Detalle (Id_Factura, Id_Estadia, Descripcion, Precio, Cantidad)
+SELECT m.Factura_Nro, e.Id_Estadia, 'Devolucion Regimen All Inclusive' , 0 - m.Factura_Total, m.Item_Factura_Cantidad
 	FROM gd_esquema.Maestra m
+	INNER JOIN LA_MAYORIA.Estadia e
+		ON m.Reserva_Codigo = e.Id_Reserva
 	WHERE UPPER(m.Regimen_Descripcion) = UPPER('All Inclusive')
 		AND m.Consumible_Codigo IS NULL
 		AND m.Item_Factura_Monto IS NOT NULL
