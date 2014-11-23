@@ -95,6 +95,11 @@ CREATE TABLE [LA_MAYORIA].[Rol_Funcionalidad](
 	CONSTRAINT UQ_Rol_Funcionalidad_Id_Rol_Id_Funcionalidad UNIQUE(Id_Rol,Id_Funcionalidad)
 )
 
+INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (1, 1)
+INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (1, 2)
+INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (1, 3)
+INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (1, 4)
+
 --TABLA USUARIO_ROL
 /*
 	Tabla que almanena los roles asignados para cada usuario y si este se encuentra habilitado

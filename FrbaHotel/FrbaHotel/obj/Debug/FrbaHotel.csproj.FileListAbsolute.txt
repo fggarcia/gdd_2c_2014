@@ -21,3 +21,4 @@ C:\Documents and Settings\UsuarioAdmin\Mis documentos\tp2c2014\gdd_2c_2014\FrbaH
 C:\Documents and Settings\UsuarioAdmin\Mis documentos\tp2c2014\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Debug\FrbaHotel.Login.FormLogin.resources
 C:\Documents and Settings\UsuarioAdmin\Mis documentos\tp2c2014\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Debug\FrbaHotel.Login.FormSeleccionHotel.resources
 C:\Documents and Settings\UsuarioAdmin\Mis documentos\tp2c2014\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Debug\FrbaHotel.Login.FormSeleccionRol.resources
+C:\Documents and Settings\UsuarioAdmin\Mis documentos\tp2c2014\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Debug\FrbaHotel.ABM_de_Usuario.FormABMUsuario.resources

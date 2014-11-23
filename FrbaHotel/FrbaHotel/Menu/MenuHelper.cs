@@ -26,8 +26,8 @@ namespace FrbaHotel
                 while (reader.Read())
                 {
                     OpcionMenu menuOption = new OpcionMenu();
-                    menuOption.descripcion = reader["descripcion"].ToString();
-                    menuOption.idFuncionalidad = Convert.ToInt32(reader["idFuncionalidad"]);
+                    menuOption.descripcion = reader["Descripcion"].ToString();
+                    menuOption.idFuncionalidad = Convert.ToInt32(reader["Id_Funcionalidad"]);
                     menuOptions.Add(position, menuOption);
                     position++;
                 }
@@ -55,15 +55,15 @@ namespace FrbaHotel
                     func.form = "Form_Login";
                     break;
                 case "ABM de Rol":
-                    func.folder = "ABM de Rol";
+                    func.folder = "ABM_de_Rol";
                     func.form = "Form1";
                     break;
                 case "ABM de Usuario":
-                    func.folder = "ABM de Usuario";
-                    func.form = "Form1";
+                    func.folder = "ABM_de_Usuario";
+                    func.form = "FormABMUsuario";
                     break;
                 case "ABM de Hotel":
-                    func.folder = "ABM de Hotel";
+                    func.folder = "ABM_de_Hotel";
                     func.form = "Form1";
                     break;
             }
