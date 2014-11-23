@@ -113,3 +113,51 @@ BEGIN
 
 END
 GO
+
+CREATE PROCEDURE [LA_MAYORIA].[sp_user_search](
+@p_user_name varchar(255) = null,
+@p_id_rol int = null,
+@p_id_hotel int = null
+)
+AS
+BEGIN
+	SELECT DISTINCT
+				
+		u.Id_Usuario 'Usuario',
+		ud.Nombre_Apellido 'Nombre',
+		ud.Tipo_DNI 'Tipo Documento',
+		ud.Nro_DNI 'Numero Documento',
+		ud.Telefono 'Telefono',
+		ud.Direccion 'Direccion',
+		ud.Fecha_Nacimiento 'Nacimiento',
+		r.Descripcion 'Rol',
+		uh.Id_Hotel 'Hotel',
+		u.Habilitado 'Habilitado'
+		
+		FROM LA_MAYORIA.Usuario u
+			INNER JOIN LA_MAYORIA.Datos_Usuario ud
+				ON u.Id_Usuario = ud.Id_Usuario
+			INNER JOIN LA_MAYORIA.Usuario_Rol ur
+				ON u.Id_Usuario = ur.Id_Usuario
+			INNER JOIN LA_MAYORIA.Rol r
+				ON ur.Id_Rol = r.Id_Rol
+			INNER JOIN LA_MAYORIA.Usuario_Hotel uh
+				ON u.Id_Usuario = uh.Id_Usuario
+
+		WHERE
+		((@p_id_rol IS NULL) OR ( ur.Id_Rol = @p_id_rol))
+		AND  ((@p_user_name IS NULL) OR (u.Id_Usuario like @p_user_name + '%'))
+		AND  ((@p_id_hotel IS NULL) OR (uh.Id_Hotel = @p_id_hotel))
+END
+GO
+
+CREATE PROCEDURE [LA_MAYORIA].[sp_user_enable_disable](
+@p_user_name varchar(255),
+@p_enable_disable int
+)
+AS
+BEGIN
+	UPDATE LA_MAYORIA.Usuario SET Habilitado = @p_enable_disable
+		WHERE Id_Usuario = @p_user_name
+END
+GO
