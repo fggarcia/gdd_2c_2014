@@ -74,6 +74,8 @@
     </Compile>
     <Compile Include="ABM de Rol\Rol.cs" />
     <Compile Include="ABM de Rol\Roles.cs" />
+    <Compile Include="ABM de Usuario\UsuariosDatosHelper.cs" />
+    <Compile Include="ABM de Usuario\Documentos.cs" />
     <Compile Include="ABM de Usuario\FormABMUsuario.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -86,6 +88,7 @@
     <Compile Include="ABM de Usuario\FormABMUsuarioModify.Designer.cs">
       <DependentUpon>FormABMUsuarioModify.cs</DependentUpon>
     </Compile>
+    <Compile Include="ABM de Usuario\UsuarioDatos.cs" />
     <Compile Include="ABM de Usuario\UsuarioHelper.cs" />
     <Compile Include="Cancelar Reserva\Form1.cs">
       <SubType>Form</SubType>
@@ -195,6 +198,7 @@
     <Compile Include="Utils\DataGridViewHelper.cs" />
     <Compile Include="Utils\DateConverter.cs" />
     <Compile Include="Utils\Encrypt.cs" />
+    <Compile Include="Utils\FormHelper.cs" />
     <Compile Include="Utils\TextBoxHelper.cs" />
     <Compile Include="VarGlobal.cs" />
   </ItemGroup>

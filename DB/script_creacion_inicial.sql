@@ -100,27 +100,20 @@ INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (1, 2)
 INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (1, 3)
 INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (1, 4)
 
---TABLA USUARIO_ROL
+--TABLA DOCUMENTOS
 /*
-	Tabla que almanena los roles asignados para cada usuario y si este se encuentra habilitado
-	Id_Usuario: Id_Usuario
-	Id_Rol: Id_Rol
-	Habilitado: Habilitado
+	Tabla de parametria de tipos de documentos
 */
-CREATE TABLE [LA_MAYORIA].[Usuario_Rol](
-	[Id_Usuario][varchar](20) NOT NULL,
-	[Id_Rol][Int] NOT NULL,
-	[Habilitado][bit] NULL
+CREATE TABLE [LA_MAYORIA].[Tipo_Identificacion](
+	[Id_Tipo_Identificacion][Int]IDENTITY(1,1) NOT NULL,
+	[Descripcion][varchar](255) NOT NULL
 
-	CONSTRAINT UQ_Usuario_Rol_Id_Usuario_Id_Rol UNIQUE(Id_Usuario, Id_Rol),
-	CONSTRAINT [FK_Usuario_Rol_Usuario_Id_Usuario] FOREIGN KEY(Id_Usuario)
-		REFERENCES [LA_MAYORIA].[Usuario] (Id_Usuario),
-	CONSTRAINT [FK_Usuario_Rol_Rol_Id_Rol] FOREIGN KEY(Id_Rol)
-		REFERENCES [LA_MAYORIA].[Rol] (Id_Rol)
+	CONSTRAINT [PK_Tipo_Identificacion_Id_Tipo_Identificacion] PRIMARY KEY (Id_Tipo_Identificacion),
+	CONSTRAINT UQ_Tipo_Identificacion_Descripcion UNIQUE (Descripcion)
 )
 
---Se agrega al usuario admin con el rol de administrador
-INSERT INTO LA_MAYORIA.Usuario_Rol (Id_Usuario, Id_Rol, Habilitado) values ('admin',1,1)
+INSERT INTO LA_MAYORIA.Tipo_Identificacion (Descripcion)
+VALUES ('PASAPORTE ARGENTINA')
 
 --TABLA DATOS_USUARIO
 /*
@@ -129,7 +122,8 @@ INSERT INTO LA_MAYORIA.Usuario_Rol (Id_Usuario, Id_Rol, Habilitado) values ('adm
 CREATE TABLE [LA_MAYORIA].[Datos_Usuario](
 	[Id_Usuario][varchar](20) NOT NULL,
 	[Nombre_Apellido][varchar](50) NOT NULL,
-	[Tipo_DNI][varchar](10) NOT NULL,
+	[Mail][varchar](255) NOT NULL,
+	[Tipo_DNI][Int] NOT NULL,
 	[Nro_DNI][int] NOT NULL,
 	[Telefono][varchar](20) NOT NULL,
 	[Direccion][varchar](50) NOT NULL,
@@ -140,9 +134,9 @@ CREATE TABLE [LA_MAYORIA].[Datos_Usuario](
 )
 
 --Ingreso datos del usuario administrador
-INSERT INTO LA_MAYORIA.Datos_Usuario (Id_Usuario, Nombre_Apellido, Tipo_DNI, Nro_DNI, Telefono,
+INSERT INTO LA_MAYORIA.Datos_Usuario (Id_Usuario, Nombre_Apellido, Mail, Tipo_DNI, Nro_DNI, Telefono,
 	Direccion, Fecha_Nacimiento)
-VALUES ('admin', 'admin','DNI', 1, '1234-5678','Calle Falsa 123, Algun Pais', getdate())
+VALUES ('admin', 'admin', 'test@gmail.com' ,1, 1, '1234-5678','Calle Falsa 123, Algun Pais', getdate())
 
 --TABLA HOTEL
 /*
@@ -187,24 +181,31 @@ SELECT h.Id_Hotel, m.Hotel_CantEstrella, m.Hotel_Recarga_Estrella FROM LA_MAYORI
 	ON h.Calle_Direccion = m.Hotel_Calle AND h.Calle_Nro = m.Hotel_Nro_Calle AND h.Ciudad = m.Hotel_Ciudad
 	GROUP BY h.Id_Hotel, h.Calle_Direccion, h.Calle_Nro, h.Ciudad, m.Hotel_CantEstrella, m.Hotel_Recarga_Estrella
 
---TABLA USUARIO_HOTEL
+--TABLA USUARIO_ROL_HOTEL
 /*
-	Tabla con los hoteles a los cuales esta asignado cada usuario
+	Tabla que almanena los roles asignados para cada usuario y hotel y si este se encuentra habilitado
+	Id_Usuario: Id_Usuario
+	Id_Rol: Id_Rol
+	Id_Hotel: Id_Hotel
+	Habilitado: Habilitado
 */
-CREATE TABLE [LA_MAYORIA].[Usuario_Hotel](
+CREATE TABLE [LA_MAYORIA].[Usuario_Rol_Hotel](
 	[Id_Usuario][varchar](20) NOT NULL,
+	[Id_Rol][Int] NOT NULL,
 	[Id_Hotel][Int] NOT NULL,
-	[Habilitado][bit] NOT NULL
+	[Habilitado][bit] NULL
 
-	CONSTRAINT [FK_Usuario_Hotel_Id_Usuario] FOREIGN KEY (Id_Usuario)
-		REFERENCES [LA_MAYORIA].[Usuario](Id_Usuario),
-	CONSTRAINT [FK_Usuario_Hotel_Id_Hotel] FOREIGN KEY (Id_Hotel)
-		REFERENCES [LA_MAYORIA].[Hotel](Id_Hotel),
-	CONSTRAINT UQ_Usuario_Hotel_Id_Usuario_Id_Hotel UNIQUE(Id_Usuario, Id_Hotel)
+	CONSTRAINT UQ_Usuario_Rol_Id_Usuario_Id_Rol UNIQUE(Id_Usuario, Id_Rol),
+	CONSTRAINT [FK_Usuario_Rol_Hotel_Usuario_Id_Usuario] FOREIGN KEY(Id_Usuario)
+		REFERENCES [LA_MAYORIA].[Usuario] (Id_Usuario),
+	CONSTRAINT [FK_Usuario_Rol_Hotel_Hotel_Id_Hotel] FOREIGN KEY (Id_Hotel)
+		REFERENCES [LA_MAYORIA].[Hotel] (Id_Hotel),
+	CONSTRAINT [FK_Usuario_Rol_Rol_Id_Rol] FOREIGN KEY(Id_Rol)
+		REFERENCES [LA_MAYORIA].[Rol] (Id_Rol)
 )
 
-INSERT INTO LA_MAYORIA.Usuario_Hotel (Id_Usuario, Id_Hotel, Habilitado)
-VALUES ('admin', 1, 1)
+--Se agrega al usuario admin con el rol de administrador
+INSERT INTO LA_MAYORIA.Usuario_Rol_Hotel (Id_Usuario, Id_Rol, Id_Hotel, Habilitado) values ('admin',1,1,1)
 
 --TABLA REGIMEN
 /*
@@ -333,21 +334,6 @@ CREATE TABLE [LA_MAYORIA].[Historial_Baja_Habitacion](
 		(Id_Hotel, Habitacion_Nro, Habitacion_Piso) REFERENCES
 		[LA_MAYORIA].[Habitacion](Id_Hotel,Nro,Piso)
 )
-
---TABLA DOCUMENTOS
-/*
-	Tabla de parametria de tipos de documentos
-*/
-CREATE TABLE [LA_MAYORIA].[Tipo_Identificacion](
-	[Id_Tipo_Identificacion][Int]IDENTITY(1,1) NOT NULL,
-	[Descripcion][varchar](255) NOT NULL
-
-	CONSTRAINT [PK_Tipo_Identificacion_Id_Tipo_Identificacion] PRIMARY KEY (Id_Tipo_Identificacion),
-	CONSTRAINT UQ_Tipo_Identificacion_Descripcion UNIQUE (Descripcion)
-)
-
-INSERT INTO LA_MAYORIA.Tipo_Identificacion (Descripcion)
-VALUES ('PASAPORTE ARGENTINA')
 
 --TABLA NACIONALIDAD
 /*

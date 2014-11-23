@@ -10,4 +10,10 @@ DROP PROCEDURE LA_MAYORIA.sp_menu_list_functionality_by_user
 
 DROP PROCEDURE LA_MAYORIA.sp_user_search
 
-DROP PROCEDURE sp_user_enable_disable
+DROP PROCEDURE LA_MAYORIA.sp_user_enable_disable
+
+DROP PROCEDURE LA_MAYORIA.sp_user_clean_login
+
+DROP PROCEDURE LA_MAYORIA.sp_user_data_get_by_user
+
+DROP PROCEDURE LA_MAYORIA.sp_user_search_rol_hotel_by_user

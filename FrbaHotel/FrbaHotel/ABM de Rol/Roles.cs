@@ -41,8 +41,8 @@ namespace FrbaHotel.ABM_de_Rol
 
         public static void fillComboBoxByUser(ComboBox comboBox_Roles, Usuario user)
         {
-            ComboBoxHelper.fill(comboBox_Roles, "LA_MAYORIA.Usuario_Rol ur INNER JOIN LA_MAYORIA.Rol r ON ur.Id_Rol = r.Id_Rol",
-                "ur.Id_Rol", "Descripcion", "ur.Id_Usuario = '" + user.id + "' AND r.Habilitado = 1 AND ur.Habilitado = 1", null);
+            ComboBoxHelper.fill(comboBox_Roles, "LA_MAYORIA.Usuario_Rol_Hotel urh INNER JOIN LA_MAYORIA.Rol r ON urh.Id_Rol = r.Id_Rol",
+                "urh.Id_Rol", "Descripcion", "urh.Id_Usuario = '" + user.id + "' AND r.Habilitado = 1 AND urh.Habilitado = 1", null);
         }
 
         public static void fillComboBox(ComboBox comboBox)

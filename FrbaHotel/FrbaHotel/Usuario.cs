@@ -10,6 +10,6 @@ namespace FrbaHotel
     {
         public string id { get; set; }
         public Rol rol { get; set; }
-        public long hotel { get; set; }
+        public int hotel { get; set; }
     }
 }

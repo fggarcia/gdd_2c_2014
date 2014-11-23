@@ -49,19 +49,21 @@ CREATE PROCEDURE [LA_MAYORIA].[sp_rol_exist_one_by_user](
 AS
 BEGIN
 	Declare @count_rol int
-	SELECT @count_rol = COUNT(1) FROM LA_MAYORIA.Usuario_Rol 
+	SELECT DISTINCT  Id_Usuario, Id_Rol FROM LA_MAYORIA.Usuario_Rol_Hotel
 		WHERE Id_Usuario = @p_id
 		AND Habilitado = 1
+
+	SET @count_rol = @@ROWCOUNT
 
 	SET @p_count_rol = @count_rol
 
 	IF ( @count_rol = 1 )
 	BEGIN
-		SELECT @p_id_rol = ur.Id_Rol, @p_rol_desc = r.Descripcion FROM LA_MAYORIA.Usuario_Rol ur 
-			INNER JOIN LA_MAYORIA.Rol r ON ur.Id_Rol = r.Id_Rol 
-		WHERE ur.Id_Usuario = @p_id 
+		SELECT @p_id_rol = urh.Id_Rol, @p_rol_desc = r.Descripcion FROM LA_MAYORIA.Usuario_Rol_Hotel urh 
+			INNER JOIN LA_MAYORIA.Rol r ON urh.Id_Rol = r.Id_Rol 
+		WHERE urh.Id_Usuario = @p_id 
 			AND r.Habilitado = 1
-			AND ur.Habilitado = 1
+			AND urh.Habilitado = 1
 	END
 	ELSE
 	BEGIN
@@ -73,6 +75,7 @@ GO
 
 CREATE PROCEDURE [LA_MAYORIA].[sp_hotel_exist_one_by_user](
 @p_id varchar(255) = null,
+@p_id_rol int,
 @p_count_hotel int = 0 OUTPUT,
 @p_id_hotel int = 0 OUTPUT,
 @p_hotel_desc varchar(255) = null OUTPUT
@@ -80,19 +83,21 @@ CREATE PROCEDURE [LA_MAYORIA].[sp_hotel_exist_one_by_user](
 AS
 BEGIN
 	Declare @count_hotel int
-	SELECT @count_hotel = COUNT(1) FROM LA_MAYORIA.Usuario_Hotel 
+	SELECT @count_hotel = COUNT(1) FROM LA_MAYORIA.Usuario_Rol_Hotel 
 		WHERE Id_Usuario = @p_id
+		AND Id_Rol = @p_id_rol
 		AND Habilitado = 1
 
 	SET @p_count_hotel = @count_hotel
 
 	IF ( @count_hotel = 1 )
 	BEGIN
-		SELECT @p_id_hotel = uh.Id_Hotel, @p_hotel_desc = h.Nombre FROM LA_MAYORIA.Usuario_Hotel uh 
-			INNER JOIN LA_MAYORIA.Hotel h ON uh.Id_Hotel = h.Id_Hotel
-		WHERE uh.Id_Usuario = @p_id 
+		SELECT @p_id_hotel = urh.Id_Hotel, @p_hotel_desc = h.Nombre FROM LA_MAYORIA.Usuario_Rol_Hotel urh 
+			INNER JOIN LA_MAYORIA.Hotel h ON urh.Id_Hotel = h.Id_Hotel
+		WHERE urh.Id_Usuario = @p_id
+			AND urh.Id_Rol = @p_id_rol
 			AND h.Habilitado = 1
-			AND uh.Habilitado = 1
+			AND urh.Habilitado = 1
 	END
 	ELSE
 	BEGIN
@@ -131,23 +136,21 @@ BEGIN
 		ud.Direccion 'Direccion',
 		ud.Fecha_Nacimiento 'Nacimiento',
 		r.Descripcion 'Rol',
-		uh.Id_Hotel 'Hotel',
+		urh.Id_Hotel 'Hotel',
 		u.Habilitado 'Habilitado'
 		
 		FROM LA_MAYORIA.Usuario u
 			INNER JOIN LA_MAYORIA.Datos_Usuario ud
 				ON u.Id_Usuario = ud.Id_Usuario
-			INNER JOIN LA_MAYORIA.Usuario_Rol ur
-				ON u.Id_Usuario = ur.Id_Usuario
+			INNER JOIN LA_MAYORIA.Usuario_Rol_Hotel urh
+				ON u.Id_Usuario = urh.Id_Usuario
 			INNER JOIN LA_MAYORIA.Rol r
-				ON ur.Id_Rol = r.Id_Rol
-			INNER JOIN LA_MAYORIA.Usuario_Hotel uh
-				ON u.Id_Usuario = uh.Id_Usuario
+				ON urh.Id_Rol = r.Id_Rol
 
 		WHERE
-		((@p_id_rol IS NULL) OR ( ur.Id_Rol = @p_id_rol))
+		((@p_id_rol IS NULL) OR ( urh.Id_Rol = @p_id_rol))
 		AND  ((@p_user_name IS NULL) OR (u.Id_Usuario like @p_user_name + '%'))
-		AND  ((@p_id_hotel IS NULL) OR (uh.Id_Hotel = @p_id_hotel))
+		AND  ((@p_id_hotel IS NULL) OR (urh.Id_Hotel = @p_id_hotel))
 END
 GO
 
@@ -159,5 +162,47 @@ AS
 BEGIN
 	UPDATE LA_MAYORIA.Usuario SET Habilitado = @p_enable_disable
 		WHERE Id_Usuario = @p_user_name
+END
+GO
+
+CREATE PROCEDURE [LA_MAYORIA].[sp_user_clean_login](
+@p_user_name varchar(255)
+)
+AS
+BEGIN
+	UPDATE LA_MAYORIA.Usuario SET Cantidad_Login = 0
+END
+GO
+
+CREATE PROCEDURE [LA_MAYORIA].[sp_user_data_get_by_user](
+@p_user_name varchar(255)
+)
+AS
+BEGIN
+	SELECT * FROM LA_MAYORIA.Usuario u
+		INNER JOIN LA_MAYORIA.Datos_Usuario ud
+			ON u.Id_Usuario = ud.Id_Usuario
+		INNER JOIN LA_MAYORIA.Tipo_Identificacion ti
+			ON ti.Id_Tipo_Identificacion = ud.Tipo_DNI
+		WHERE u.Id_Usuario = @p_user_name
+END
+GO
+
+CREATE PROCEDURE [LA_MAYORIA].[sp_user_search_rol_hotel_by_user](
+@p_user_name varchar(255),
+@p_id_hotel int
+)
+AS
+BEGIN
+	SELECT
+		r.Id_Rol 'IdRol',
+		r.Descripcion 'Descripcion'
+	FROM LA_MAYORIA.Usuario_Rol_Hotel urh
+	INNER JOIN LA_MAYORIA.Rol r 
+		ON urh.Id_Rol = r.Id_Rol
+	WHERE urh.Id_Usuario = @p_user_name
+	AND urh.Id_Hotel = @p_id_hotel
+	AND r.Habilitado = 1
+	AND urh.Habilitado = 1
 END
 GO

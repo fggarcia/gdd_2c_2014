@@ -16,6 +16,8 @@ namespace FrbaHotel.Hotel
             sp_rol_exist_one_by_user.CommandText = "LA_MAYORIA.sp_hotel_exist_one_by_user";
             sp_rol_exist_one_by_user.Parameters.Add(new SqlParameter("@p_id", SqlDbType.VarChar));
             sp_rol_exist_one_by_user.Parameters["@p_id"].Value = user.id;
+            sp_rol_exist_one_by_user.Parameters.Add(new SqlParameter("@p_id_rol", SqlDbType.Int));
+            sp_rol_exist_one_by_user.Parameters["@p_id_rol"].Value = user.rol.id;
 
             var returnParameterCountHotel = sp_rol_exist_one_by_user.Parameters.Add(new SqlParameter("@p_count_hotel", SqlDbType.Int));
             returnParameterCountHotel.Direction = ParameterDirection.InputOutput;
@@ -40,8 +42,9 @@ namespace FrbaHotel.Hotel
 
         public static void fillComboBoxByUser(ComboBox comboBox_Hotel, Usuario user)
         {
-            ComboBoxHelper.fill(comboBox_Hotel, "LA_MAYORIA.Usuario_Hotel uh INNER JOIN LA_MAYORIA.Hotel h ON uh.Id_Hotel = h.Id_Hotel",
-                "uh.Id_Hotel", "uh.Id_Hotel", "uh.Id_Usuario = '" + user.id + "' AND h.Habilitado = 1 AND uh.Habilitado = 1", "uh.Id_Hotel ASC");
+            ComboBoxHelper.fill(comboBox_Hotel, "LA_MAYORIA.Usuario_Rol_Hotel urh INNER JOIN LA_MAYORIA.Hotel h ON urh.Id_Hotel = h.Id_Hotel",
+                "urh.Id_Hotel", "urh.Id_Hotel", "urh.Id_Usuario = '" + user.id + "'AND urh.Id_Rol = " + 
+                user.rol.id + "AND h.Habilitado = 1 AND urh.Habilitado = 1", "urh.Id_Hotel ASC");
         }
 
         public static void fillComboBox(ComboBox comboBox)

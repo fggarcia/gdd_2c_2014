@@ -10,6 +10,10 @@ namespace FrbaHotel.ABM_de_Rol
         public int id { get; set;}
         public string description {get; set; }
 
+        public Rol()
+        {
+        }
+
         public Rol(int id, string description)
         {
             this.id = id;

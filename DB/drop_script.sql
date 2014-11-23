@@ -1,22 +1,18 @@
 DROP TABLE LA_MAYORIA.Datos_Usuario
 
-DROP TABLE LA_MAYORIA.Usuario_Hotel
-
 DROP TABLE LA_MAYORIA.Hotel_Estrellas
 
-DROP TABLE LA_MAYORIA.Usuario_Rol
-
-DROP TABLE LA_MAYORIA.Rol_Funcionalidad
+DROP TABLE LA_MAYORIA.Usuario_Rol_Hotel
 
 DROP TABLE LA_MAYORIA.Regimen_Hotel
+
+DROP TABLE LA_MAYORIA.Rol_Funcionalidad
 
 DROP TABLE LA_MAYORIA.Historial_Baja_Hotel
 
 DROP TABLE LA_MAYORIA.Historial_Baja_Habitacion
 
 DROP TABLE LA_MAYORIA.Historial_Cancelacion_Reserva
-
-DROP TABLE LA_MAYORIA.Estadia
 
 DROP TABLE LA_MAYORIA.Consumible_Reserva
 
@@ -42,6 +38,8 @@ DROP TABLE LA_MAYORIA.Tipo_Identificacion
 DROP TABLE LA_MAYORIA.Funcionalidad
 
 DROP TABLE LA_MAYORIA.Habitacion_Reserva
+
+DROP TABLE LA_MAYORIA.Estadia
 
 DROP TABLE LA_MAYORIA.Reserva
 
