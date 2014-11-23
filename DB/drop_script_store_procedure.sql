@@ -1,0 +1,3 @@
+DROP PROCEDURE LA_MAYORIA.sp_login_check_valid_user
+
+DROP PROCEDURE LA_MAYORIA.sp_login_check_password

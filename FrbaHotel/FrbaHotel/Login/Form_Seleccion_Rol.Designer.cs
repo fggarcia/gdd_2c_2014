@@ -30,8 +30,7 @@
         {
             this.label1 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
-            this.dataGrid_Rol = new System.Windows.Forms.DataGridView();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGrid_Rol)).BeginInit();
+            this.comboBox_Roles = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // label1
@@ -45,32 +44,31 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(75, 136);
+            this.button1.Location = new System.Drawing.Point(75, 83);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(65, 31);
             this.button1.TabIndex = 2;
             this.button1.Text = "Aceptar";
             this.button1.UseVisualStyleBackColor = true;
             // 
-            // dataGrid_Rol
+            // comboBox_Roles
             // 
-            this.dataGrid_Rol.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGrid_Rol.Location = new System.Drawing.Point(57, 25);
-            this.dataGrid_Rol.Name = "dataGrid_Rol";
-            this.dataGrid_Rol.Size = new System.Drawing.Size(103, 105);
-            this.dataGrid_Rol.TabIndex = 3;
+            this.comboBox_Roles.FormattingEnabled = true;
+            this.comboBox_Roles.Location = new System.Drawing.Point(46, 42);
+            this.comboBox_Roles.Name = "comboBox_Roles";
+            this.comboBox_Roles.Size = new System.Drawing.Size(121, 21);
+            this.comboBox_Roles.TabIndex = 3;
             // 
             // Form_Seleccion_Rol
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(220, 200);
-            this.Controls.Add(this.dataGrid_Rol);
+            this.ClientSize = new System.Drawing.Size(220, 134);
+            this.Controls.Add(this.comboBox_Roles);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label1);
             this.Name = "Form_Seleccion_Rol";
             this.Text = "Seleccion de Rol";
-            ((System.ComponentModel.ISupportInitialize)(this.dataGrid_Rol)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -80,6 +78,6 @@
 
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.DataGridView dataGrid_Rol;
+        private System.Windows.Forms.ComboBox comboBox_Roles;
     }
 }

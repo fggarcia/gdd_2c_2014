@@ -27,7 +27,7 @@ namespace FrbaHotel
         {
             SqlConnection conn = Connection.getConnection();
             DataSet dataSet = new DataSet();
-            SqlDataAdapter dataAdapter = new SqlDataAdapter(String.Format("SELECT {0} 'Value',{1} AS 'Display' FROM {2} {3} {4}", valueMember, displayMember, dataSource, String.IsNullOrEmpty(whereMember) ? "" : "WHERE " + whereMember, String.IsNullOrEmpty(orderMember) ? "" : "ORDER BY " + orderMember), conn);
+            SqlDataAdapter dataAdapter = new SqlDataAdapter(String.Format("SELECT {0} AS 'Value',{1} AS 'Display' FROM {2} {3} {4}", valueMember, displayMember, dataSource, String.IsNullOrEmpty(whereMember) ? "" : "WHERE " + whereMember, String.IsNullOrEmpty(orderMember) ? "" : "ORDER BY " + orderMember), conn);
             dataAdapter.Fill(dataSet, dataSource);
             DataRow row = dataSet.Tables[0].NewRow();
             dataSet.Tables[0].Rows.InsertAt(row, 0);

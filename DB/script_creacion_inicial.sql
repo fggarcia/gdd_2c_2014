@@ -33,8 +33,8 @@ CREATE TABLE [LA_MAYORIA].[Usuario](
 )
 
 --Se agrega usuario admin con contraseña "shadea" w23e
-INSERT INTO LA_MAYORIA.Usuario(Id_Usuario,Password, Cantidad_Login) 
-VALUES ('admin','e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7', 0)
+INSERT INTO LA_MAYORIA.Usuario(Id_Usuario,Password, Cantidad_Login, Habilitado) 
+VALUES ('admin','e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7', 0, 1)
 
 --TABLA ROL
 /*

@@ -72,6 +72,7 @@
     <Compile Include="ABM de Rol\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="ABM de Rol\Rol.cs" />
     <Compile Include="ABM de Usuario\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -123,6 +124,8 @@
     <Compile Include="Login\Form_Seleccion_Rol.Designer.cs">
       <DependentUpon>Form_Seleccion_Rol.cs</DependentUpon>
     </Compile>
+    <Compile Include="Login\Login.cs" />
+    <Compile Include="Usuario.cs" />
     <Compile Include="Menu\Menu.cs" />
     <Compile Include="Menu\MenuHelper.cs" />
     <Compile Include="Program.cs" />
