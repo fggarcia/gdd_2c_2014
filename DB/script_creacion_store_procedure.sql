@@ -39,3 +39,46 @@ BEGIN
 	END
 END
 GO
+
+CREATE PROCEDURE [LA_MAYORIA].[sp_rol_exist_one_by_user](
+@p_id varchar(255) = null,
+@p_count_rol int = 0 OUTPUT,
+@p_id_rol int = 0 OUTPUT,
+@p_rol_desc varchar(255) = null OUTPUT
+)
+AS
+BEGIN
+	Declare @count_rol int
+	SELECT @count_rol = COUNT(1) FROM LA_MAYORIA.Usuario_Rol 
+		WHERE Id_Usuario = @p_id
+		AND Habilitado = 1
+
+	SET @p_count_rol = @count_rol
+
+	IF ( @count_rol = 1 )
+	BEGIN
+		SELECT @p_id_rol = ur.Id_Rol, @p_rol_desc = r.Descripcion FROM LA_MAYORIA.Usuario_Rol ur 
+			INNER JOIN LA_MAYORIA.Rol r ON ur.Id_Rol = r.Id_Rol 
+		WHERE ur.Id_Usuario = @p_id 
+			AND r.Habilitado = 1
+			AND ur.Habilitado = 1
+	END
+	ELSE
+	BEGIN
+		SET @p_id_rol = null
+		SET @p_rol_desc = null
+	END
+END
+GO
+
+CREATE PROCEDURE [LA_MAYORIA].[sp_menu_list_functionality_by_user](
+@p_id_rol int
+)
+AS
+BEGIN
+	SELECT fun.Descripcion, fun.Id_Funcionalidad FROM LOS_OPTIMISTAS.Funcionalidad fun
+	INNER JOIN LOS_OPTIMISTAS.Rol_Funcionalidad funR ON fun.Id_Funcionalidad = funR.Id_Funcionalidad 
+	WHERE @p_id_rol = funR.Id_Rol
+
+END
+GO

@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using FrbaHotel.ABM_de_Rol;
 
 namespace FrbaHotel
 {
     public class Usuario
     {
         public string id { get; set; }
-        public int rol { get; set; }
+        public Rol rol { get; set; }
         public long hotel { get; set; }
     }
 }

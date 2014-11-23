@@ -73,6 +73,7 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="ABM de Rol\Rol.cs" />
+    <Compile Include="ABM de Rol\Roles.cs" />
     <Compile Include="ABM de Usuario\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -88,11 +89,11 @@
     <Compile Include="Common\AppConnections.cs" />
     <Compile Include="Db\Connection.cs" />
     <Compile Include="Db\ProcedurenHelper.cs" />
-    <Compile Include="Form_Main.cs">
+    <Compile Include="FormMenu.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form_Main.Designer.cs">
-      <DependentUpon>Form_Main.cs</DependentUpon>
+    <Compile Include="FormMenu.Designer.cs">
+      <DependentUpon>FormMenu.cs</DependentUpon>
     </Compile>
     <Compile Include="Generar Modificar Reserva\Form1.cs">
       <SubType>Form</SubType>
@@ -106,42 +107,43 @@
     <Compile Include="Listado Estadistico\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Login\Form_Login.cs">
+    <Compile Include="Login\FormLogin.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Login\Form_Login.Designer.cs">
-      <DependentUpon>Form_Login.cs</DependentUpon>
+    <Compile Include="Login\FormLogin.Designer.cs">
+      <DependentUpon>FormLogin.cs</DependentUpon>
     </Compile>
-    <Compile Include="Login\Form_Seleccion_Hotel.cs">
+    <Compile Include="Login\FormSeleccionHotel.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Login\Form_Seleccion_Hotel.Designer.cs">
-      <DependentUpon>Form_Seleccion_Hotel.cs</DependentUpon>
+    <Compile Include="Login\FormSeleccionHotel.Designer.cs">
+      <DependentUpon>FormSeleccionHotel.cs</DependentUpon>
     </Compile>
-    <Compile Include="Login\Form_Seleccion_Rol.cs">
+    <Compile Include="Login\FormSeleccionRol.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Login\Form_Seleccion_Rol.Designer.cs">
-      <DependentUpon>Form_Seleccion_Rol.cs</DependentUpon>
+    <Compile Include="Login\FormSeleccionRol.Designer.cs">
+      <DependentUpon>FormSeleccionRol.cs</DependentUpon>
     </Compile>
     <Compile Include="Login\Login.cs" />
+    <Compile Include="Menu\MenuValidateHelper.cs" />
     <Compile Include="Usuario.cs" />
-    <Compile Include="Menu\Menu.cs" />
+    <Compile Include="Menu\OpcionMenu.cs" />
     <Compile Include="Menu\MenuHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Form_Main.resx">
-      <DependentUpon>Form_Main.cs</DependentUpon>
+    <EmbeddedResource Include="FormMenu.resx">
+      <DependentUpon>FormMenu.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Login\Form_Login.resx">
-      <DependentUpon>Form_Login.cs</DependentUpon>
+    <EmbeddedResource Include="Login\FormLogin.resx">
+      <DependentUpon>FormLogin.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Login\Form_Seleccion_Hotel.resx">
-      <DependentUpon>Form_Seleccion_Hotel.cs</DependentUpon>
+    <EmbeddedResource Include="Login\FormSeleccionHotel.resx">
+      <DependentUpon>FormSeleccionHotel.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Login\Form_Seleccion_Rol.resx">
-      <DependentUpon>Form_Seleccion_Rol.cs</DependentUpon>
+    <EmbeddedResource Include="Login\FormSeleccionRol.resx">
+      <DependentUpon>FormSeleccionRol.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -180,6 +182,7 @@
     <Compile Include="Utils\DateConverter.cs" />
     <Compile Include="Utils\Encrypt.cs" />
     <Compile Include="Utils\TextBoxHelper.cs" />
+    <Compile Include="VarGlobal.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

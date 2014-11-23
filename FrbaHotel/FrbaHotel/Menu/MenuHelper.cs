@@ -10,12 +10,15 @@ namespace FrbaHotel
         {
             SortedList<int, OpcionMenu> menuOptions = new SortedList<int, OpcionMenu>();
 
-            string storedProcedureName = "LA_MAYORIA.proc_listarMenuFuncionalidadPorRol";
-            SqlCommand command = new SqlCommand(storedProcedureName);
-            command.CommandType = CommandType.StoredProcedure;
-            command.Parameters.AddWithValue("@p_idRol", idRol);
+            SqlConnection conn = Connection.getConnection();
 
-            SqlDataReader reader = ProcedureHelper.execute(command) as SqlDataReader;
+            string storedProcedureName = "LA_MAYORIA.sp_menu_list_functionality_by_user";
+            SqlCommand command = new SqlCommand(storedProcedureName);
+            command.Connection = conn;
+            command.CommandType = CommandType.StoredProcedure;
+            command.Parameters.AddWithValue("@p_id_rol", idRol);
+
+            SqlDataReader reader = command.ExecuteReader() as SqlDataReader;
 
             int position = 0;
             if (reader.HasRows)
@@ -30,7 +33,41 @@ namespace FrbaHotel
                 }
             }
 
+            Connection.close(conn);
+
             return menuOptions;
+        }
+
+        public struct functionality
+        {
+            public String folder;
+            public String form;
+        }
+
+        public static functionality getFunctionality(string id)
+        {
+            functionality func = new functionality();
+
+            switch (id)
+            {
+                case "Login y Seguridad":
+                    func.folder = "Login";
+                    func.form = "Form_Login";
+                    break;
+                case "ABM de Rol":
+                    func.folder = "ABM de Rol";
+                    func.form = "Form1";
+                    break;
+                case "ABM de Usuario":
+                    func.folder = "ABM de Usuario";
+                    func.form = "Form1";
+                    break;
+                case "ABM de Hotel":
+                    func.folder = "ABM de Hotel";
+                    func.form = "Form1";
+                    break;
+            }
+            return func;
         }
     }
 }
