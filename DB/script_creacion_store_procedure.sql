@@ -71,13 +71,44 @@ BEGIN
 END
 GO
 
+CREATE PROCEDURE [LA_MAYORIA].[sp_hotel_exist_one_by_user](
+@p_id varchar(255) = null,
+@p_count_hotel int = 0 OUTPUT,
+@p_id_hotel int = 0 OUTPUT,
+@p_hotel_desc varchar(255) = null OUTPUT
+)
+AS
+BEGIN
+	Declare @count_hotel int
+	SELECT @count_hotel = COUNT(1) FROM LA_MAYORIA.Usuario_Hotel 
+		WHERE Id_Usuario = @p_id
+		AND Habilitado = 1
+
+	SET @p_count_hotel = @count_hotel
+
+	IF ( @count_hotel = 1 )
+	BEGIN
+		SELECT @p_id_hotel = uh.Id_Hotel, @p_hotel_desc = h.Nombre FROM LA_MAYORIA.Usuario_Hotel uh 
+			INNER JOIN LA_MAYORIA.Hotel h ON uh.Id_Hotel = h.Id_Hotel
+		WHERE uh.Id_Usuario = @p_id 
+			AND h.Habilitado = 1
+			AND uh.Habilitado = 1
+	END
+	ELSE
+	BEGIN
+		SET @p_id_hotel = null
+		SET @p_hotel_desc = null
+	END
+END
+GO
+
 CREATE PROCEDURE [LA_MAYORIA].[sp_menu_list_functionality_by_user](
 @p_id_rol int
 )
 AS
 BEGIN
-	SELECT fun.Descripcion, fun.Id_Funcionalidad FROM LOS_OPTIMISTAS.Funcionalidad fun
-	INNER JOIN LOS_OPTIMISTAS.Rol_Funcionalidad funR ON fun.Id_Funcionalidad = funR.Id_Funcionalidad 
+	SELECT fun.Descripcion, fun.Id_Funcionalidad FROM LA_MAYORIA.Funcionalidad fun
+	INNER JOIN LA_MAYORIA.Rol_Funcionalidad funR ON fun.Id_Funcionalidad = funR.Id_Funcionalidad 
 	WHERE @p_id_rol = funR.Id_Rol
 
 END

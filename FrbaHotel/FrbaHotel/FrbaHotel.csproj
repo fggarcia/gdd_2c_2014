@@ -88,7 +88,7 @@
     </Compile>
     <Compile Include="Common\AppConnections.cs" />
     <Compile Include="Db\Connection.cs" />
-    <Compile Include="Db\ProcedurenHelper.cs" />
+    <Compile Include="Db\ProcedureHelper.cs" />
     <Compile Include="FormMenu.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -101,6 +101,7 @@
     <Compile Include="Generar Modificar Reserva\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Hotel\Hoteles.cs" />
     <Compile Include="Listado Estadistico\Form1.cs">
       <SubType>Form</SubType>
     </Compile>

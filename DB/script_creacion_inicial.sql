@@ -198,6 +198,8 @@ CREATE TABLE [LA_MAYORIA].[Usuario_Hotel](
 	CONSTRAINT UQ_Usuario_Hotel_Id_Usuario_Id_Hotel UNIQUE(Id_Usuario, Id_Hotel)
 )
 
+INSERT INTO LA_MAYORIA.Usuario_Hotel (Id_Usuario, Id_Hotel, Habilitado)
+VALUES ('admin', 1, 1)
 
 --TABLA REGIMEN
 /*
