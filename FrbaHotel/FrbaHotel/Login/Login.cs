@@ -4,32 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Data.SqlClient;
 using System.Data;
+using FrbaHotel.ABM_de_Usuario;
 
 namespace FrbaHotel.Login
 {
     class Login
     {
         public static Boolean isValidUser(Usuario user){
-            SqlCommand sp_check_user = new SqlCommand();
-            sp_check_user.CommandText = "LA_MAYORIA.sp_login_check_valid_user";
-            sp_check_user.Parameters.Add(new SqlParameter("@p_id", SqlDbType.VarChar));
-            sp_check_user.Parameters["@p_id"].Value = user.id;
-
-            var returnParameterIsValid = sp_check_user.Parameters.Add(new SqlParameter("@p_is_valid", SqlDbType.Bit));
-            returnParameterIsValid.Direction = ParameterDirection.InputOutput;
-
-            ProcedureHelper.execute(sp_check_user, "chequear usuario valido", false);
-
-            int isValid = Convert.ToInt16(returnParameterIsValid.Value);
-
-            if (isValid == 1)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return UsuarioHelper.existUser(user.id);
         }
 
         public static int login(Usuario user, String password)

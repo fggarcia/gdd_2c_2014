@@ -96,6 +96,7 @@
     <Compile Include="Cancelar Reserva\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Validaciones.cs" />
     <Compile Include="Common\AppConnections.cs" />
     <Compile Include="Db\Connection.cs" />
     <Compile Include="Db\ProcedureHelper.cs" />
@@ -196,7 +197,7 @@
     <Compile Include="Utils\CheckBoxHelper.cs" />
     <Compile Include="Utils\ComboBoxHelper.cs" />
     <Compile Include="Utils\DataGridViewHelper.cs" />
-    <Compile Include="Utils\DateConverter.cs" />
+    <Compile Include="Utils\DateHelper.cs" />
     <Compile Include="Utils\Encrypt.cs" />
     <Compile Include="Utils\FormHelper.cs" />
     <Compile Include="Utils\TextBoxHelper.cs" />

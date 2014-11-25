@@ -41,7 +41,7 @@ namespace FrbaHotel.ABM_de_Usuario
                 this.txtNameLastname.Text = userData.nameLastname;
                 this.txtPassword.Enabled = false;
                 this.txtTelephone.Text = userData.telephone;
-                this.txtUsername.Text = user;
+                this.txtUsername.Text = userData.username;
                 this.txtUsername.Enabled = false;
                 this.comboBoxDocumentType.SelectedIndex = this.comboBoxDocumentType.FindStringExact(userData.typeDocumentDescription);
                 this.checkBoxEnable.Checked = userData.enabled;
@@ -51,11 +51,6 @@ namespace FrbaHotel.ABM_de_Usuario
                 Rol rolUsuario = UsuarioHelper.getRolByUserHotel(user, VarGlobal.usuario.hotel);
                 this.comboBoxRol.SelectedIndex = this.comboBoxRol.FindStringExact(rolUsuario.description);
             }
-        }
-
-        private void loadProfileToEdit(String user)
-        {
-
         }
 
         private void buttonCancel_Click(object sender, EventArgs e)
@@ -76,6 +71,76 @@ namespace FrbaHotel.ABM_de_Usuario
         {
             UsuarioHelper.cleanLogin(txtUsername.Text.ToString());
             MessageBox.Show("Se reinicio contador de login");
+        }
+
+        private void buttonAccept_Click(object sender, EventArgs e)
+        {
+            UsuarioDatos userData = this.getDataFromForm();
+            Int32 idRol = 0;
+            if (userData != null)
+            {
+                if (txtPassword.Text != "" || edit)
+                    if (Validaciones.requiredString(comboBoxRol.SelectedValue.ToString(), "Un rol debe ser seleccionado"))
+                    {
+                        idRol = Convert.ToInt32(comboBoxRol.SelectedValue.ToString());
+                        UsuarioDatosHelper.save(userData, VarGlobal.usuario.hotel, idRol, txtPassword.Text);
+                    }
+            }
+        }
+
+        private UsuarioDatos getDataFromForm()
+        {
+            UsuarioDatos userData = new UsuarioDatos();
+            Boolean isValid;
+            isValid = Validaciones.requiredString(txtAddress.Text, "La direccion es necesaria");
+            if (isValid)
+                userData.address = txtAddress.Text;
+            else
+                return null;
+
+            isValid = Validaciones.validAndRequiredInt32(txtDocumentNumber.Text, "El numero de documento debe ser numerico");
+            if (isValid)
+                userData.documentNumber = Convert.ToInt32(txtDocumentNumber.Text);
+            else
+                return null;
+
+            isValid = Validaciones.validAndRequiredMail(txtMail.Text, "El mail es necesario");
+            if (isValid)
+                userData.mail = this.txtMail.Text;
+            else
+                return null;
+
+            isValid = Validaciones.requiredString(txtNameLastname.Text, "El nombre/apellido es necesario");
+            if (isValid)
+                userData.nameLastname = this.txtNameLastname.Text;
+            else
+                return null;
+
+            isValid = Validaciones.requiredString(txtTelephone.Text, "El telefono es necesario");
+            if (isValid)
+                userData.telephone = this.txtTelephone.Text;
+            else
+                return null;
+
+            isValid = Validaciones.requiredString(txtUsername.Text, "El usuario es necesario");
+            if (isValid)
+                userData.username = this.txtUsername.Text;
+            else
+                return null;
+
+            isValid = Validaciones.requiredString(this.comboBoxDocumentType.SelectedValue.ToString(), "Debe seleccionar un tipo de documento");
+            if (isValid)
+                userData.typeDocument = Convert.ToInt32(this.comboBoxDocumentType.SelectedValue.ToString());
+            else
+                return null;
+
+            userData.enabled = this.checkBoxEnable.Checked;
+
+            DateTime birthDate = this.dtBirthDate.Value;
+            DateHelper.truncate(birthDate);
+            userData.birthDate = birthDate;
+
+            return userData;
         }
     }
 }

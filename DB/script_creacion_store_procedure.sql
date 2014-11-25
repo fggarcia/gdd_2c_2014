@@ -206,3 +206,66 @@ BEGIN
 	AND urh.Habilitado = 1
 END
 GO
+
+CREATE PROCEDURE [LA_MAYORIA].[sp_user_save_update](
+@p_user_name varchar(255),
+@p_name_lastName varchar(255),
+@p_id_type_document int,
+@p_document_number int,
+@p_mail varchar(255),
+@p_telephone varchar(255),
+@p_address varchar(255),
+@p_birthdate datetime,
+@p_enabled bit,
+@p_id_hotel int,
+@p_id_rol varchar(255),
+@p_password varchar(255) = null
+)
+AS
+BEGIN
+	BEGIN TRANSACTION
+		IF ( EXISTS(SELECT 1 FROM LA_MAYORIA.Usuario WHERE ID_Usuario = @p_user_name))
+		BEGIN
+			IF (@p_password IS NOT NULL)
+				UPDATE LA_MAYORIA.Usuario SET Password = @p_password
+				WHERE Id_Usuario = @p_user_name
+			UPDATE LA_MAYORIA.Usuario SET Habilitado = @p_enabled
+			WHERE Id_Usuario = @p_user_name
+		END
+		ELSE
+		BEGIN
+			INSERT INTO LA_MAYORIA.Usuario (Id_Usuario, Password, Cantidad_Login, Ultima_Fecha, Habilitado)
+			VALUES (@p_user_name, @p_password, 0, null, @p_enabled)
+		END
+
+		IF ( EXISTS(SELECT 1 FROM LA_MAYORIA.Usuario_Rol_Hotel urh
+			WHERE Id_Usuario = @p_user_name
+			AND Id_Hotel = @p_id_hotel ))
+		BEGIN
+			UPDATE LA_MAYORIA.Usuario_Rol_Hotel SET Id_Rol = @p_id_rol, Habilitado = @p_enabled
+			WHERE Id_Usuario = @p_user_name
+			AND Id_Hotel = @p_id_hotel
+		END
+		ELSE
+		BEGIN
+			INSERT INTO LA_MAYORIA.Usuario_Rol_Hotel (Id_Usuario, Id_Rol, Id_Hotel, Habilitado)
+				VALUES (@p_user_name, @p_id_rol, @p_id_hotel, @p_enabled)
+		END
+
+		IF ( EXISTS(SELECT 1 FROM LA_MAYORIA.Datos_Usuario WHERE Id_Usuario = @p_user_name))
+		BEGIN
+			UPDATE LA_MAYORIA.Datos_Usuario SET Nombre_Apellido = @p_name_lastName, Mail = @p_mail,
+				Tipo_DNI = @p_id_type_document, Nro_DNI = @p_document_number,
+				Telefono = @p_telephone, Direccion = @p_address, Fecha_Nacimiento = @p_birthdate
+			WHERE Id_Usuario = @p_user_name
+		END
+		ELSE
+		BEGIN
+			INSERT INTO LA_MAYORIA.Datos_Usuario (Id_Usuario, Nombre_Apellido, Mail, Tipo_DNI, Nro_DNI, Telefono,
+				Direccion, Fecha_Nacimiento)
+			VALUES (@p_user_name, @p_name_lastName, @p_mail, @p_id_type_document, @p_document_number, @p_telephone,
+				@p_address, @p_birthdate)
+		END
+
+	COMMIT TRANSACTION
+END

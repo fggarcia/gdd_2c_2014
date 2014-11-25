@@ -200,7 +200,7 @@ CREATE TABLE [LA_MAYORIA].[Usuario_Rol_Hotel](
 		REFERENCES [LA_MAYORIA].[Usuario] (Id_Usuario),
 	CONSTRAINT [FK_Usuario_Rol_Hotel_Hotel_Id_Hotel] FOREIGN KEY (Id_Hotel)
 		REFERENCES [LA_MAYORIA].[Hotel] (Id_Hotel),
-	CONSTRAINT [FK_Usuario_Rol_Rol_Id_Rol] FOREIGN KEY(Id_Rol)
+	CONSTRAINT [FK_Usuario_Rol_Hotel_Id_Rol] FOREIGN KEY(Id_Rol)
 		REFERENCES [LA_MAYORIA].[Rol] (Id_Rol)
 )
 
