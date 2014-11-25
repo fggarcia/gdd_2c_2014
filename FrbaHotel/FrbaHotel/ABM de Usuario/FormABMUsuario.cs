@@ -94,8 +94,6 @@ namespace FrbaHotel.ABM_de_Usuario
             {
                 MessageBox.Show("Debe seleccionar un usuario a modificar");
             }
-
-            
         }
     }
 }

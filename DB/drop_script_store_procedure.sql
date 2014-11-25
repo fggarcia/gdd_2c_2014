@@ -33,3 +33,7 @@ DROP PROCEDURE LA_MAYORIA.sp_rol_create
 DROP PROCEDURE LA_MAYORIA.sp_rol_functionality_add
 
 DROP PROCEDURE LA_MAYORIA.sp_rol_functionality_remove
+
+DROP PROCEDURE LA_MAYORIA.sp_client_search
+
+DROP PROCEDURE LA_MAYORIA.sp_client_enable_disable

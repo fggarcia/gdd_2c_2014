@@ -48,11 +48,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ABM de Cliente\Form1.cs">
+    <Compile Include="ABM de Cliente\TypeDocument.cs" />
+    <Compile Include="ABM de Cliente\Cliente.cs" />
+    <Compile Include="ABM de Cliente\ClienteHelper.cs" />
+    <Compile Include="ABM de Cliente\FormABMClient.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ABM de Cliente\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="ABM de Cliente\FormABMClient.Designer.cs">
+      <DependentUpon>FormABMClient.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABM de Cliente\FormABMClientModify.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM de Cliente\FormABMClientModify.Designer.cs">
+      <DependentUpon>FormABMClientModify.cs</DependentUpon>
     </Compile>
     <Compile Include="ABM de Habitacion\Form1.cs">
       <SubType>Form</SubType>
@@ -152,6 +161,9 @@
     <Compile Include="Menu\MenuHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="ABM de Cliente\FormABMClient.resx">
+      <DependentUpon>FormABMClient.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ABM de Rol\FormABMRolModify.resx">
       <DependentUpon>FormABMRolModify.cs</DependentUpon>
     </EmbeddedResource>

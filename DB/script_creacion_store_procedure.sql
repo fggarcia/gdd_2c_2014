@@ -375,3 +375,57 @@ BEGIN
 	DELETE FROM LA_MAYORIA.Rol_Funcionalidad WHERE Id_Rol = @p_id_rol AND Id_Funcionalidad = @p_id_functionality
 END
 GO
+
+CREATE PROCEDURE [LA_MAYORIA].[sp_client_search](
+@p_client_name varchar(255) = null,
+@p_client_lastname varchar(255) = null,
+@p_id_type_document int = null,
+@p_client_document_number varchar(255) = null,
+@p_client_mail varchar(255) = null
+)
+AS
+BEGIN
+	SELECT DISTINCT
+				
+		c.Id_Cliente 'Id Cliente',
+		c.Nombre 'Nombre',
+		c.Apellido 'Apellido',
+		ti.Id_Tipo_Identificacion 'Id Tipo Documento',
+		ti.Descripcion 'Tipo Documento',
+		c.Nro_Identificacion 'Nro Documento',
+		c.Mail 'Mail',
+		c.Telefono 'Telefono',
+		c.Calle_Direccion 'Direccion',
+		c.Calle_Nro 'Nro',
+		c.Calle_Piso 'Piso',
+		c.Calle_Depto 'Departamento',
+		na.Id_Nacionalidad 'Id Nacionalidad',
+		na.Descripcion 'Nacionalidad',
+		c.Fecha_Nacimiento 'Nacimiento',
+		c.Habilitado 'Habilitado'
+		
+		FROM LA_MAYORIA.Clientes c
+			INNER JOIN LA_MAYORIA.Tipo_Identificacion ti
+				ON c.Tipo_Identificacion = ti.Id_Tipo_Identificacion
+			INNER JOIN LA_MAYORIA.Nacionalidad na
+				ON c.Nacionalidad = na.Id_Nacionalidad
+
+		WHERE
+		( (@p_client_name IS NULL) OR (UPPER(c.Nombre) like UPPER(@p_client_name) + '%'))
+		AND ((@p_client_lastname IS NULL) OR (UPPER(c.Apellido) like UPPER(@p_client_lastname) + '%'))
+		AND ((@p_id_type_document IS NULL) OR (c.Tipo_Identificacion = @p_id_type_document))
+		AND ((@p_client_document_number IS NULL) OR (LTRIM(RTRIM(STR(c.Nro_Identificacion))) like @p_client_document_number + '%'))
+		AND ((@p_client_mail IS NULL) OR (UPPER(c.Mail) like UPPER(@p_client_mail) + '%'))
+END
+GO
+
+CREATE PROCEDURE [LA_MAYORIA].[sp_client_enable_disable](
+@p_client_id int,
+@p_enable_disable int
+)
+AS
+BEGIN
+	UPDATE LA_MAYORIA.Clientes SET Habilitado = @p_enable_disable
+		WHERE Id_Cliente = @p_client_id
+END
+GO

@@ -25,3 +25,4 @@ C:\Documents and Settings\UsuarioAdmin\Mis documentos\tp2c2014\gdd_2c_2014\FrbaH
 C:\Documents and Settings\UsuarioAdmin\Mis documentos\tp2c2014\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Debug\FrbaHotel.ABM_de_Usuario.FormABMUsuarioModify.resources
 C:\Documents and Settings\UsuarioAdmin\Mis documentos\tp2c2014\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Debug\FrbaHotel.ABM_de_Rol.FormABMRol.resources
 C:\Documents and Settings\UsuarioAdmin\Mis documentos\tp2c2014\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Debug\FrbaHotel.ABM_de_Rol.FormABMRolModify.resources
+C:\Documents and Settings\UsuarioAdmin\Mis documentos\tp2c2014\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Debug\FrbaHotel.ABM_de_Cliente.FormABMClient.resources
