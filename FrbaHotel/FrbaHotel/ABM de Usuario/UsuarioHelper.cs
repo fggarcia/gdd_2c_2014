@@ -70,13 +70,16 @@ namespace FrbaHotel.ABM_de_Usuario
             return rol;
         }
 
-        public static void enable(string username, Boolean enable)
+        public static void enable(string username, Int32 idHotel, Boolean enable)
         {
             SqlCommand command = new SqlCommand();
             command.CommandText = "LA_MAYORIA.sp_user_enable_disable";
 
             command.Parameters.Add(new SqlParameter("@p_user_name", SqlDbType.VarChar, 255));
             command.Parameters["@p_user_name"].Value = username;
+
+            command.Parameters.Add(new SqlParameter("@p_id_hotel", SqlDbType.Int));
+            command.Parameters["@p_id_hotel"].Value = idHotel;
 
             command.Parameters.Add(new SqlParameter("@p_enable_disable", SqlDbType.Int));
             if (enable)

@@ -56,7 +56,7 @@ namespace FrbaHotel
                     break;
                 case "ABM de Rol":
                     func.folder = "ABM_de_Rol";
-                    func.form = "Form1";
+                    func.form = "FormABMRol";
                     break;
                 case "ABM de Usuario":
                     func.folder = "ABM_de_Usuario";

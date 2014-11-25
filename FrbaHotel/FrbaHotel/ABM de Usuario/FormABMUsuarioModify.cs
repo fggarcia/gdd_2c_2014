@@ -84,6 +84,15 @@ namespace FrbaHotel.ABM_de_Usuario
                     {
                         idRol = Convert.ToInt32(comboBoxRol.SelectedValue.ToString());
                         UsuarioDatosHelper.save(userData, VarGlobal.usuario.hotel, idRol, txtPassword.Text);
+                        if (edit)
+                        {
+                            MessageBox.Show("Modificacion de usuario realizada con exito");
+                        }
+                        else
+                        {
+                            MessageBox.Show("Creacion de usuario realizada con exito");
+                        }
+                        this.closeWindow();
                     }
             }
         }

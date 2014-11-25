@@ -19,3 +19,17 @@ DROP PROCEDURE LA_MAYORIA.sp_user_data_get_by_user
 DROP PROCEDURE LA_MAYORIA.sp_user_search_rol_hotel_by_user
 
 DROP PROCEDURE LA_MAYORIA.sp_user_save_update
+
+DROP PROCEDURE LA_MAYORIA.sp_rol_search
+
+DROP PROCEDURE LA_MAYORIA.sp_rol_enable_disable
+
+DROP PROCEDURE LA_MAYORIA.sp_rol_functionality_availability
+
+DROP PROCEDURE LA_MAYORIA.sp_rol_functionality_enabled
+
+DROP PROCEDURE LA_MAYORIA.sp_rol_create
+
+DROP PROCEDURE LA_MAYORIA.sp_rol_functionality_add
+
+DROP PROCEDURE LA_MAYORIA.sp_rol_functionality_remove

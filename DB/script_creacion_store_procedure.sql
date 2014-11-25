@@ -156,12 +156,14 @@ GO
 
 CREATE PROCEDURE [LA_MAYORIA].[sp_user_enable_disable](
 @p_user_name varchar(255),
+@p_id_hotel int,
 @p_enable_disable int
 )
 AS
 BEGIN
-	UPDATE LA_MAYORIA.Usuario SET Habilitado = @p_enable_disable
+	UPDATE LA_MAYORIA.Usuario_Rol_Hotel SET Habilitado = @p_enable_disable
 		WHERE Id_Usuario = @p_user_name
+		AND Id_Hotel = @p_id_hotel
 END
 GO
 
@@ -269,3 +271,107 @@ BEGIN
 
 	COMMIT TRANSACTION
 END
+GO
+
+CREATE PROCEDURE [LA_MAYORIA].[sp_rol_search](
+@p_rol_name varchar(255) = null
+)
+AS
+BEGIN
+	SELECT DISTINCT
+				
+		r.Id_Rol 'Id Rol',
+		r.Descripcion 'Descripcion',
+		r.Habilitado 'Habilitado'
+		
+		FROM LA_MAYORIA.Rol r
+
+		WHERE
+		((@p_rol_name IS NULL) OR (r.Descripcion like @p_rol_name + '%'))
+END
+GO
+
+CREATE PROCEDURE [LA_MAYORIA].[sp_rol_enable_disable](
+@p_id_rol int,
+@p_enable_disable int
+)
+AS
+BEGIN
+	UPDATE LA_MAYORIA.Rol SET Habilitado = @p_enable_disable
+		WHERE Id_Rol = @p_id_rol
+END
+GO
+
+CREATE PROCEDURE [LA_MAYORIA].[sp_rol_functionality_availability](
+@p_id_rol int = null
+)
+AS
+BEGIN
+	SELECT DISTINCT
+		f.Id_Funcionalidad 'Id Funcionalidad',
+		f.Descripcion 'Descripcion'
+
+		FROM LA_MAYORIA.Funcionalidad f
+		WHERE NOT EXISTS (SELECT 1 FROM LA_MAYORIA.Rol_Funcionalidad rf
+			WHERE f.Id_Funcionalidad = rf.Id_Funcionalidad
+			AND rf.Id_Rol = @p_id_rol)
+END
+GO
+
+CREATE PROCEDURE [LA_MAYORIA].[sp_rol_functionality_enabled](
+@p_id_rol int = null
+)
+AS
+BEGIN
+	SELECT DISTINCT
+		f.Id_Funcionalidad 'Id Funcionalidad',
+		f.Descripcion 'Descripcion'
+
+		FROM LA_MAYORIA.Funcionalidad f
+		WHERE EXISTS (SELECT 1 FROM LA_MAYORIA.Rol_Funcionalidad rf
+			WHERE f.Id_Funcionalidad = rf.Id_Funcionalidad
+			AND rf.Id_Rol = @p_id_rol)
+END
+GO
+
+CREATE PROCEDURE LA_MAYORIA.[sp_rol_create](
+@p_rol_description varchar(255),
+@p_id_rol int OUTPUT
+)
+AS
+BEGIN
+	IF (@p_id_rol = 0)
+	BEGIN
+		INSERT INTO LA_MAYORIA.Rol (Descripcion, Habilitado)
+			VALUES(@p_rol_description, 1)
+		SET @p_id_rol = @@IDENTITY
+	END
+	ELSE
+	BEGIN
+		UPDATE LA_MAYORIA.Rol SET Descripcion = @p_rol_description
+			WHERE Id_Rol = @p_id_rol 
+	END
+	
+END
+GO
+
+CREATE PROCEDURE [LA_MAYORIA].[sp_rol_functionality_add](
+@p_id_rol int = null,
+@p_id_functionality int = null
+)
+AS
+BEGIN
+	INSERT INTO LA_MAYORIA.Rol_Funcionalidad (Id_Rol, Id_Funcionalidad)
+		VALUES (@p_id_rol, @p_id_functionality)
+END
+GO
+
+CREATE PROCEDURE [LA_MAYORIA].[sp_rol_functionality_remove](
+@p_id_rol int = null,
+@p_id_functionality int = null
+)
+AS
+BEGIN
+	DELETE FROM LA_MAYORIA.Rol_Funcionalidad WHERE Id_Rol = @p_id_rol AND Id_Funcionalidad = @p_id_functionality
+END
+GO

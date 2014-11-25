@@ -49,7 +49,7 @@ namespace FrbaHotel.ABM_de_Usuario
         {
             if (dgvUser.CurrentRow != null)
             {
-                UsuarioHelper.enable(Convert.ToString(dgvUser.CurrentRow.Cells[0].Value), false);
+                UsuarioHelper.enable(Convert.ToString(dgvUser.CurrentRow.Cells[0].Value), VarGlobal.usuario.hotel, false);
                 buttonSearch.PerformClick();
             }
             else
@@ -62,7 +62,7 @@ namespace FrbaHotel.ABM_de_Usuario
         {
             if (dgvUser.CurrentRow != null)
             {
-                UsuarioHelper.enable(Convert.ToString(dgvUser.CurrentRow.Cells[0].Value), true);
+                UsuarioHelper.enable(Convert.ToString(dgvUser.CurrentRow.Cells[0].Value), VarGlobal.usuario.hotel, true);
                 buttonSearch.PerformClick();
             }
             else

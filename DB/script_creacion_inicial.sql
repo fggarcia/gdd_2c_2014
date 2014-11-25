@@ -44,7 +44,7 @@ VALUES ('admin','e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be
 	-Habilitado: Indica si el rol esta habilitado
 */
 CREATE TABLE [LA_MAYORIA].[Rol](
-	[Id_Rol][Int] NOT NULL,
+	[Id_Rol][Int]IDENTITY(1,1) NOT NULL,
 	[Descripcion][varchar](20) NOT NULL,
 	[Habilitado][bit] NULL
 
@@ -52,9 +52,9 @@ CREATE TABLE [LA_MAYORIA].[Rol](
 	CONSTRAINT UQ_Rol_Id_Rol UNIQUE(Id_Rol)
 )
 
-INSERT INTO LA_MAYORIA.Rol(Id_Rol,Descripcion,Habilitado) VALUES(1,'administrador',1)
-INSERT INTO LA_MAYORIA.Rol(Id_Rol,Descripcion,Habilitado) VALUES(2,'recepcionista',1)
-INSERT INTO LA_MAYORIA.Rol(Id_Rol,Descripcion,Habilitado) VALUES(3,'guest',1)
+INSERT INTO LA_MAYORIA.Rol(Descripcion,Habilitado) VALUES('administrador',1)
+INSERT INTO LA_MAYORIA.Rol(Descripcion,Habilitado) VALUES('recepcionista',1)
+INSERT INTO LA_MAYORIA.Rol(Descripcion,Habilitado) VALUES('guest',1)
 
 --TABLA FUNCIONALIDAD
 /*
