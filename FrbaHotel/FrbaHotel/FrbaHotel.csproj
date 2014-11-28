@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ABM de Cliente\Nacionalidad.cs" />
     <Compile Include="ABM de Cliente\TypeDocument.cs" />
     <Compile Include="ABM de Cliente\Cliente.cs" />
     <Compile Include="ABM de Cliente\ClienteHelper.cs" />
@@ -163,6 +164,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="ABM de Cliente\FormABMClient.resx">
       <DependentUpon>FormABMClient.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM de Cliente\FormABMClientModify.resx">
+      <DependentUpon>FormABMClientModify.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ABM de Rol\FormABMRolModify.resx">
       <DependentUpon>FormABMRolModify.cs</DependentUpon>

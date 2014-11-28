@@ -17,10 +17,11 @@ namespace FrbaHotel.ABM_de_Cliente
         public String telephone { get; set; }
         public String addressName { get; set; }
         public Int32 addressNum { get; set; }
-        public Int32 addressFlour { get; set; }
+        public Int32 addressFloor { get; set; }
         public String adressDeptName { get; set; }
         public Int32 idNacionality { get; set; }
         public String nacionality { get; set; }
+        public DateTime birthdate { get; set; }
         public Boolean enable { get; set; }
     }
 }

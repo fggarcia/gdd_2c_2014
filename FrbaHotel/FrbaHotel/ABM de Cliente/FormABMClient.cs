@@ -68,10 +68,10 @@ namespace FrbaHotel.ABM_de_Cliente
         {
             if (dgvClient.CurrentRow != null)
             {
-                //FormABMClientModify formABMClientModify = new FormABMClientModify(true, dgvClient.CurrentRow.Cells[0].Value.ToString());
-                //formABMUsuarioModify.MdiParent = this.MdiParent;
-                //MdiParent.Size = formABMUsuarioModify.Size;
-                //formABMUsuarioModify.Show();
+                FormABMClientModify formABMClientModify = new FormABMClientModify(true, dgvClient.CurrentRow.Cells[0].Value.ToString());
+                formABMClientModify.MdiParent = this.MdiParent;
+                MdiParent.Size = formABMClientModify.Size;
+                formABMClientModify.Show();
                 this.Close();
             }
             else
@@ -124,7 +124,11 @@ namespace FrbaHotel.ABM_de_Cliente
 
         private void buttonCreate_Click(object sender, EventArgs e)
         {
-
+            FormABMClientModify formABMClientModify = new FormABMClientModify(false, null);
+            formABMClientModify.MdiParent = this.MdiParent;
+            MdiParent.Size = formABMClientModify.Size;
+            formABMClientModify.Show();
+            this.Close();
         }
 
         private void textBoxMail_TextChanged(object sender, EventArgs e)

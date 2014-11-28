@@ -68,5 +68,81 @@ namespace FrbaHotel.ABM_de_Cliente
 
             ProcedureHelper.execute(command, "Habilitar o deshabilitar client", false);
         }
+
+        public static Cliente getClientData(String clientId)
+        {
+            Cliente clientData = new Cliente();
+
+            SqlConnection conn = Connection.getConnection();
+
+            SqlCommand command = new SqlCommand();
+            command.Connection = conn;
+            command.CommandText = "LA_MAYORIA.sp_client_data_get_by_id_client";
+            command.CommandType = CommandType.StoredProcedure;
+            command.Parameters.AddWithValue("@p_id_client", clientId);
+
+            SqlDataReader reader = command.ExecuteReader();
+
+            if (reader.HasRows)
+            {
+                reader.Read();
+                clientData.id = Convert.ToInt32(clientId);
+                clientData.name = Convert.ToString(reader["Nombre"]);
+                clientData.lastname = Convert.ToString(reader["Apellido"]);
+                clientData.idTypeDocument = Convert.ToInt32(reader["Tipo_Identificacion"]);
+                clientData.typeDocument = Convert.ToString(reader["Identificacion_Descripcion"]);
+                clientData.documentNumber = Convert.ToInt32(reader["Nro_Identificacion"]);
+                clientData.mail = Convert.ToString(reader["Mail"]);
+                clientData.telephone = Convert.ToString(reader["Telefono"]);
+                clientData.addressName = Convert.ToString(reader["Calle_Direccion"]);
+                clientData.addressNum = Convert.ToInt32(reader["Calle_Nro"]);
+                if (reader["Calle_Piso"] != DBNull.Value)
+                    clientData.addressFloor = Convert.ToInt32(reader["Calle_Piso"]);
+                if (reader["Calle_Nro"] != DBNull.Value)
+                clientData.adressDeptName = Convert.ToString(reader["Calle_Depto"]);
+                clientData.idNacionality = Convert.ToInt32(reader["Nacionalidad"]);
+                clientData.nacionality = Convert.ToString(reader["Nacionalidad_Descripcion"]);
+                clientData.birthdate = Convert.ToDateTime(reader["Fecha_Nacimiento"]);
+                
+                int enable = Convert.ToInt16(reader["Habilitado"]);
+
+                if (enable == 1)
+                    clientData.enable = true;
+                else
+                    clientData.enable = false;
+            }
+
+            conn.Close();
+
+            return clientData;
+        }
+
+        public static void save(Cliente clientData)
+        {
+            SqlCommand sp_save_or_update_client = new SqlCommand();
+            sp_save_or_update_client.CommandType = CommandType.StoredProcedure;
+            sp_save_or_update_client.CommandText = "LA_MAYORIA.sp_client_save_update";
+
+
+            sp_save_or_update_client.Parameters.AddWithValue("@p_client_id", clientData.id);
+            sp_save_or_update_client.Parameters.AddWithValue("@p_client_name", clientData.name);
+            sp_save_or_update_client.Parameters.AddWithValue("@p_client_lastname", clientData.lastname);
+            sp_save_or_update_client.Parameters.AddWithValue("@p_client_type_document", clientData.typeDocument);
+            sp_save_or_update_client.Parameters.AddWithValue("@p_client_document_number", clientData.documentNumber);
+            sp_save_or_update_client.Parameters.AddWithValue("@p_client_mail", clientData.mail);
+            sp_save_or_update_client.Parameters.AddWithValue("@p_client_telephone", clientData.telephone);
+            sp_save_or_update_client.Parameters.AddWithValue("@p_client_address_name", clientData.addressName);
+            sp_save_or_update_client.Parameters.AddWithValue("@p_client_address_number", clientData.addressNum);
+            
+            if(clientData.addressFloor != VarGlobal.NoAddressFloor){
+                sp_save_or_update_client.Parameters.AddWithValue("@p_client_address_floor", clientData.addressFloor);
+                sp_save_or_update_client.Parameters.AddWithValue("@p_client_address_dept", clientData.adressDeptName);
+            }
+
+            sp_save_or_update_client.Parameters.AddWithValue("@p_client_nationality", clientData.nacionality);
+            sp_save_or_update_client.Parameters.AddWithValue("@p_client_birthdate", clientData.birthdate);
+
+            ProcedureHelper.execute(sp_save_or_update_client, "save or update client data", false);
+        }
     }
 }
