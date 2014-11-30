@@ -70,6 +70,28 @@
     <Compile Include="ABM de Habitacion\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="ABM de Hotel\FormABMHotelModify.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM de Hotel\FormABMHotelModify.Designer.cs">
+      <DependentUpon>FormABMHotelModify.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABM de Hotel\FormABMHotelPeriod.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM de Hotel\FormABMHotelPeriod.Designer.cs">
+      <DependentUpon>FormABMHotelPeriod.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABM de Hotel\HotelHelper.cs" />
+    <Compile Include="ABM de Hotel\FormABMHotel.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM de Hotel\FormABMHotel.Designer.cs">
+      <DependentUpon>FormABMHotel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABM de Hotel\Hotel.cs" />
+    <Compile Include="ABM de Hotel\RegimenHotelHelper.cs" />
+    <Compile Include="ABM de Hotel\Star.cs" />
     <Compile Include="ABM de Regimen\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -114,6 +136,7 @@
     <Compile Include="Cancelar Reserva\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Common\Period.cs" />
     <Compile Include="Validaciones.cs" />
     <Compile Include="Common\AppConnections.cs" />
     <Compile Include="Db\Connection.cs" />
@@ -167,6 +190,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ABM de Cliente\FormABMClientModify.resx">
       <DependentUpon>FormABMClientModify.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM de Hotel\FormABMHotel.resx">
+      <DependentUpon>FormABMHotel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM de Hotel\FormABMHotelModify.resx">
+      <DependentUpon>FormABMHotelModify.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM de Hotel\FormABMHotelPeriod.resx">
+      <DependentUpon>FormABMHotelPeriod.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ABM de Rol\FormABMRolModify.resx">
       <DependentUpon>FormABMRolModify.cs</DependentUpon>

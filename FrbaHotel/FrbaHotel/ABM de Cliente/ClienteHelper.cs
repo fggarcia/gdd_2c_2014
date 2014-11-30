@@ -117,14 +117,16 @@ namespace FrbaHotel.ABM_de_Cliente
             return clientData;
         }
 
-        public static void save(Cliente clientData)
+        public static Int32 save(Cliente clientData)
         {
             SqlCommand sp_save_or_update_client = new SqlCommand();
             sp_save_or_update_client.CommandType = CommandType.StoredProcedure;
             sp_save_or_update_client.CommandText = "LA_MAYORIA.sp_client_save_update";
 
-
-            sp_save_or_update_client.Parameters.AddWithValue("@p_client_id", clientData.id);
+            var returnParameterClientId = sp_save_or_update_client.Parameters.Add(new SqlParameter("@p_client_id", SqlDbType.Int));
+            returnParameterClientId.Direction = ParameterDirection.InputOutput;
+            sp_save_or_update_client.Parameters["@p_client_id"].Value = clientData.id;
+            
             sp_save_or_update_client.Parameters.AddWithValue("@p_client_name", clientData.name);
             sp_save_or_update_client.Parameters.AddWithValue("@p_client_lastname", clientData.lastname);
             sp_save_or_update_client.Parameters.AddWithValue("@p_client_type_document", clientData.typeDocument);
@@ -143,6 +145,8 @@ namespace FrbaHotel.ABM_de_Cliente
             sp_save_or_update_client.Parameters.AddWithValue("@p_client_birthdate", clientData.birthdate);
 
             ProcedureHelper.execute(sp_save_or_update_client, "save or update client data", false);
+
+            return Convert.ToInt32(returnParameterClientId.Value);
         }
 
         public static Boolean checkTypeAndDocumentNumber(Int32 clientId, String typeDocument, Int32 documentNumber)

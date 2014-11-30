@@ -463,7 +463,7 @@ END
 GO
 
 CREATE PROCEDURE [LA_MAYORIA].[sp_client_save_update](
-@p_client_id int = 0,
+@p_client_id int = 0 OUTPUT,
 @p_client_name varchar(255),
 @p_client_lastname varchar(255),
 @p_client_type_document varchar(255),
@@ -496,6 +496,8 @@ BEGIN
 			VALUES (@p_client_name, @p_client_lastname, @p_client_type_document_id, @p_client_document_number, @p_client_mail,
 				@p_client_telephone, @p_client_address_name, @p_client_address_number, @p_client_address_floor, @p_client_address_dept,
 				@p_client_nationality_id, @p_client_birthdate, 1)
+
+			SET @p_client_id = @@IDENTITY
 		END
 		ELSE
 		BEGIN
@@ -548,3 +550,227 @@ BEGIN
 		SET @p_isValid = 0
 END
 GO
+
+CREATE PROCEDURE [LA_MAYORIA].[sp_hotel_search](
+@p_hotel_name varchar(255) = null,
+@p_hotel_city varchar(255) = null,
+@p_hotel_country varchar(255) = null,
+@p_hotel_star int = null,
+@p_hotel_user_id varchar(255)
+)
+AS
+BEGIN
+	SELECT DISTINCT
+				
+		h.Id_Hotel 'Id Hotel',
+		h.Nombre 'Nombre',
+		h.Mail 'Mail',
+		h.Telefono 'Telefono',
+		h.Calle_Direccion 'Direccion',
+		h.Calle_Nro 'Numero',
+		h.Ciudad 'Ciudad',
+		h.Pais 'Pais',
+		h.Fecha_Creacion 'Fecha Creacion',
+		he.Cantidad_Estrellas 'Estrellas',
+		h.Habilitado 'Habilitado'
+		
+		FROM LA_MAYORIA.Hotel h
+		INNER JOIN LA_MAYORIA.Hotel_Estrellas he
+			ON h.Id_Hotel = he.Id_Hotel
+		INNER JOIN LA_MAYORIA.Usuario_Rol_Hotel urh
+			ON h.Id_Hotel = urh.Id_Hotel
+		WHERE
+		( (@p_hotel_name IS NULL) OR (UPPER(h.Nombre) like UPPER(@p_hotel_name) + '%'))
+		AND ((@p_hotel_city IS NULL) OR (UPPER(h.Ciudad) like UPPER(@p_hotel_city) + '%'))
+		AND ((@p_hotel_country IS NULL) OR (UPPER(h.Pais) like UPPER (@p_hotel_country + '%')))
+		AND ((@p_hotel_star IS NULL) OR (he.Cantidad_Estrellas = @p_hotel_star))
+		AND (LTRIM(RTRIM(urh.Id_Usuario)) = LTRIM(RTRIM(@p_hotel_user_id)))
+END
+GO
+
+CREATE PROCEDURE [LA_MAYORIA].[sp_hotel_enable_disable](
+@p_hotel_id int,
+@p_enable_disable int
+)
+AS
+BEGIN
+	UPDATE LA_MAYORIA.Hotel SET Habilitado = @p_enable_disable
+		WHERE Id_Hotel = @p_hotel_id
+END
+GO
+
+CREATE PROCEDURE [LA_MAYORIA].[sp_hotel_regimen_available](
+@p_hotel_id int = null
+)
+AS
+BEGIN
+	SELECT DISTINCT
+		r.Id_Regimen 'Id Regimen',
+		r.Descripcion 'Descripcion'
+
+		FROM LA_MAYORIA.Regimen r
+		WHERE NOT EXISTS (SELECT 1 FROM LA_MAYORIA.Regimen_Hotel rh
+			WHERE r.Id_Regimen = rh.Id_Regimen
+			AND rh.Id_Hotel = @p_hotel_id)
+END
+GO
+
+CREATE PROCEDURE [LA_MAYORIA].[sp_hotel_regimen_assign](
+@p_hotel_id int = null
+)
+AS
+BEGIN
+	SELECT DISTINCT
+		r.Id_Regimen 'Id Regimen',
+		r.Descripcion 'Descripcion'
+
+		FROM LA_MAYORIA.Regimen r
+		WHERE EXISTS (SELECT 1 FROM LA_MAYORIA.Regimen_Hotel rh
+			WHERE r.Id_Regimen = rh.Id_Regimen
+			AND rh.Id_Hotel = @p_hotel_id)
+END
+GO
+
+CREATE PROCEDURE [LA_MAYORIA].[sp_hotel_data_get_by_id](
+@p_hotel_id int = null
+)
+AS
+BEGIN
+	SELECT 
+		h.Nombre 'Nombre',
+		h.Mail 'Mail',
+		h.Telefono 'Telefono',
+		he.Cantidad_Estrellas 'Estrellas',
+		h.Calle_Direccion 'Direccion',
+		h.Calle_Nro 'Direccion Nro',
+		h.Ciudad 'Ciudad',
+		h.Pais 'Pais',
+		h.Fecha_Creacion 'Creacion',
+		h.Habilitado 'Habilitado'
+
+		FROM LA_MAYORIA.Hotel h
+		INNER JOIN LA_MAYORIA.Hotel_Estrellas he
+			ON h.Id_Hotel = he.Id_Hotel
+		WHERE h.Id_Hotel = @p_hotel_id
+END
+GO
+
+CREATE PROCEDURE [LA_MAYORIA].[sp_hotel_save_update](
+@p_user_id varchar(255),
+@p_user_rol_id int,
+@p_hotel_id int = 0 OUTPUT,
+@p_hotel_name varchar(255),
+@p_hotel_mail varchar(255),
+@p_hotel_address varchar(255),
+@p_hotel_address_number int,
+@p_hotel_telephone varchar(255),
+@p_hotel_city varchar(255),
+@p_hotel_country varchar(255),
+@p_hotel_star int,
+@p_hotel_creation datetime
+)
+AS
+BEGIN
+	BEGIN TRANSACTION
+		IF ( @p_hotel_id = 0)
+		BEGIN
+			INSERT INTO LA_MAYORIA.Hotel (Nombre, Mail, Telefono, Calle_Direccion, Calle_Nro, Ciudad, Pais,
+				Fecha_Creacion, Habilitado)
+			VALUES (@p_hotel_name, @p_hotel_mail, @p_hotel_telephone, @p_hotel_address, @p_hotel_address_number,
+				@p_hotel_city, @p_hotel_country, @p_hotel_creation, 1)
+
+			SET @p_hotel_id = @@IDENTITY
+
+			INSERT INTO LA_MAYORIA.Usuario_Rol_Hotel (Id_Usuario, Id_Rol, Id_Hotel)
+			VALUES (@p_user_id, @p_user_rol_id, @p_hotel_id)
+
+			INSERT INTO LA_MAYORIA.Hotel_Estrellas(Id_Hotel, Cantidad_Estrellas, recarga)
+			VALUES (@p_hotel_id, @p_hotel_star, 10)
+		END
+		ELSE
+		BEGIN
+			UPDATE LA_MAYORIA.Hotel SET Nombre = @p_hotel_name, Mail = @p_hotel_mail, 
+			Telefono = @p_hotel_telephone, Calle_Direccion = @p_hotel_address,
+			Calle_Nro = @p_hotel_address_number, Ciudad = @p_hotel_city, Pais = @p_hotel_country,
+			Fecha_Creacion = @p_hotel_creation
+			WHERE Id_Hotel = @p_hotel_id
+
+			UPDATE LA_MAYORIA.Hotel_Estrellas SET Cantidad_Estrellas = @p_hotel_star
+			WHERE Id_hotel = @p_hotel_id
+		END
+	COMMIT TRANSACTION
+END
+GO
+
+CREATE PROCEDURE [LA_MAYORIA].[sp_hotel_regimen_add](
+@p_hotel_id int = null,
+@p_regimen_id int = null
+)
+AS
+BEGIN
+	INSERT INTO LA_MAYORIA.Regimen_Hotel (Id_Hotel, Id_Regimen)
+		VALUES (@p_hotel_id, @p_regimen_id)
+END
+GO
+
+CREATE PROCEDURE [LA_MAYORIA].[sp_hotel_regimen_remove](
+@p_hotel_id int = null,
+@p_regimen_id int = null,
+@p_remove_ok int = null OUTPUT
+)
+AS
+BEGIN
+	IF NOT EXISTS (
+		SELECT 1 FROM LA_MAYORIA.Reserva r
+			INNER JOIN LA_MAYORIA.Habitacion_Reserva hr
+				ON hr.Id_Reserva = r.Id_Reserva
+			WHERE hr.Id_Hotel = @p_hotel_id
+			AND r.Tipo_Regimen = @p_regimen_id 
+			AND	(
+				(CAST(GETDATE() AS DATE) BETWEEN r.Fecha_Inicio AND DATEADD(DAY, r.Estadia, r.Fecha_Inicio))
+				OR (r.Fecha_Inicio > CAST(GETDATE() AS DATE))
+			)
+		)
+	BEGIN
+		SET @p_remove_ok = 1
+		DELETE FROM LA_MAYORIA.Regimen_Hotel WHERE Id_Hotel = @p_hotel_id AND Id_Regimen = @p_regimen_id
+	END
+	ELSE
+		SET @p_remove_ok = 0
+END
+GO
+
+CREATE PROCEDURE [LA_MAYORIA].[sp_hotel_close_period_valid](
+@p_user_id int,
+@p_hotel_id int,
+@p_hotel_close_period_from datetime,
+@p_hotel_close_period_to datetime,
+@p_hotel_close_period_motive varchar(255),
+@p_add_ok int = null OUTPUT
+)
+AS
+BEGIN
+	IF NOT EXISTS (
+		SELECT 1 FROM LA_MAYORIA.Reserva r
+			INNER JOIN LA_MAYORIA.Habitacion_Reserva hr
+				ON hr.Id_Reserva = r.Id_Reserva
+			WHERE hr.Id_Hotel = @p_hotel_id
+			AND	(
+				(CAST(@p_hotel_close_period_from AS DATE) BETWEEN r.Fecha_Inicio AND DATEADD(DAY, r.Estadia, r.Fecha_Inicio))
+				OR (r.Fecha_Inicio > CAST(@p_hotel_close_period_from AS DATE))
+			)
+			AND	(
+				(CAST(@p_hotel_close_period_to AS DATE) BETWEEN r.Fecha_Inicio AND DATEADD(DAY, r.Estadia, r.Fecha_Inicio))
+				OR (r.Fecha_Inicio > CAST(@p_hotel_close_period_to AS DATE))
+			) 
+		)
+	BEGIN
+		SET @p_add_ok = 1
+		INSERT INTO LA_MAYORIA.Historial_Baja_Hotel (Id_Hotel, Fecha_Inicio, Fecha_Fin, Motivo, Id_Usuario)
+		VALUES (@p_hotel_id, @p_hotel_close_period_from, @p_hotel_close_period_to, @p_hotel_close_period_motive, @p_user_id)
+	END
+	ELSE
+		SET @p_add_ok = 0
+END
+GO
+

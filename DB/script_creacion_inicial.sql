@@ -164,6 +164,18 @@ INSERT INTO LA_MAYORIA.Hotel (Calle_Direccion, Calle_Nro, Ciudad, Pais, Fecha_Cr
 SELECT Hotel_Calle,Hotel_Nro_Calle,Hotel_Ciudad,'Argentina',getdate(),1 FROM gd_esquema.Maestra
 	GROUP BY Hotel_Calle,Hotel_Nro_Calle,Hotel_Ciudad
 
+CREATE TABLE [LA_MAYORIA].[Estrellas](
+	[Estrellas][Int] NOT NULL,
+
+	CONSTRAINT UQ_Estrellas_Estrellas UNIQUE (Estrellas)
+)
+
+INSERT INTO LA_MAYORIA.Estrellas (Estrellas) VALUES (1)
+INSERT INTO LA_MAYORIA.Estrellas (Estrellas) VALUES (2)
+INSERT INTO LA_MAYORIA.Estrellas (Estrellas) VALUES (3)
+INSERT INTO LA_MAYORIA.Estrellas (Estrellas) VALUES (4)
+INSERT INTO LA_MAYORIA.Estrellas (Estrellas) VALUES (5)
+
 --TABLA HOTEL_ESTRELLAS
 /*
 	Tabla con la cantidad de estrellas y su recargo por hotel
@@ -175,7 +187,9 @@ CREATE TABLE [LA_MAYORIA].[Hotel_Estrellas](
 
 	CONSTRAINT [FK_Hotel_Estrellas_Id_Hotel] FOREIGN KEY (Id_Hotel)
 		REFERENCES [LA_MAYORIA].[Hotel](Id_Hotel),
-	CONSTRAINT UQ_Hotel_Estrellas_Id_Hotel UNIQUE (Id_Hotel)
+	CONSTRAINT [FK_Hotel_Estrellas_Estrellas] FOREIGN KEY (Cantidad_Estrellas)
+		REFERENCES [LA_MAYORIA].[Estrellas](Estrellas),
+	CONSTRAINT UQ_Hotel_Estrellas_Id_Hotel UNIQUE (Id_Hotel, Cantidad_Estrellas)
 )
 
 INSERT INTO LA_MAYORIA.Hotel_Estrellas (Id_Hotel, Cantidad_Estrellas, recarga)
@@ -197,7 +211,7 @@ CREATE TABLE [LA_MAYORIA].[Usuario_Rol_Hotel](
 	[Id_Hotel][Int] NOT NULL,
 	[Habilitado][bit] NULL
 
-	CONSTRAINT UQ_Usuario_Rol_Id_Usuario_Id_Rol UNIQUE(Id_Usuario, Id_Rol),
+	CONSTRAINT UQ_Usuario_Rol_Id_Usuario_Id_Rol_Id_Hotel UNIQUE(Id_Usuario, Id_Rol, Id_Hotel),
 	CONSTRAINT [FK_Usuario_Rol_Hotel_Usuario_Id_Usuario] FOREIGN KEY(Id_Usuario)
 		REFERENCES [LA_MAYORIA].[Usuario] (Id_Usuario),
 	CONSTRAINT [FK_Usuario_Rol_Hotel_Hotel_Id_Hotel] FOREIGN KEY (Id_Hotel)
@@ -282,10 +296,13 @@ CREATE TABLE [LA_MAYORIA].[Historial_Baja_Hotel](
 	[Id_Hotel][Int] NOT NULL,
 	[Fecha_Inicio][datetime] NOT NULL,
 	[Fecha_Fin][datetime] NOT NULL,
-	[Motivo][varchar](255) NOT NULL
+	[Motivo][varchar](255) NOT NULL,
+	[Id_Usuario][varchar](20) NOT NULL
 
 	CONSTRAINT [FK_Historial_Baja_Hotel_Id_Hotel] FOREIGN KEY (Id_Hotel)
-		REFERENCES [LA_MAYORIA].[Hotel](Id_Hotel)
+		REFERENCES [LA_MAYORIA].[Hotel](Id_Hotel),
+	CONSTRAINT [FK_Historial_Baja_Hotel_Id_Usuario] FOREIGN KEY (Id_Usuario)
+		REFERENCES [LA_MAYORIA].[Usuario](Id_Usuario)
 )
 
 --TABLA HABITACION
@@ -328,13 +345,16 @@ CREATE TABLE [LA_MAYORIA].[Historial_Baja_Habitacion](
 	[Habitacion_Piso][Int] NOT NULL,
 	[Fecha_Inicio][datetime] NOT NULL,
 	[Fecha_Fin][datetime] NOT NULL,
-	[Motivo][varchar](255) NOT NULL
+	[Motivo][varchar](255) NOT NULL,
+	[Id_Usuario][varchar](20) NOT NULL
 	
 	CONSTRAINT [PK_Historial_Baja_Habitacion_Id_hotel_Habitacion_Nro_Habitacion_Piso] PRIMARY KEY
 		(Id_Hotel, Habitacion_Nro, Habitacion_Piso),
 	CONSTRAINT [FK_Historial_Baja_Habitacion_Id_hotel_Habitacion_Nro_Habitacion_Piso] FOREIGN KEY 
 		(Id_Hotel, Habitacion_Nro, Habitacion_Piso) REFERENCES
-		[LA_MAYORIA].[Habitacion](Id_Hotel,Nro,Piso)
+		[LA_MAYORIA].[Habitacion](Id_Hotel,Nro,Piso),
+	CONSTRAINT [FK_Historial_Baja_Habitacion_Id_Usuario] FOREIGN KEY (Id_Usuario)
+		REFERENCES [LA_MAYORIA].[Usuario](Id_Usuario)
 )
 
 --TABLA NACIONALIDAD

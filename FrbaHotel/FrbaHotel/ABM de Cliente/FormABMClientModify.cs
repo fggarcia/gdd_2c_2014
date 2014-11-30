@@ -64,7 +64,8 @@ namespace FrbaHotel.ABM_de_Cliente
 
         private void saveOrUpdateClient(Cliente clientData)
         {
-            ClienteHelper.save(clientData);
+            Int32 clientId = ClienteHelper.save(clientData);
+            this.client = clientId.ToString();
             if (edit)
             {
                 MessageBox.Show("Modificacion de cliente realizada con exito");

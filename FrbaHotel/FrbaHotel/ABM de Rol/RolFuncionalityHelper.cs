@@ -55,7 +55,7 @@ namespace FrbaHotel.ABM_de_Rol
             command.Parameters.Add(new SqlParameter("@p_id_functionality", SqlDbType.Int));
             command.Parameters["@p_id_functionality"].Value = idFunctionality;
 
-            ProcedureHelper.execute(command, "agregar funcionalidad a rol", false);
+            ProcedureHelper.execute(command, "quitar funcionalidad a rol", false);
         }
     }
 }
