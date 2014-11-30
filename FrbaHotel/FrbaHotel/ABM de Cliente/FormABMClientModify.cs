@@ -1,10 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using FrbaHotel.ABM_de_Usuario;
 
@@ -41,17 +35,45 @@ namespace FrbaHotel.ABM_de_Cliente
             Cliente clientData = this.getDataFromForm();
             if (clientData != null)
             {
-                    ClienteHelper.save(clientData);
-                    if (edit)
+                Boolean existEqualTypeAndDocumentNumber = ClienteHelper.checkTypeAndDocumentNumber(clientData.id, 
+                    clientData.typeDocument, clientData.documentNumber);
+                if (existEqualTypeAndDocumentNumber)
+                {
+                    DialogResult dialogDocument = MessageBox.Show("Existe ya un usuario con ese tipo de documento y numero. Desea continuar igual?",
+                        "Mensaje importante", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (dialogDocument != DialogResult.Yes)
                     {
-                        MessageBox.Show("Modificacion de cliente realizada con exito");
+                        return;        
                     }
-                    else
+                }
+
+                Boolean existAnEqualMail = ClienteHelper.checkMail(clientData.id, clientData.mail);
+                if (existAnEqualMail)
+                {
+                    DialogResult dialogMail = MessageBox.Show("Existe ya un usuario con ese mail. Desea continuar igual?",
+                        "Mensaje importante", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (dialogMail != DialogResult.Yes)
                     {
-                        MessageBox.Show("Creacion de cliente realizada con exito");
+                        return;
                     }
-                    this.closeWindow();
+                }
+
+                this.saveOrUpdateClient(clientData);
             }
+        }
+
+        private void saveOrUpdateClient(Cliente clientData)
+        {
+            ClienteHelper.save(clientData);
+            if (edit)
+            {
+                MessageBox.Show("Modificacion de cliente realizada con exito");
+            }
+            else
+            {
+                MessageBox.Show("Creacion de cliente realizada con exito");
+            }
+            this.closeWindow();
         }
 
         private void FormABMClientModify_Load(object sender, EventArgs e)

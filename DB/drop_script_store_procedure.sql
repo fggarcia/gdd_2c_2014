@@ -41,3 +41,8 @@ DROP PROCEDURE LA_MAYORIA.sp_client_enable_disable
 DROP PROCEDURE LA_MAYORIA.sp_client_data_get_by_id_client
 
 DROP PROCEDURE LA_MAYORIA.sp_client_save_update
+
+DROP PROCEDURE LA_MAYORIA.sp_client_check_exist_mail
+
+DROP PROCEDURE LA_MAYORIA.sp_client_check_exist_document
+

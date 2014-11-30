@@ -144,5 +144,58 @@ namespace FrbaHotel.ABM_de_Cliente
 
             ProcedureHelper.execute(sp_save_or_update_client, "save or update client data", false);
         }
+
+        public static Boolean checkTypeAndDocumentNumber(Int32 clientId, String typeDocument, Int32 documentNumber)
+        {
+            SqlCommand sp_client_check_exist_document = new SqlCommand();
+            sp_client_check_exist_document.CommandText = "LA_MAYORIA.sp_client_check_exist_document";
+            sp_client_check_exist_document.Parameters.Add(new SqlParameter("@p_client_id", SqlDbType.Int));
+            sp_client_check_exist_document.Parameters["@p_client_id"].Value = clientId;
+
+            sp_client_check_exist_document.Parameters.Add(new SqlParameter("@p_client_type_document", SqlDbType.VarChar, 255));
+            sp_client_check_exist_document.Parameters["@p_client_type_document"].Value = typeDocument;
+
+            sp_client_check_exist_document.Parameters.Add(new SqlParameter("@p_client_document_number", SqlDbType.Int));
+            sp_client_check_exist_document.Parameters["@p_client_document_number"].Value = documentNumber;
+
+            var returnParametersIsValid = sp_client_check_exist_document.Parameters.Add(new SqlParameter("@p_isValid", SqlDbType.Int));
+            returnParametersIsValid.Direction = ParameterDirection.InputOutput;
+
+            ProcedureHelper.execute(sp_client_check_exist_document, "chequear tipo y numero de documento", false);
+
+            if (Convert.ToInt16(returnParametersIsValid.Value) == 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        public static Boolean checkMail(Int32 clientId, String mail)
+        {
+            SqlCommand sp_client_check_exist_mail = new SqlCommand();
+            sp_client_check_exist_mail.CommandText = "LA_MAYORIA.sp_client_check_exist_mail";
+            sp_client_check_exist_mail.Parameters.Add(new SqlParameter("@p_client_id", SqlDbType.Int));
+            sp_client_check_exist_mail.Parameters["@p_client_id"].Value = clientId;
+
+            sp_client_check_exist_mail.Parameters.Add(new SqlParameter("@p_client_mail", SqlDbType.VarChar));
+            sp_client_check_exist_mail.Parameters["@p_client_mail"].Value = mail;
+
+            var returnParametersIsValid = sp_client_check_exist_mail.Parameters.Add(new SqlParameter("@p_isValid", SqlDbType.Int));
+            returnParametersIsValid.Direction = ParameterDirection.InputOutput;
+
+            ProcedureHelper.execute(sp_client_check_exist_mail, "chequear mail", false);
+
+            if (Convert.ToInt16(returnParametersIsValid.Value) == 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
     }
 }

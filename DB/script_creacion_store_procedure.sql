@@ -473,7 +473,7 @@ CREATE PROCEDURE [LA_MAYORIA].[sp_client_save_update](
 @p_client_address_name varchar(255),
 @p_client_address_number int,
 @p_client_address_floor int = null,
-@p_client_addres_dept varchar(2) = null,
+@p_client_address_dept varchar(2) = null,
 @p_client_nationality varchar(255),
 @p_client_birthdate datetime
 )
@@ -494,7 +494,7 @@ BEGIN
 			INSERT INTO LA_MAYORIA.Clientes (Nombre, Apellido, Tipo_Identificacion, Nro_Identificacion, Mail, Telefono, Calle_Direccion,
 				Calle_Nro, Calle_Piso, Calle_Depto, Nacionalidad, Fecha_Nacimiento, Habilitado)
 			VALUES (@p_client_name, @p_client_lastname, @p_client_type_document_id, @p_client_document_number, @p_client_mail,
-				@p_client_telephone, @p_client_address_name, @p_client_address_number, @p_client_address_floor, @p_client_addres_dept,
+				@p_client_telephone, @p_client_address_name, @p_client_address_number, @p_client_address_floor, @p_client_address_dept,
 				@p_client_nationality_id, @p_client_birthdate, 1)
 		END
 		ELSE
@@ -502,10 +502,49 @@ BEGIN
 			UPDATE LA_MAYORIA.Clientes SET Nombre = @p_client_name, Apellido = @p_client_lastname, 
 			Tipo_Identificacion = @p_client_type_document_id, Nro_Identificacion = @p_client_document_number,
 			Mail = @p_client_mail, Telefono = @p_client_telephone, Calle_Direccion = @p_client_address_name,
-			Calle_Nro = @p_client_address_number, Calle_Piso = @p_client_address_floor, Calle_Depto = @p_client_addres_dept,
+			Calle_Nro = @p_client_address_number, Calle_Piso = @p_client_address_floor, Calle_Depto = @p_client_address_dept,
 			Nacionalidad = @p_client_nationality_id, Fecha_Nacimiento = @p_client_birthdate
 			WHERE Id_Cliente = @p_client_id
 		END
 	COMMIT TRANSACTION
+END
+GO
+
+CREATE PROCEDURE [LA_MAYORIA].[sp_client_check_exist_document](
+@p_client_id int = 0,
+@p_client_type_document varchar(255),
+@p_client_document_number int,
+@p_isValid bit = 0 OUTPUT
+)
+AS
+BEGIN
+	Declare @p_client_type_document_id int
+
+	SELECT @p_client_type_document_id = Id_Tipo_Identificacion FROM LA_MAYORIA.Tipo_Identificacion
+		WHERE UPPER(LTRIM(RTRIM(Descripcion))) = UPPER(LTRIM(RTRIM(@p_client_type_document)))
+
+	IF EXISTS (SELECT 1 FROM LA_MAYORIA.Clientes
+		WHERE Tipo_Identificacion = @p_client_type_document_id
+			AND Nro_Identificacion = @p_client_document_number
+			AND Id_Cliente != @p_client_id)
+		SET @p_isValid = 1
+	ELSE
+		SET @p_isValid = 0
+END
+GO
+
+CREATE PROCEDURE [LA_MAYORIA].[sp_client_check_exist_mail](
+@p_client_id int = 0,
+@p_client_mail varchar(255),
+@p_isValid bit = 0 OUTPUT
+)
+AS
+BEGIN
+	IF EXISTS (SELECT 1 FROM LA_MAYORIA.Clientes
+		WHERE Mail = @p_client_mail
+			AND Id_Cliente != @p_client_id)
+		SET @p_isValid = 1
+	ELSE
+		SET @p_isValid = 0
 END
 GO
