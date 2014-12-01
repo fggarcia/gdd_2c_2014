@@ -70,6 +70,10 @@ namespace FrbaHotel
                     func.folder = "ABM_de_Cliente";
                     func.form = "FormABMClient";
                     break;
+                case "ABM de Habitacion":
+                    func.folder = "ABM_de_Habitacion";
+                    func.form = "FormABMHabitacion";
+                    break;
             }
             return func;
         }

@@ -96,7 +96,6 @@ BEGIN
 			INNER JOIN LA_MAYORIA.Hotel h ON urh.Id_Hotel = h.Id_Hotel
 		WHERE urh.Id_Usuario = @p_id
 			AND urh.Id_Rol = @p_id_rol
-			AND h.Habilitado = 1
 			AND urh.Habilitado = 1
 	END
 	ELSE
@@ -571,8 +570,7 @@ BEGIN
 		h.Ciudad 'Ciudad',
 		h.Pais 'Pais',
 		h.Fecha_Creacion 'Fecha Creacion',
-		he.Cantidad_Estrellas 'Estrellas',
-		h.Habilitado 'Habilitado'
+		he.Cantidad_Estrellas 'Estrellas'
 		
 		FROM LA_MAYORIA.Hotel h
 		INNER JOIN LA_MAYORIA.Hotel_Estrellas he
@@ -585,17 +583,6 @@ BEGIN
 		AND ((@p_hotel_country IS NULL) OR (UPPER(h.Pais) like UPPER (@p_hotel_country + '%')))
 		AND ((@p_hotel_star IS NULL) OR (he.Cantidad_Estrellas = @p_hotel_star))
 		AND (LTRIM(RTRIM(urh.Id_Usuario)) = LTRIM(RTRIM(@p_hotel_user_id)))
-END
-GO
-
-CREATE PROCEDURE [LA_MAYORIA].[sp_hotel_enable_disable](
-@p_hotel_id int,
-@p_enable_disable int
-)
-AS
-BEGIN
-	UPDATE LA_MAYORIA.Hotel SET Habilitado = @p_enable_disable
-		WHERE Id_Hotel = @p_hotel_id
 END
 GO
 
@@ -645,8 +632,7 @@ BEGIN
 		h.Calle_Nro 'Direccion Nro',
 		h.Ciudad 'Ciudad',
 		h.Pais 'Pais',
-		h.Fecha_Creacion 'Creacion',
-		h.Habilitado 'Habilitado'
+		h.Fecha_Creacion 'Creacion'
 
 		FROM LA_MAYORIA.Hotel h
 		INNER JOIN LA_MAYORIA.Hotel_Estrellas he
@@ -675,9 +661,9 @@ BEGIN
 		IF ( @p_hotel_id = 0)
 		BEGIN
 			INSERT INTO LA_MAYORIA.Hotel (Nombre, Mail, Telefono, Calle_Direccion, Calle_Nro, Ciudad, Pais,
-				Fecha_Creacion, Habilitado)
+				Fecha_Creacion)
 			VALUES (@p_hotel_name, @p_hotel_mail, @p_hotel_telephone, @p_hotel_address, @p_hotel_address_number,
-				@p_hotel_city, @p_hotel_country, @p_hotel_creation, 1)
+				@p_hotel_city, @p_hotel_country, @p_hotel_creation)
 
 			SET @p_hotel_id = @@IDENTITY
 
@@ -774,3 +760,42 @@ BEGIN
 END
 GO
 
+CREATE PROCEDURE [LA_MAYORIA].[sp_habitacion_search](
+@p_habitacion_id int = null,
+@p_habitacion_hotel_id int = null,
+@p_habitacion_floor int = null,
+@p_habitacion_type int = null,
+@p_habitacion_front int = null,
+@p_habitacion_comodity varchar(255) =null,
+@p_user_name varchar(20)
+)
+AS
+BEGIN
+	SELECT DISTINCT
+				
+		h.Id_Hotel 'Hotel',
+		h.Piso 'Piso',
+		h.Nro 'Nro Habitacion',
+		f.Descripcion 'Frente',
+		th.Descripcion 'Tipo Habitacion',
+		h.Comodidades 'Comodidades'
+		
+		FROM LA_MAYORIA.Habitacion h
+			INNER JOIN LA_MAYORIA.Frente f
+				ON h.Frente = f.Id_Frente
+			INNER JOIN LA_MAYORIA.Tipo_Habitacion th
+				ON h.Tipo_Habitacion = th.Id_Tipo_Habitacion
+			INNER JOIN LA_MAYORIA.Usuario_Rol_Hotel urh
+				ON urh.Id_Usuario = @p_user_name
+				AND h.Id_Hotel = urh.Id_Hotel
+		
+		WHERE
+		((@p_habitacion_id IS NULL) OR ( h.Nro = @p_habitacion_id))
+		AND ((@p_habitacion_hotel_id IS NULL) OR (urh.Id_Hotel = @p_habitacion_hotel_id))
+		AND ((@p_habitacion_floor IS NULL) OR (h.Piso = @p_habitacion_floor))
+		AND ((@p_habitacion_type IS NULL) OR (th.Id_Tipo_Habitacion = @p_habitacion_type))
+		AND ((@p_habitacion_front IS NULL) OR (f.Id_Frente = @p_habitacion_front))
+		AND ((@p_habitacion_comodity IS NULL) OR (UPPER(h.Comodidades) like '%' + UPPER(@p_habitacion_comodity) + '%'))
+		AND (LTRIM(RTRIM(urh.Id_Usuario)) = LTRIM(RTRIM(@p_user_name)))
+END
+GO

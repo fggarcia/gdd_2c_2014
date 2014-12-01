@@ -42,9 +42,7 @@
             this.buttonBack = new System.Windows.Forms.Button();
             this.buttonCreate = new System.Windows.Forms.Button();
             this.buttonDisablePeriod = new System.Windows.Forms.Button();
-            this.buttonDisable = new System.Windows.Forms.Button();
             this.buttonModify = new System.Windows.Forms.Button();
-            this.buttonEnable = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvHotel)).BeginInit();
             this.SuspendLayout();
             // 
@@ -153,7 +151,7 @@
             // 
             // buttonCreate
             // 
-            this.buttonCreate.Location = new System.Drawing.Point(214, 357);
+            this.buttonCreate.Location = new System.Drawing.Point(317, 357);
             this.buttonCreate.Name = "buttonCreate";
             this.buttonCreate.Size = new System.Drawing.Size(75, 23);
             this.buttonCreate.TabIndex = 12;
@@ -163,23 +161,13 @@
             // 
             // buttonDisablePeriod
             // 
-            this.buttonDisablePeriod.Location = new System.Drawing.Point(388, 358);
+            this.buttonDisablePeriod.Location = new System.Drawing.Point(612, 358);
             this.buttonDisablePeriod.Name = "buttonDisablePeriod";
             this.buttonDisablePeriod.Size = new System.Drawing.Size(75, 23);
             this.buttonDisablePeriod.TabIndex = 13;
             this.buttonDisablePeriod.Text = "Baja Periodo";
             this.buttonDisablePeriod.UseVisualStyleBackColor = true;
             this.buttonDisablePeriod.Click += new System.EventHandler(this.buttonDisablePeriod_Click);
-            // 
-            // buttonDisable
-            // 
-            this.buttonDisable.Location = new System.Drawing.Point(692, 358);
-            this.buttonDisable.Name = "buttonDisable";
-            this.buttonDisable.Size = new System.Drawing.Size(75, 23);
-            this.buttonDisable.TabIndex = 14;
-            this.buttonDisable.Text = "Deshabilitar";
-            this.buttonDisable.UseVisualStyleBackColor = true;
-            this.buttonDisable.Click += new System.EventHandler(this.buttonDisable_Click);
             // 
             // buttonModify
             // 
@@ -191,24 +179,12 @@
             this.buttonModify.UseVisualStyleBackColor = true;
             this.buttonModify.Click += new System.EventHandler(this.buttonModify_Click);
             // 
-            // buttonEnable
-            // 
-            this.buttonEnable.Location = new System.Drawing.Point(542, 358);
-            this.buttonEnable.Name = "buttonEnable";
-            this.buttonEnable.Size = new System.Drawing.Size(75, 23);
-            this.buttonEnable.TabIndex = 16;
-            this.buttonEnable.Text = "Habilitar";
-            this.buttonEnable.UseVisualStyleBackColor = true;
-            this.buttonEnable.Click += new System.EventHandler(this.buttonEnable_Click);
-            // 
             // FormABMHotel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(971, 424);
-            this.Controls.Add(this.buttonEnable);
             this.Controls.Add(this.buttonModify);
-            this.Controls.Add(this.buttonDisable);
             this.Controls.Add(this.buttonDisablePeriod);
             this.Controls.Add(this.buttonCreate);
             this.Controls.Add(this.buttonBack);
@@ -248,8 +224,6 @@
         private System.Windows.Forms.Button buttonBack;
         private System.Windows.Forms.Button buttonCreate;
         private System.Windows.Forms.Button buttonDisablePeriod;
-        private System.Windows.Forms.Button buttonDisable;
         private System.Windows.Forms.Button buttonModify;
-        private System.Windows.Forms.Button buttonEnable;
     }
 }

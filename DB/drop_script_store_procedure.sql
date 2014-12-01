@@ -48,8 +48,6 @@ DROP PROCEDURE LA_MAYORIA.sp_client_check_exist_document
 
 DROP PROCEDURE LA_MAYORIA.sp_hotel_search
 
-DROP PROCEDURE LA_MAYORIA.sp_hotel_enable_disable
-
 DROP PROCEDURE LA_MAYORIA.sp_hotel_regimen_available
 
 DROP PROCEDURE LA_MAYORIA.sp_hotel_regimen_assign
@@ -63,3 +61,5 @@ DROP PROCEDURE LA_MAYORIA.sp_hotel_regimen_add
 DROP PROCEDURE LA_MAYORIA.sp_hotel_regimen_remove
 
 DROP PROCEDURE LA_MAYORIA.sp_hotel_close_period_valid
+
+DROP PROCEDURE LA_MAYORIA.sp_habitacion_search

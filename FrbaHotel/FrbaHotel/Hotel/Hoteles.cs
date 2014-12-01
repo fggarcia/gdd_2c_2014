@@ -44,13 +44,13 @@ namespace FrbaHotel.Hotel
         {
             ComboBoxHelper.fill(comboBox_Hotel, "LA_MAYORIA.Usuario_Rol_Hotel urh INNER JOIN LA_MAYORIA.Hotel h ON urh.Id_Hotel = h.Id_Hotel",
                 "urh.Id_Hotel", "urh.Id_Hotel", "urh.Id_Usuario = '" + user.id + "'AND urh.Id_Rol = " + 
-                user.rol.id + "AND h.Habilitado = 1 AND urh.Habilitado = 1", "urh.Id_Hotel ASC");
+                user.rol.id + "AND urh.Habilitado = 1", "urh.Id_Hotel ASC");
         }
 
         public static void fillComboBox(ComboBox comboBox)
         {
             ComboBoxHelper.fill(comboBox, "LA_MAYORIA.Hotel h",
-                "h.Id_Hotel", "h.Id_Hotel", "h.Habilitado = 1", "h.Id_Hotel ASC");
+                "h.Id_Hotel", "h.Id_Hotel", "", "h.Id_Hotel ASC");
         }
     }
 }

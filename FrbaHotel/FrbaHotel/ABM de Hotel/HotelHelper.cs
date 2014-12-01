@@ -46,27 +46,6 @@ namespace FrbaHotel.ABM_de_Hotel
             DataGridViewHelper.fill(command, dgvHotel);
         }
 
-        public static void enable(Int32 id, Boolean enable)
-        {
-            SqlCommand command = new SqlCommand();
-            command.CommandText = "LA_MAYORIA.sp_hotel_enable_disable";
-
-            command.Parameters.Add(new SqlParameter("@p_hotel_id", SqlDbType.Int));
-            command.Parameters["@p_hotel_id"].Value = id;
-
-            command.Parameters.Add(new SqlParameter("@p_enable_disable", SqlDbType.Int));
-            if (enable)
-            {
-                command.Parameters["@p_enable_disable"].Value = 1;
-            }
-            else
-            {
-                command.Parameters["@p_enable_disable"].Value = 0;
-            }
-
-            ProcedureHelper.execute(command, "Habilitar o deshabilitar hotel", false);
-        }
-
         public static Hotel getHotelData(Int32 hotelId)
         {
             Hotel hotelData = new Hotel();

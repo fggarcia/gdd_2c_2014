@@ -75,6 +75,7 @@ INSERT INTO LA_MAYORIA.Funcionalidad(Id_Funcionalidad,Descripcion) VALUES(2,'ABM
 INSERT INTO LA_MAYORIA.Funcionalidad(Id_Funcionalidad,Descripcion) VALUES(3,'ABM de Usuario')
 INSERT INTO LA_MAYORIA.Funcionalidad(Id_Funcionalidad,Descripcion) VALUES(4,'ABM de Hotel')
 INSERT INTO LA_MAYORIA.Funcionalidad(Id_Funcionalidad,Descripcion) VALUES(5,'ABM de Cliente')
+INSERT INTO LA_MAYORIA.Funcionalidad(Id_Funcionalidad,Descripcion) VALUES(6,'ABM de Habitacion')
 
 --TABLA ROL_FUNCIONALIDAD
 /*
@@ -101,6 +102,7 @@ INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (1, 2)
 INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (1, 3)
 INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (1, 4)
 INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (1, 5)
+INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (1, 6)
 
 --TABLA DOCUMENTOS
 /*
@@ -153,15 +155,14 @@ CREATE TABLE [LA_MAYORIA].[Hotel](
 	[Calle_Nro][numeric](18,0) NOT NULL,
 	[Ciudad][varchar](255) NOT NULL,
 	[Pais][varchar](255) NULL,
-	[Fecha_Creacion][datetime] NOT NULL,
-	[Habilitado][bit] NOT NULL
+	[Fecha_Creacion][datetime] NOT NULL
 
 	CONSTRAINT UQ_Hotel_Id_Hotel UNIQUE(Id_Hotel),
 	CONSTRAINT [PK_Hotel_Calle_Direccion_Calle_Nro_Ciudad] PRIMARY KEY (Calle_Direccion, Calle_Nro, Ciudad)
 )
 
-INSERT INTO LA_MAYORIA.Hotel (Calle_Direccion, Calle_Nro, Ciudad, Pais, Fecha_Creacion, Habilitado)
-SELECT Hotel_Calle,Hotel_Nro_Calle,Hotel_Ciudad,'Argentina',getdate(),1 FROM gd_esquema.Maestra
+INSERT INTO LA_MAYORIA.Hotel (Calle_Direccion, Calle_Nro, Ciudad, Pais, Fecha_Creacion)
+SELECT Hotel_Calle,Hotel_Nro_Calle,Hotel_Ciudad,'Argentina',getdate() FROM gd_esquema.Maestra
 	GROUP BY Hotel_Calle,Hotel_Nro_Calle,Hotel_Ciudad
 
 CREATE TABLE [LA_MAYORIA].[Estrellas](
@@ -305,6 +306,20 @@ CREATE TABLE [LA_MAYORIA].[Historial_Baja_Hotel](
 		REFERENCES [LA_MAYORIA].[Usuario](Id_Usuario)
 )
 
+--TABLA FRENTE
+/*
+	Parametria de tipo de frente
+*/
+CREATE TABLE [LA_MAYORIA].[Frente](
+	[Id_Frente][Int]IDENTITY(1,1) NOT NULL,
+	[Descripcion][Varchar](255) NOT NULL
+
+	CONSTRAINT [UQ_Frente_Descripcion] UNIQUE (Descripcion)
+)
+
+INSERT INTO LA_MAYORIA.Frente (Descripcion) VALUES ('S')
+INSERT INTO LA_MAYORIA.Frente (Descripcion) VALUES ('N')
+
 --TABLA HABITACION
 /*
 	Tabla con cada habitacion dependiendo del hotel
@@ -313,9 +328,9 @@ CREATE TABLE [LA_MAYORIA].[Habitacion](
 	[Id_Hotel][Int] NOT NULL,
 	[Nro][Int] NOT NULL,
 	[Piso][Int] NOT NULL,
-	[Frente][char](1) NOT NULL,
+	[Frente][int] NOT NULL,
 	[Tipo_Habitacion][numeric](18,0) NOT NULL,
-	[Habilitado][bit] NOT NULL
+	[Comodidades][varchar](255)
 
 	CONSTRAINT [FK_Habitacion_Id_Hotel] FOREIGN KEY (Id_Hotel)
 		REFERENCES [LA_MAYORIA].[Hotel](Id_Hotel),
@@ -324,15 +339,17 @@ CREATE TABLE [LA_MAYORIA].[Habitacion](
 	CONSTRAINT [PK_Habitacion_Id_Hotel_Nro_Piso] PRIMARY KEY(Id_Hotel, Nro, Piso)
 )
 
-INSERT INTO LA_MAYORIA.Habitacion (Id_Hotel, Nro, Piso, Frente, Tipo_Habitacion, Habilitado)
-SELECT h.Id_Hotel, m.Habitacion_Numero, m.Habitacion_Piso, m.Habitacion_Frente, th.Id_Tipo_Habitacion, 1 
+INSERT INTO LA_MAYORIA.Habitacion (Id_Hotel, Nro, Piso, Frente, Tipo_Habitacion)
+SELECT h.Id_Hotel, m.Habitacion_Numero, m.Habitacion_Piso, f.Id_Frente, th.Id_Tipo_Habitacion
 	FROM LA_MAYORIA.Hotel h INNER JOIN gd_esquema.Maestra m
 		ON h.Calle_Direccion = m.Hotel_Calle AND h.Calle_Nro = m.Hotel_Nro_Calle
 		AND h.Ciudad = m.Hotel_Ciudad AND m.Habitacion_Numero IS NOT NULL
 		INNER JOIN LA_MAYORIA.Tipo_Habitacion th 
 		ON m.Habitacion_Tipo_Codigo = th.Id_Tipo_Habitacion
 			AND m.Habitacion_Tipo_Descripcion = th.Descripcion
-	GROUP BY h.Id_Hotel, m.Habitacion_Numero, m.Habitacion_Piso, m.Habitacion_Frente, th.Id_Tipo_Habitacion
+		INNER JOIN LA_MAYORIA.Frente f
+		ON UPPER(LTRIM(RTRIM(f.Descripcion))) = UPPER(LTRIM(RTRIM(m.Habitacion_Frente)))
+	GROUP BY h.Id_Hotel, m.Habitacion_Numero, m.Habitacion_Piso, f.Id_Frente, th.Id_Tipo_Habitacion
 
 --TABLA HISTORIAL_BAJA_HABITACION
 /*

@@ -39,32 +39,6 @@ namespace FrbaHotel.ABM_de_Hotel
             Star.fillComboBox(comboBoxStar);
         }
 
-        private void buttonEnable_Click(object sender, EventArgs e)
-        {
-            if (dgvHotel.CurrentRow != null)
-            {
-                HotelHelper.enable(Convert.ToInt32(dgvHotel.CurrentRow.Cells[0].Value), true);
-                buttonSearch.PerformClick();
-            }
-            else
-            {
-                MessageBox.Show("Debe seleccionar un hotel a habilitar");
-            }
-        }
-
-        private void buttonDisable_Click(object sender, EventArgs e)
-        {
-            if (dgvHotel.CurrentRow != null)
-            {
-                HotelHelper.enable(Convert.ToInt32(dgvHotel.CurrentRow.Cells[0].Value), false);
-                buttonSearch.PerformClick();
-            }
-            else
-            {
-                MessageBox.Show("Debe seleccionar un hotel a deshabilitar");
-            }
-        }
-
         private void buttonSearch_Click(object sender, EventArgs e)
         {
             Hotel hotel = this.getDataToSearch();

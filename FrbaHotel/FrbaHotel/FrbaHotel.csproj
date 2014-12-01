@@ -64,12 +64,29 @@
     <Compile Include="ABM de Cliente\FormABMClientModify.Designer.cs">
       <DependentUpon>FormABMClientModify.cs</DependentUpon>
     </Compile>
-    <Compile Include="ABM de Habitacion\Form1.cs">
+    <Compile Include="ABM de Habitacion\FormABMHabitacion.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ABM de Habitacion\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="ABM de Habitacion\FormABMHabitacion.Designer.cs">
+      <DependentUpon>FormABMHabitacion.cs</DependentUpon>
     </Compile>
+    <Compile Include="ABM de Habitacion\FormABMHabitacionModify.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM de Habitacion\FormABMHabitacionModify.Designer.cs">
+      <DependentUpon>FormABMHabitacionModify.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABM de Habitacion\FormABMHabitacionPeriod.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM de Habitacion\FormABMHabitacionPeriod.Designer.cs">
+      <DependentUpon>FormABMHabitacionPeriod.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABM de Habitacion\Front.cs" />
+    <Compile Include="ABM de Habitacion\Habitacion.cs" />
+    <Compile Include="ABM de Habitacion\HabitacionHelper.cs" />
+    <Compile Include="ABM de Habitacion\HotelUserHelper.cs" />
+    <Compile Include="ABM de Habitacion\TypeRoom.cs" />
     <Compile Include="ABM de Hotel\FormABMHotelModify.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -190,6 +207,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ABM de Cliente\FormABMClientModify.resx">
       <DependentUpon>FormABMClientModify.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM de Habitacion\FormABMHabitacion.resx">
+      <DependentUpon>FormABMHabitacion.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ABM de Hotel\FormABMHotel.resx">
       <DependentUpon>FormABMHotel.cs</DependentUpon>
