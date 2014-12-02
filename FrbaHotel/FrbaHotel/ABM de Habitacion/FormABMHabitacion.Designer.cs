@@ -195,6 +195,7 @@
             this.buttonCreate.TabIndex = 17;
             this.buttonCreate.Text = "Crear";
             this.buttonCreate.UseVisualStyleBackColor = true;
+            this.buttonCreate.Click += new System.EventHandler(this.buttonCreate_Click);
             // 
             // buttonModify
             // 
@@ -204,6 +205,7 @@
             this.buttonModify.TabIndex = 20;
             this.buttonModify.Text = "Modificar";
             this.buttonModify.UseVisualStyleBackColor = true;
+            this.buttonModify.Click += new System.EventHandler(this.buttonModify_Click);
             // 
             // buttonDisablePeriod
             // 
@@ -213,6 +215,7 @@
             this.buttonDisablePeriod.TabIndex = 21;
             this.buttonDisablePeriod.Text = "Baja Periodo";
             this.buttonDisablePeriod.UseVisualStyleBackColor = true;
+            this.buttonDisablePeriod.Click += new System.EventHandler(this.buttonDisablePeriod_Click);
             // 
             // FormABMHabitacion
             // 

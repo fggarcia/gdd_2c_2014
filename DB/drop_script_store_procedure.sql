@@ -63,3 +63,11 @@ DROP PROCEDURE LA_MAYORIA.sp_hotel_regimen_remove
 DROP PROCEDURE LA_MAYORIA.sp_hotel_close_period_valid
 
 DROP PROCEDURE LA_MAYORIA.sp_habitacion_search
+
+DROP PROCEDURE LA_MAYORIA.sp_habitacion_close_period_valid
+
+DROP PROCEDURE LA_MAYORIA.sp_habitacion_exist_hotel_room
+
+DROP PROCEDURE LA_MAYORIA.sp_habitacion_data_get_by_id
+
+DROP PROCEDURE LA_MAYORIA.sp_habitacion_save_update

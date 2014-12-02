@@ -211,6 +211,12 @@
     <EmbeddedResource Include="ABM de Habitacion\FormABMHabitacion.resx">
       <DependentUpon>FormABMHabitacion.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ABM de Habitacion\FormABMHabitacionModify.resx">
+      <DependentUpon>FormABMHabitacionModify.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM de Habitacion\FormABMHabitacionPeriod.resx">
+      <DependentUpon>FormABMHabitacionPeriod.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ABM de Hotel\FormABMHotel.resx">
       <DependentUpon>FormABMHotel.cs</DependentUpon>
     </EmbeddedResource>

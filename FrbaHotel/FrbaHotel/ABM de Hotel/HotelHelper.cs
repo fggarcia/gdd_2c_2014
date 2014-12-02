@@ -89,27 +89,27 @@ namespace FrbaHotel.ABM_de_Hotel
 
         public static Int32 save(Hotel hotelData)
         {
-            SqlCommand sp_save_or_update_client = new SqlCommand();
-            sp_save_or_update_client.CommandType = CommandType.StoredProcedure;
-            sp_save_or_update_client.CommandText = "LA_MAYORIA.sp_hotel_save_update";
+            SqlCommand sp_save_or_update_hotel = new SqlCommand();
+            sp_save_or_update_hotel.CommandType = CommandType.StoredProcedure;
+            sp_save_or_update_hotel.CommandText = "LA_MAYORIA.sp_hotel_save_update";
 
-            var returnParameterHotelId = sp_save_or_update_client.Parameters.Add(new SqlParameter("@p_hotel_id", SqlDbType.Int));
+            var returnParameterHotelId = sp_save_or_update_hotel.Parameters.Add(new SqlParameter("@p_hotel_id", SqlDbType.Int));
             returnParameterHotelId.Direction = ParameterDirection.InputOutput;
-            sp_save_or_update_client.Parameters["@p_hotel_id"].Value = hotelData.id;
+            sp_save_or_update_hotel.Parameters["@p_hotel_id"].Value = hotelData.id;
 
-            sp_save_or_update_client.Parameters.AddWithValue("@p_user_id", VarGlobal.usuario.id);
-            sp_save_or_update_client.Parameters.AddWithValue("@p_user_rol_id", VarGlobal.usuario.rol.id);
-            sp_save_or_update_client.Parameters.AddWithValue("@p_hotel_name", hotelData.name);
-            sp_save_or_update_client.Parameters.AddWithValue("@p_hotel_mail", hotelData.mail);
-            sp_save_or_update_client.Parameters.AddWithValue("@p_hotel_address", hotelData.address);
-            sp_save_or_update_client.Parameters.AddWithValue("@p_hotel_address_number", hotelData.addressNumber);
-            sp_save_or_update_client.Parameters.AddWithValue("@p_hotel_telephone", hotelData.telephone);
-            sp_save_or_update_client.Parameters.AddWithValue("@p_hotel_city", hotelData.city);
-            sp_save_or_update_client.Parameters.AddWithValue("@p_hotel_country", hotelData.country);
-            sp_save_or_update_client.Parameters.AddWithValue("@p_hotel_star", hotelData.star);
-            sp_save_or_update_client.Parameters.AddWithValue("@p_hotel_creation", hotelData.creation);
-            
-            ProcedureHelper.execute(sp_save_or_update_client, "save or update hotel data", false);
+            sp_save_or_update_hotel.Parameters.AddWithValue("@p_user_id", VarGlobal.usuario.id);
+            sp_save_or_update_hotel.Parameters.AddWithValue("@p_user_rol_id", VarGlobal.usuario.rol.id);
+            sp_save_or_update_hotel.Parameters.AddWithValue("@p_hotel_name", hotelData.name);
+            sp_save_or_update_hotel.Parameters.AddWithValue("@p_hotel_mail", hotelData.mail);
+            sp_save_or_update_hotel.Parameters.AddWithValue("@p_hotel_address", hotelData.address);
+            sp_save_or_update_hotel.Parameters.AddWithValue("@p_hotel_address_number", hotelData.addressNumber);
+            sp_save_or_update_hotel.Parameters.AddWithValue("@p_hotel_telephone", hotelData.telephone);
+            sp_save_or_update_hotel.Parameters.AddWithValue("@p_hotel_city", hotelData.city);
+            sp_save_or_update_hotel.Parameters.AddWithValue("@p_hotel_country", hotelData.country);
+            sp_save_or_update_hotel.Parameters.AddWithValue("@p_hotel_star", hotelData.star);
+            sp_save_or_update_hotel.Parameters.AddWithValue("@p_hotel_creation", hotelData.creation);
+
+            ProcedureHelper.execute(sp_save_or_update_hotel, "save or update hotel data", false);
 
             return Convert.ToInt32(returnParameterHotelId.Value);
         }
@@ -128,6 +128,8 @@ namespace FrbaHotel.ABM_de_Hotel
             sp_hotel_close_period_valid.Parameters.AddWithValue("@p_hotel_close_period_from", period.from);
             sp_hotel_close_period_valid.Parameters.AddWithValue("@p_hotel_close_period_to", period.to);
             sp_hotel_close_period_valid.Parameters.AddWithValue("@p_hotel_close_period_motive", period.motive);
+
+            ProcedureHelper.execute(sp_hotel_close_period_valid, "check down period", false);
 
             Int16 enable = Convert.ToInt16(returnParameterAddOk.Value);
 

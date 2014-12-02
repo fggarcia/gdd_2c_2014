@@ -799,3 +799,117 @@ BEGIN
 		AND (LTRIM(RTRIM(urh.Id_Usuario)) = LTRIM(RTRIM(@p_user_name)))
 END
 GO
+
+CREATE PROCEDURE [LA_MAYORIA].[sp_habitacion_close_period_valid](
+@p_user_id varchar(20),
+@p_habitacion_id int,
+@p_habitacion_floor_id int,
+@p_habitacion_hotel_id int,
+@p_habitacion_close_period_from datetime,
+@p_habitacion_close_period_to datetime,
+@p_habitacion_close_period_motive varchar(255),
+@p_add_ok int = 0 OUTPUT
+)
+AS
+BEGIN
+	IF NOT EXISTS (
+		SELECT 1 FROM LA_MAYORIA.Reserva r
+			INNER JOIN LA_MAYORIA.Habitacion_Reserva hr
+				ON hr.Id_Reserva = r.Id_Reserva
+			WHERE hr.Id_Hotel = @p_habitacion_hotel_id
+			AND hr.Habitacion_Nro = @p_habitacion_id
+			AND hr.Habitacion_Piso = @p_habitacion_floor_id
+			AND	(
+				(CAST(@p_habitacion_close_period_from AS DATE) BETWEEN r.Fecha_Inicio AND DATEADD(DAY, r.Estadia, r.Fecha_Inicio))
+				OR (r.Fecha_Inicio > CAST(@p_habitacion_close_period_from AS DATE))
+			)
+			AND	(
+				(CAST(@p_habitacion_close_period_to AS DATE) BETWEEN r.Fecha_Inicio AND DATEADD(DAY, r.Estadia, r.Fecha_Inicio))
+				OR (r.Fecha_Inicio > CAST(@p_habitacion_close_period_to AS DATE))
+			) 
+		)
+	BEGIN
+		SET @p_add_ok = 1
+		INSERT INTO LA_MAYORIA.Historial_Baja_Habitacion (Id_Hotel, Habitacion_Nro, Habitacion_Piso, Fecha_Inicio, Fecha_Fin, Motivo, Id_Usuario)
+		VALUES (@p_habitacion_hotel_id, @p_habitacion_id, @p_habitacion_floor_id, @p_habitacion_close_period_from, @p_habitacion_close_period_to, 
+			@p_habitacion_close_period_motive, @p_user_id)
+	END
+	ELSE
+		SET @p_add_ok = 0
+END
+GO
+
+CREATE PROCEDURE [LA_MAYORIA].[sp_habitacion_data_get_by_id](
+@p_habitacion_id int = null,
+@p_habitacion_floor_id int = null,
+@p_habitacion_hotel_id int = null
+)
+AS
+BEGIN
+	SELECT 
+		h.Nro 'NroHabitacion',
+		h.Piso 'Piso',
+		h.Id_Hotel 'Hotel',
+		h.Id_Hotel 'HotelNombre',
+		h.Frente 'IdFrente',
+		f.Descripcion 'FrenteDescripcion',
+		h.Tipo_Habitacion 'IdTipoHabitacion',
+		th.Descripcion 'TipoHabitacion',
+		h.Comodidades 'Comodidades'
+
+		FROM LA_MAYORIA.Habitacion h
+		INNER JOIN LA_MAYORIA.Tipo_Habitacion th
+			ON h.Tipo_Habitacion = th.Id_Tipo_Habitacion
+		INNER JOIN LA_MAYORIA.Frente f
+			ON h.frente = f.Id_Frente
+		WHERE h.Id_Hotel = @p_habitacion_hotel_id
+			AND h.Nro = @p_habitacion_id
+			AND h.Piso = @p_habitacion_floor_id
+END
+GO
+
+CREATE PROCEDURE [LA_MAYORIA].[sp_habitacion_exist_hotel_room](
+@p_habitacion_id int,
+@p_habitacion_hotel_id int,
+@p_habitacion_floor_id int,
+@p_exist bit = 0 OUTPUT
+)
+AS
+BEGIN
+	IF EXISTS(SELECT 1 FROM LA_MAYORIA.Habitacion
+		WHERE Id_Hotel = @p_habitacion_hotel_id
+			AND Nro = @p_habitacion_id
+			AND Piso = @p_habitacion_floor_id)
+		SET @p_exist = 1
+	ELSE
+		SET @p_exist = 0
+END
+GO
+
+CREATE PROCEDURE [LA_MAYORIA].[sp_habitacion_save_update](
+@p_habitacion_id int,
+@p_habitacion_floor_id int,
+@p_habitacion_hotel_id int,
+@p_habitacion_type int,
+@p_habitacion_comodity varchar(255),
+@p_habitacion_front int
+)
+AS
+BEGIN
+	BEGIN TRANSACTION
+		IF EXISTS(SELECT 1 FROM LA_MAYORIA.Habitacion
+		WHERE Id_Hotel = @p_habitacion_hotel_id
+			AND Nro = @p_habitacion_id
+			AND Piso = @p_habitacion_floor_id)
+			UPDATE LA_MAYORIA.Habitacion SET Frente = @p_habitacion_front, 
+			Tipo_Habitacion = @p_habitacion_type, Comodidades = @p_habitacion_comodity
+				WHERE Id_Hotel = @p_habitacion_hotel_id
+					AND Nro = @p_habitacion_id
+					AND Piso = @p_habitacion_floor_id
+		ELSE
+			INSERT INTO LA_MAYORIA.Habitacion (Id_Hotel, Nro, Piso, Frente, Tipo_Habitacion, Comodidades)
+				VALUES (@p_habitacion_hotel_id, @p_habitacion_id, @p_habitacion_floor_id,
+					@p_habitacion_front, @p_habitacion_type, @p_habitacion_comodity)
+	COMMIT TRANSACTION
+END
+GO

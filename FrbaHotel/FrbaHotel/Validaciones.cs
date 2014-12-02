@@ -49,6 +49,19 @@ namespace FrbaHotel
                 return false;
             }
         }
+        public static Boolean validAndRequiredInt32MoreThanEqual0(string value, string error)
+        {
+            Int32 aux;
+            if (Int32.TryParse(value, out aux) && value != "" && aux >= 0)
+            {
+                return true;
+            }
+            else
+            {
+                MessageBox.Show(error, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+        }
         public static Boolean requiredString(string value, string error)
         {
             if (value != "")
