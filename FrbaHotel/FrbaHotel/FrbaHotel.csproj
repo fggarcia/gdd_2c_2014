@@ -109,12 +109,13 @@
     <Compile Include="ABM de Hotel\Hotel.cs" />
     <Compile Include="ABM de Hotel\RegimenHotelHelper.cs" />
     <Compile Include="ABM de Hotel\Star.cs" />
-    <Compile Include="ABM de Regimen\Form1.cs">
+    <Compile Include="ABM de Regimen\FormABMRegimen.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ABM de Regimen\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="ABM de Regimen\FormABMRegimen.Designer.cs">
+      <DependentUpon>FormABMRegimen.cs</DependentUpon>
     </Compile>
+    <Compile Include="ABM de Regimen\RegimenHelper.cs" />
     <Compile Include="ABM de Rol\RolFuncionalityHelper.cs" />
     <Compile Include="ABM de Rol\FormABMRolModify.cs">
       <SubType>Form</SubType>
@@ -147,11 +148,11 @@
     </Compile>
     <Compile Include="ABM de Usuario\UsuarioDatos.cs" />
     <Compile Include="ABM de Usuario\UsuarioHelper.cs" />
-    <Compile Include="Cancelar Reserva\Form1.cs">
+    <Compile Include="Cancelar Reserva\FormCancelarReserva.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Cancelar Reserva\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Cancelar Reserva\FormCancelarReserva.Designer.cs">
+      <DependentUpon>FormCancelarReserva.cs</DependentUpon>
     </Compile>
     <Compile Include="Common\Period.cs" />
     <Compile Include="Validaciones.cs" />
@@ -225,6 +226,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ABM de Hotel\FormABMHotelPeriod.resx">
       <DependentUpon>FormABMHotelPeriod.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM de Regimen\FormABMRegimen.resx">
+      <DependentUpon>FormABMRegimen.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ABM de Rol\FormABMRolModify.resx">
       <DependentUpon>FormABMRolModify.cs</DependentUpon>

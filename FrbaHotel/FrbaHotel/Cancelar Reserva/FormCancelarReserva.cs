@@ -7,11 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace FrbaHotel.ABM_de_Regimen
+namespace FrbaHotel.Cancelar_Reserva
 {
-    public partial class Form1 : Form
+    public partial class FormCancelarReserva : Form
     {
-        public Form1()
+        public FormCancelarReserva()
         {
             InitializeComponent();
         }

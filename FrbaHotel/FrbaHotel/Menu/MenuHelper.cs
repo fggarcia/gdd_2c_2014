@@ -74,6 +74,14 @@ namespace FrbaHotel
                     func.folder = "ABM_de_Habitacion";
                     func.form = "FormABMHabitacion";
                     break;
+                case "ABM de Regimen":
+                    func.folder = "ABM_de_Regimen";
+                    func.form = "FormABMRegimen";
+                    break;
+                case "Cancelar Reserva":
+                    func.folder = "Cancelar_Reserva";
+                    func.form = "FormCancelarReserva";
+                    break;
             }
             return func;
         }

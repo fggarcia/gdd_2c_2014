@@ -913,3 +913,31 @@ BEGIN
 	COMMIT TRANSACTION
 END
 GO
+
+CREATE PROCEDURE [LA_MAYORIA].[sp_regimen_search](
+@p_regimen_description varchar(255) = null
+)
+AS
+BEGIN
+	SELECT DISTINCT
+				
+		h.Id_Hotel 'Hotel',
+		h.Piso 'Piso',
+		h.Nro 'Nro Habitacion',
+		f.Descripcion 'Frente',
+		th.Descripcion 'Tipo Habitacion',
+		h.Comodidades 'Comodidades'
+		
+		FROM LA_MAYORIA.Regimen r
+			INNER JOIN LA_MAYORIA.Frente f
+				ON h.Frente = f.Id_Frente
+			INNER JOIN LA_MAYORIA.Tipo_Habitacion th
+				ON h.Tipo_Habitacion = th.Id_Tipo_Habitacion
+			INNER JOIN LA_MAYORIA.Usuario_Rol_Hotel urh
+				ON urh.Id_Usuario = @p_user_name
+				AND h.Id_Hotel = urh.Id_Hotel
+		
+		WHERE
+		((@p_regimen_description IS NULL) OR (UPPER(r.Descripcion) like '%' + UPPER(LTRIM(RTRIM(@p_regimen_description))) + '%'))
+END
+GO
