@@ -73,3 +73,7 @@ DROP PROCEDURE LA_MAYORIA.sp_habitacion_data_get_by_id
 DROP PROCEDURE LA_MAYORIA.sp_habitacion_save_update
 
 DROP PROCEDURE LA_MAYORIA.sp_regimen_search
+
+DROP PROCEDURE LA_MAYORIA.sp_cancelacion_reserva_search
+
+DROP PROCEDURE LA_MAYORIA.sp_cancelacion_reserva_cancel

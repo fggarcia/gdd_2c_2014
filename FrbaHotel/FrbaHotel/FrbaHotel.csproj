@@ -148,6 +148,7 @@
     </Compile>
     <Compile Include="ABM de Usuario\UsuarioDatos.cs" />
     <Compile Include="ABM de Usuario\UsuarioHelper.cs" />
+    <Compile Include="Cancelar Reserva\CancelationBookingHelper.cs" />
     <Compile Include="Cancelar Reserva\FormCancelarReserva.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -241,6 +242,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ABM de Usuario\FormABMUsuarioModify.resx">
       <DependentUpon>FormABMUsuarioModify.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Cancelar Reserva\FormCancelarReserva.resx">
+      <DependentUpon>FormCancelarReserva.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormMenu.resx">
       <DependentUpon>FormMenu.cs</DependentUpon>

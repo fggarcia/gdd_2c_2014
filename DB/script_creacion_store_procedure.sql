@@ -921,23 +921,81 @@ AS
 BEGIN
 	SELECT DISTINCT
 				
-		h.Id_Hotel 'Hotel',
-		h.Piso 'Piso',
-		h.Nro 'Nro Habitacion',
-		f.Descripcion 'Frente',
-		th.Descripcion 'Tipo Habitacion',
-		h.Comodidades 'Comodidades'
+		r.Descripcion 'Descripcion',
+		r.Precio 'Precio',
+		r.Habilitado 'Habilitado'
 		
 		FROM LA_MAYORIA.Regimen r
-			INNER JOIN LA_MAYORIA.Frente f
-				ON h.Frente = f.Id_Frente
-			INNER JOIN LA_MAYORIA.Tipo_Habitacion th
-				ON h.Tipo_Habitacion = th.Id_Tipo_Habitacion
-			INNER JOIN LA_MAYORIA.Usuario_Rol_Hotel urh
-				ON urh.Id_Usuario = @p_user_name
-				AND h.Id_Hotel = urh.Id_Hotel
 		
 		WHERE
 		((@p_regimen_description IS NULL) OR (UPPER(r.Descripcion) like '%' + UPPER(LTRIM(RTRIM(@p_regimen_description))) + '%'))
+END
+GO
+
+CREATE PROCEDURE [LA_MAYORIA].[sp_cancelacion_reserva_search](
+@p_cancelacion_reserva_id int = null,
+@p_cancelacion_reserva_lastname varchar(255) = null,
+@p_user_hotel_id int = null
+)
+AS
+BEGIN
+	SELECT DISTINCT
+		
+		r.Id_Reserva 'Reserva',
+		c.Nombre 'Nombre',
+		c.Apellido 'Apellido',
+		hr.Id_Hotel 'Hotel',
+		hr.Habitacion_Piso 'Piso',
+		hr.Habitacion_Nro 'Habitacion',
+		r.Fecha_Inicio 'Fecha Inicio',
+		r.Estadia 'Estadia',
+		er.Descripcion 'Estado'
+		
+		FROM LA_MAYORIA.Reserva r 
+		INNER JOIN LA_MAYORIA.Reserva_Cliente rc
+			ON r.Id_Reserva = rc.Id_Reserva
+		INNER JOIN LA_MAYORIA.Habitacion_Reserva hr
+			ON r.Id_Reserva = hr.Id_Reserva
+		INNER JOIN LA_MAYORIA.Estado_Reserva er
+			ON r.Estado = er.Id_Estado
+		INNER JOIN LA_MAYORIA.Clientes c
+			ON rc.Id_Cliente = c.Id_Cliente
+
+		WHERE
+
+		((@p_user_hotel_id IS NULL) OR (hr.Id_Hotel = @p_user_hotel_id))
+		AND ((@p_cancelacion_reserva_lastname IS NULL) OR (UPPER(LTRIM(RTRIM(c.Apellido))) 
+			like '%' + UPPER(LTRIM(RTRIM(@p_cancelacion_reserva_lastname))) + '%'))
+		AND ((@p_cancelacion_reserva_id IS NULL) OR (STR(r.Id_Reserva) like '%' + STR(@p_cancelacion_reserva_id) + '%'))
+		AND ( (UPPER(er.Descripcion) = UPPER('Reserva con ingreso')) OR (UPPER(er.Descripcion) = UPPER('Reserva Correcta'))
+			OR (UPPER(er.Descripcion) = UPPER('Reserva Modificada')) )
+		AND (DATEADD(DAY, 1,CAST(GETDATE() AS DATE)) <= r.Fecha_Inicio)
+END
+GO
+
+CREATE PROCEDURE [LA_MAYORIA].[sp_cancelacion_reserva_cancel](
+@p_cancelacion_reserva_id int,
+@p_cancelacion_reserva_motive varchar(255),
+@p_user_name varchar(20)
+)
+AS
+BEGIN
+	BEGIN TRANSACTION
+
+		INSERT INTO LA_MAYORIA.Historial_Cancelacion_Reserva (Id_Reserva, Motivo, Fecha_Cancelacion, Id_Usuario)
+			VALUES (@p_cancelacion_reserva_id, @p_cancelacion_reserva_motive, GETDATE(), @p_user_name)
+
+		Declare @bookingStatus int
+		IF (LTRIM(RTRIM(@p_user_name)) = 'guest')
+			SELECT @bookingStatus = Id_Estado FROM LA_MAYORIA.Estado_Reserva
+				WHERE UPPER(LTRIM(RTRIM(Descripcion))) = UPPER('Reserva Cancelada Por Cliente')
+		ELSE
+			SELECT @bookingStatus = Id_Estado FROM LA_MAYORIA.Estado_Reserva
+				WHERE UPPER(LTRIM(RTRIM(Descripcion))) = UPPER('Reserva Cancelada Por Recepcion')
+
+		UPDATE LA_MAYORIA.Reserva SET Estado = @bookingStatus
+			WHERE Id_Reserva = @p_cancelacion_reserva_id
+
+	COMMIT TRANSACTION
 END
 GO
