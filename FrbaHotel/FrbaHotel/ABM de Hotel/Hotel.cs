@@ -17,7 +17,6 @@ namespace FrbaHotel.ABM_de_Hotel
         public String country { get; set; }
         public Int32 star { get; set; }
         public DateTime creation { get; set; }
-        public Boolean enable { get; set; }
         
     }
 }

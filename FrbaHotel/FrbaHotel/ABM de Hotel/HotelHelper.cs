@@ -73,13 +73,6 @@ namespace FrbaHotel.ABM_de_Hotel
                 hotelData.city = Convert.ToString(reader["Ciudad"]);
                 hotelData.country = Convert.ToString(reader["Pais"]);
                 hotelData.creation = Convert.ToDateTime(reader["Creacion"]);
-
-                int enable = Convert.ToInt16(reader["Habilitado"]);
-
-                if (enable == 1)
-                    hotelData.enable = true;
-                else
-                    hotelData.enable = false;
             }
 
             conn.Close();
