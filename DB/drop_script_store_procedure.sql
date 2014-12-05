@@ -77,3 +77,7 @@ DROP PROCEDURE LA_MAYORIA.sp_regimen_search
 DROP PROCEDURE LA_MAYORIA.sp_cancelacion_reserva_search
 
 DROP PROCEDURE LA_MAYORIA.sp_cancelacion_reserva_cancel
+
+DROP PROCEDURE LA_MAYORIA.sp_estadia_booking_search
+
+DROP PROCEDURE LA_MAYORIA.sp_estadia_booking_status

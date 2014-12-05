@@ -156,6 +156,14 @@
       <DependentUpon>FormCancelarReserva.cs</DependentUpon>
     </Compile>
     <Compile Include="Common\Period.cs" />
+    <Compile Include="Registrar Estadia\BookingStatus.cs" />
+    <Compile Include="Registrar Estadia\FormRegistrarEstadiaCliente.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Registrar Estadia\FormRegistrarEstadiaCliente.Designer.cs">
+      <DependentUpon>FormRegistrarEstadiaCliente.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Registrar Estadia\RegisterStayHelper.cs" />
     <Compile Include="Validaciones.cs" />
     <Compile Include="Common\AppConnections.cs" />
     <Compile Include="Db\Connection.cs" />
@@ -264,6 +272,12 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Registrar Estadia\FormRegistrarEstadia.resx">
+      <DependentUpon>FormRegistrarEstadia.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Registrar Estadia\FormRegistrarEstadiaCliente.resx">
+      <DependentUpon>FormRegistrarEstadiaCliente.cs</DependentUpon>
+    </EmbeddedResource>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
@@ -284,11 +298,11 @@
     <Compile Include="Registrar Consumible\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Registrar Estadia\Form1.cs">
+    <Compile Include="Registrar Estadia\FormRegistrarEstadia.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Registrar Estadia\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Registrar Estadia\FormRegistrarEstadia.Designer.cs">
+      <DependentUpon>FormRegistrarEstadia.cs</DependentUpon>
     </Compile>
     <Compile Include="Utils\CheckBoxHelper.cs" />
     <Compile Include="Utils\ComboBoxHelper.cs" />

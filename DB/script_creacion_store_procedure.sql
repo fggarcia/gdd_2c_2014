@@ -999,3 +999,79 @@ BEGIN
 	COMMIT TRANSACTION
 END
 GO
+
+CREATE PROCEDURE [LA_MAYORIA].[sp_estadia_booking_search](
+@p_stay_booking_id int,
+@p_stay_hotel_id int
+)
+AS
+BEGIN
+	SELECT 
+		r.Id_Reserva 'Nro Reserva',
+		rc.Id_Cliente 'Nro Cliente',
+		c.Nombre 'Nombre',
+		c.Apellido 'Apellido',
+		CAST(r.Fecha_Inicio AS DATE) 'Fecha Inicio',
+		r.Estadia 'Estadia',
+		hr.Id_Hotel 'Hotel',
+		hr.Habitacion_Piso 'Piso',
+		hr.Habitacion_Nro 'Nro Habitacion'
+
+	FROM LA_MAYORIA.Reserva r
+	INNER JOIN LA_MAYORIA.Reserva_Cliente rc
+		ON r.Id_Reserva = rc.Id_Reserva
+	INNER JOIN LA_MAYORIA.Habitacion_Reserva hr
+		ON r.Id_Reserva = hr.Id_Reserva
+	INNER JOIN LA_MAYORIA.Clientes c
+		ON rc.Id_Cliente = c.Id_Cliente
+	INNER JOIN LA_MAYORIA.Estado_Reserva er
+		ON r.Estado = er.Id_Estado
+	WHERE r.Id_Reserva = @p_stay_booking_id
+		AND hr.Id_Hotel = @p_stay_hotel_id
+		AND CAST(r.Fecha_Inicio AS DATE) = CAST(GETDATE() AS DATE)
+		AND (
+			(UPPER(RTRIM(LTRIM(er.Descripcion))) = UPPER(RTRIM(LTRIM('Reserva Correcta'))))
+			OR (UPPER(RTRIM(LTRIM(er.Descripcion))) = UPPER(RTRIM(LTRIM('Reserva Modificada'))))
+		)
+		AND c.Habilitado = 1
+END
+GO
+
+CREATE PROCEDURE [LA_MAYORIA].[sp_estadia_booking_status](
+@p_stay_booking_id int,
+@p_stay_hotel_id int,
+@p_stay_booking_cancel bit = 0 OUTPUT,
+@p_stay_booking_exist bit = 0 OUTPUT,
+@p_stay_booking_before bit = 0 OUTPUT,
+@p_stay_booking_hotel bit = 0 OUTPUT
+)
+AS
+BEGIN
+	SET @p_stay_booking_before = 0
+	SET @p_stay_booking_cancel = 0
+	SET @p_stay_booking_exist = 0
+	SET @p_stay_booking_hotel = 0
+	IF EXISTS(SELECT 1 FROM LA_MAYORIA.Reserva r
+		WHERE r.Id_Reserva = @p_stay_booking_id)
+		SET @p_stay_booking_exist = 1
+	
+	IF EXISTS(SELECT 1 FROM LA_MAYORIA.Reserva r
+		INNER JOIN LA_MAYORIA.Habitacion_Reserva hr
+			ON r.Id_Reserva = hr.Id_Reserva
+		WHERE r.Id_Reserva = @p_stay_booking_id
+			AND hr.Id_Hotel = @p_stay_booking_hotel)
+		SET @p_stay_booking_hotel = 1
+
+	IF EXISTS(SELECT 1 FROM LA_MAYORIA.Reserva r
+		WHERE r.Id_Reserva = @p_stay_booking_id
+			AND CAST(r.Fecha_Inicio AS DATE) < CAST(GETDATE() AS DATE))
+		SET @p_stay_booking_before = 1
+
+	IF EXISTS(SELECT 1 FROM LA_MAYORIA.Reserva r
+		INNER JOIN LA_MAYORIA.Estado_Reserva er
+			ON r.Estado = er.Id_Estado
+	WHERE r.Id_Reserva = @p_stay_booking_id
+		AND UPPER(er.Descripcion) like '%' + 'CANCELADA' + '%')
+		SET @p_stay_booking_cancel = 1
+END
+GO

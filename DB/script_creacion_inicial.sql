@@ -78,6 +78,7 @@ INSERT INTO LA_MAYORIA.Funcionalidad(Id_Funcionalidad,Descripcion) VALUES(5,'ABM
 INSERT INTO LA_MAYORIA.Funcionalidad(Id_Funcionalidad,Descripcion) VALUES(6,'ABM de Habitacion')
 INSERT INTO LA_MAYORIA.Funcionalidad(Id_Funcionalidad,Descripcion) VALUES(7,'ABM de Regimen')
 INSERT INTO LA_MAYORIA.Funcionalidad(Id_Funcionalidad,Descripcion) VALUES(9,'Cancelar Reserva')
+INSERT INTO LA_MAYORIA.Funcionalidad(Id_Funcionalidad,Descripcion) VALUES(10,'Registrar Estadía')
 
 --TABLA ROL_FUNCIONALIDAD
 /*
@@ -109,6 +110,7 @@ INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (1, 7)
 INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (1, 9)
 INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (2, 9)
 INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (3, 9)
+INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (2, 10)
 
 --TABLA DOCUMENTOS
 /*
@@ -229,6 +231,7 @@ CREATE TABLE [LA_MAYORIA].[Usuario_Rol_Hotel](
 
 --Se agrega al usuario admin con el rol de administrador
 INSERT INTO LA_MAYORIA.Usuario_Rol_Hotel (Id_Usuario, Id_Rol, Id_Hotel, Habilitado) values ('admin',1,1,1)
+INSERT INTO LA_MAYORIA.Usuario_Rol_Hotel (Id_Usuario, Id_Rol, Id_Hotel, Habilitado) values ('admin',2,1,1)
 
 --TABLA REGIMEN
 /*
