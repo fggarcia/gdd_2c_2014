@@ -1,7 +1,4 @@
 C:\Users\Administrator\Desktop\Repositorio\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Release\ResolveAssemblyReference.cache
-C:\Users\Administrator\Desktop\Repositorio\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Release\FrbaHotel.Form_Main.resources
-C:\Users\Administrator\Desktop\Repositorio\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Release\FrbaHotel.Login.Form_Login.resources
-C:\Users\Administrator\Desktop\Repositorio\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Release\FrbaHotel.Login.Form_Seleccion_Rol.resources
 C:\Users\Administrator\Desktop\Repositorio\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Release\FrbaHotel.Properties.Resources.resources
 C:\Users\Administrator\Desktop\Repositorio\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Release\FrbaHotel.csproj.GenerateResource.Cache
 C:\Users\Administrator\Desktop\Repositorio\gdd_2c_2014\FrbaHotel\FrbaHotel\bin\Release\FrbaHotel.exe
@@ -20,3 +17,24 @@ C:\Documents and Settings\UsuarioAdmin\Mis documentos\tp2c2014\gdd_2c_2014\FrbaH
 C:\Documents and Settings\UsuarioAdmin\Mis documentos\tp2c2014\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Release\FrbaHotel.csproj.GenerateResource.Cache
 C:\Documents and Settings\UsuarioAdmin\Mis documentos\tp2c2014\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Release\FrbaHotel.exe
 C:\Documents and Settings\UsuarioAdmin\Mis documentos\tp2c2014\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Release\FrbaHotel.pdb
+C:\Users\Administrator\Desktop\Repositorio\gdd_2c_2014\FrbaHotel\FrbaHotel\bin\Release\FrbaHotel.exe.config
+C:\Users\Administrator\Desktop\Repositorio\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Release\FrbaHotel.ABM_de_Cliente.FormABMClient.resources
+C:\Users\Administrator\Desktop\Repositorio\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Release\FrbaHotel.ABM_de_Cliente.FormABMClientModify.resources
+C:\Users\Administrator\Desktop\Repositorio\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Release\FrbaHotel.ABM_de_Habitacion.FormABMHabitacion.resources
+C:\Users\Administrator\Desktop\Repositorio\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Release\FrbaHotel.ABM_de_Habitacion.FormABMHabitacionModify.resources
+C:\Users\Administrator\Desktop\Repositorio\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Release\FrbaHotel.ABM_de_Habitacion.FormABMHabitacionPeriod.resources
+C:\Users\Administrator\Desktop\Repositorio\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Release\FrbaHotel.ABM_de_Hotel.FormABMHotel.resources
+C:\Users\Administrator\Desktop\Repositorio\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Release\FrbaHotel.ABM_de_Hotel.FormABMHotelModify.resources
+C:\Users\Administrator\Desktop\Repositorio\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Release\FrbaHotel.ABM_de_Hotel.FormABMHotelPeriod.resources
+C:\Users\Administrator\Desktop\Repositorio\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Release\FrbaHotel.ABM_de_Regimen.FormABMRegimen.resources
+C:\Users\Administrator\Desktop\Repositorio\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Release\FrbaHotel.ABM_de_Rol.FormABMRolModify.resources
+C:\Users\Administrator\Desktop\Repositorio\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Release\FrbaHotel.ABM_de_Rol.FormABMRol.resources
+C:\Users\Administrator\Desktop\Repositorio\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Release\FrbaHotel.ABM_de_Usuario.FormABMUsuario.resources
+C:\Users\Administrator\Desktop\Repositorio\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Release\FrbaHotel.ABM_de_Usuario.FormABMUsuarioModify.resources
+C:\Users\Administrator\Desktop\Repositorio\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Release\FrbaHotel.Cancelar_Reserva.FormCancelarReserva.resources
+C:\Users\Administrator\Desktop\Repositorio\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Release\FrbaHotel.FormMenu.resources
+C:\Users\Administrator\Desktop\Repositorio\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Release\FrbaHotel.Login.FormLogin.resources
+C:\Users\Administrator\Desktop\Repositorio\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Release\FrbaHotel.Login.FormSeleccionHotel.resources
+C:\Users\Administrator\Desktop\Repositorio\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Release\FrbaHotel.Login.FormSeleccionRol.resources
+C:\Users\Administrator\Desktop\Repositorio\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Release\FrbaHotel.Registrar_Estadia.FormRegistrarEstadia.resources
+C:\Users\Administrator\Desktop\Repositorio\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Release\FrbaHotel.Registrar_Estadia.FormRegistrarEstadiaCliente.resources

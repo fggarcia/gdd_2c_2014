@@ -174,11 +174,11 @@
     <Compile Include="FormMenu.Designer.cs">
       <DependentUpon>FormMenu.cs</DependentUpon>
     </Compile>
-    <Compile Include="Generar Modificar Reserva\Form1.cs">
+    <Compile Include="Generar Modificar Reserva\FormABMReserva.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Generar Modificar Reserva\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Generar Modificar Reserva\FormABMReserva.Designer.cs">
+      <DependentUpon>FormABMReserva.cs</DependentUpon>
     </Compile>
     <Compile Include="Hotel\Hoteles.cs" />
     <Compile Include="Listado Estadistico\Form1.cs">
@@ -256,6 +256,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormMenu.resx">
       <DependentUpon>FormMenu.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Generar Modificar Reserva\FormABMReserva.resx">
+      <DependentUpon>FormABMReserva.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Login\FormLogin.resx">
       <DependentUpon>FormLogin.cs</DependentUpon>
