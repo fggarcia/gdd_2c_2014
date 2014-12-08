@@ -156,6 +156,21 @@
       <DependentUpon>FormCancelarReserva.cs</DependentUpon>
     </Compile>
     <Compile Include="Common\Period.cs" />
+    <Compile Include="Registrar Consumible\Consumible.cs" />
+    <Compile Include="Registrar Consumible\ConsumiblesFuncionalityHelper.cs" />
+    <Compile Include="Registrar Consumible\ConsumiblesHelper.cs" />
+    <Compile Include="Registrar Consumible\FormABMConsumibles.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Registrar Consumible\FormABMConsumibles.Designer.cs">
+      <DependentUpon>FormABMConsumibles.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Registrar Consumible\FormRegistrarConsumibles.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Registrar Consumible\FormRegistrarConsumibles.Designer.cs">
+      <DependentUpon>FormRegistrarConsumibles.cs</DependentUpon>
+    </Compile>
     <Compile Include="Registrar Estadia\BookingStatus.cs" />
     <Compile Include="Registrar Estadia\FormRegistrarEstadiaCliente.cs">
       <SubType>Form</SubType>
@@ -272,6 +287,12 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Registrar Consumible\FormABMConsumibles.resx">
+      <DependentUpon>FormABMConsumibles.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Registrar Consumible\FormRegistrarConsumibles.resx">
+      <DependentUpon>FormRegistrarConsumibles.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Registrar Estadia\FormRegistrarEstadia.resx">
       <DependentUpon>FormRegistrarEstadia.cs</DependentUpon>
     </EmbeddedResource>
@@ -291,12 +312,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
-    <Compile Include="Registrar Consumible\Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Registrar Consumible\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Registrar Estadia\FormRegistrarEstadia.cs">
       <SubType>Form</SubType>
