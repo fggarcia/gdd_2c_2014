@@ -32,7 +32,9 @@
             this.buttonSearch = new System.Windows.Forms.Button();
             this.textBoxBookingId = new System.Windows.Forms.TextBox();
             this.dgvBooking = new System.Windows.Forms.DataGridView();
-            this.buttonRegister = new System.Windows.Forms.Button();
+            this.buttonCheckIn = new System.Windows.Forms.Button();
+            this.buttonCheckOut = new System.Windows.Forms.Button();
+            this.buttonBack = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvBooking)).BeginInit();
             this.SuspendLayout();
             // 
@@ -70,22 +72,44 @@
             this.dgvBooking.Size = new System.Drawing.Size(552, 93);
             this.dgvBooking.TabIndex = 2;
             // 
-            // buttonRegister
+            // buttonCheckIn
             // 
-            this.buttonRegister.Location = new System.Drawing.Point(236, 235);
-            this.buttonRegister.Name = "buttonRegister";
-            this.buttonRegister.Size = new System.Drawing.Size(75, 23);
-            this.buttonRegister.TabIndex = 3;
-            this.buttonRegister.Text = "Registrar";
-            this.buttonRegister.UseVisualStyleBackColor = true;
-            this.buttonRegister.Click += new System.EventHandler(this.buttonRegister_Click);
+            this.buttonCheckIn.Location = new System.Drawing.Point(236, 239);
+            this.buttonCheckIn.Name = "buttonCheckIn";
+            this.buttonCheckIn.Size = new System.Drawing.Size(75, 23);
+            this.buttonCheckIn.TabIndex = 3;
+            this.buttonCheckIn.Text = "Check In";
+            this.buttonCheckIn.UseVisualStyleBackColor = true;
+            this.buttonCheckIn.Click += new System.EventHandler(this.buttonCheckIn_Click);
+            // 
+            // buttonCheckOut
+            // 
+            this.buttonCheckOut.Location = new System.Drawing.Point(364, 239);
+            this.buttonCheckOut.Name = "buttonCheckOut";
+            this.buttonCheckOut.Size = new System.Drawing.Size(75, 23);
+            this.buttonCheckOut.TabIndex = 4;
+            this.buttonCheckOut.Text = "Check Out";
+            this.buttonCheckOut.UseVisualStyleBackColor = true;
+            this.buttonCheckOut.Click += new System.EventHandler(this.buttonCheckOut_Click);
+            // 
+            // buttonBack
+            // 
+            this.buttonBack.Location = new System.Drawing.Point(97, 239);
+            this.buttonBack.Name = "buttonBack";
+            this.buttonBack.Size = new System.Drawing.Size(75, 23);
+            this.buttonBack.TabIndex = 5;
+            this.buttonBack.Text = "Volver";
+            this.buttonBack.UseVisualStyleBackColor = true;
+            this.buttonBack.Click += new System.EventHandler(this.buttonBack_Click);
             // 
             // FormRegistrarEstadia
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(576, 309);
-            this.Controls.Add(this.buttonRegister);
+            this.Controls.Add(this.buttonBack);
+            this.Controls.Add(this.buttonCheckOut);
+            this.Controls.Add(this.buttonCheckIn);
             this.Controls.Add(this.dgvBooking);
             this.Controls.Add(this.textBoxBookingId);
             this.Controls.Add(this.buttonSearch);
@@ -105,6 +129,8 @@
         private System.Windows.Forms.Button buttonSearch;
         private System.Windows.Forms.TextBox textBoxBookingId;
         private System.Windows.Forms.DataGridView dgvBooking;
-        private System.Windows.Forms.Button buttonRegister;
+        private System.Windows.Forms.Button buttonCheckIn;
+        private System.Windows.Forms.Button buttonCheckOut;
+        private System.Windows.Forms.Button buttonBack;
     }
 }

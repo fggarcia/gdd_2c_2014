@@ -32,7 +32,6 @@ C:\Documents and Settings\UsuarioAdmin\Mis documentos\tp2c2014\gdd_2c_2014\FrbaH
 C:\Documents and Settings\UsuarioAdmin\Mis documentos\tp2c2014\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Debug\FrbaHotel.ABM_de_Regimen.FormABMRegimen.resources
 C:\Documents and Settings\UsuarioAdmin\Mis documentos\tp2c2014\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Debug\FrbaHotel.Cancelar_Reserva.FormCancelarReserva.resources
 C:\Documents and Settings\UsuarioAdmin\Mis documentos\tp2c2014\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Debug\FrbaHotel.Registrar_Estadia.FormRegistrarEstadia.resources
-C:\Documents and Settings\UsuarioAdmin\Mis documentos\tp2c2014\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Debug\FrbaHotel.Registrar_Estadia.FormRegistrarEstadiaCliente.resources
 C:\Users\Administrator\Desktop\Repositorio\gdd_2c_2014\FrbaHotel\FrbaHotel\bin\Debug\FrbaHotel.exe.config
 C:\Users\Administrator\Desktop\Repositorio\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Debug\FrbaHotel.ABM_de_Cliente.FormABMClient.resources
 C:\Users\Administrator\Desktop\Repositorio\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Debug\FrbaHotel.ABM_de_Cliente.FormABMClientModify.resources
@@ -55,3 +54,6 @@ C:\Users\Administrator\Desktop\Repositorio\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\D
 C:\Users\Administrator\Desktop\Repositorio\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Debug\FrbaHotel.Registrar_Estadia.FormRegistrarEstadia.resources
 C:\Users\Administrator\Desktop\Repositorio\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Debug\FrbaHotel.Registrar_Estadia.FormRegistrarEstadiaCliente.resources
 C:\Users\Administrator\Desktop\Repositorio\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Debug\FrbaHotel.Generar_Modificar_Reserva.Form1.resources
+C:\Documents and Settings\UsuarioAdmin\Mis documentos\tp2c2014\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Debug\FrbaHotel.Facturar_Publicaciones.FormFacturarPublicaciones.resources
+C:\Documents and Settings\UsuarioAdmin\Mis documentos\tp2c2014\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Debug\FrbaHotel.Generar_Modificar_Reserva.FormABMReserva.resources
+C:\Documents and Settings\UsuarioAdmin\Mis documentos\tp2c2014\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Debug\FrbaHotel.Registrar_Estadia.FormRegistrarEstadiaCliente.resources

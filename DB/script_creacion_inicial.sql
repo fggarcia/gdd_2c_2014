@@ -79,6 +79,7 @@ INSERT INTO LA_MAYORIA.Funcionalidad(Id_Funcionalidad,Descripcion) VALUES(6,'ABM
 INSERT INTO LA_MAYORIA.Funcionalidad(Id_Funcionalidad,Descripcion) VALUES(7,'ABM de Regimen')
 INSERT INTO LA_MAYORIA.Funcionalidad(Id_Funcionalidad,Descripcion) VALUES(9,'Cancelar Reserva')
 INSERT INTO LA_MAYORIA.Funcionalidad(Id_Funcionalidad,Descripcion) VALUES(10,'Registrar Estadía')
+INSERT INTO LA_MAYORIA.Funcionalidad(Id_Funcionalidad,Descripcion) VALUES(12,'Facturar Publicaciones')
 
 --TABLA ROL_FUNCIONALIDAD
 /*
@@ -111,6 +112,7 @@ INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (1, 9)
 INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (2, 9)
 INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (3, 9)
 INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (2, 10)
+INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (2,12)
 
 --TABLA DOCUMENTOS
 /*
@@ -504,7 +506,7 @@ INSERT INTO LA_MAYORIA.Estado_Reserva (Descripcion) VALUES ('Reserva con ingreso
 	Tabla con todas las reservas hasta la fecha
 */
 CREATE TABLE [LA_MAYORIA].[Reserva](
-	[Id_Reserva][numeric](18,0) NOT NULL,
+	[Id_Reserva][numeric](18,0)IDENTITY(1,1) NOT NULL,
 	[Fecha_Inicio][datetime] NOT NULL,
 	[Estadia][Int] NOT NULL,
 	[Tipo_Regimen][Int] NOT NULL,
@@ -516,6 +518,8 @@ CREATE TABLE [LA_MAYORIA].[Reserva](
 		REFERENCES [LA_MAYORIA].[Estado_Reserva](Id_Estado),
 	CONSTRAINT [PK_Reservar_Id_Reserva] PRIMARY KEY (Id_Reserva)
 )
+
+SET IDENTITY_INSERT [LA_MAYORIA].Reserva ON
 
 INSERT INTO LA_MAYORIA.Reserva(Id_Reserva, Fecha_Inicio, Estadia, Tipo_Regimen, Estado)
 SELECT m.Reserva_Codigo, m.Reserva_Fecha_Inicio, m.Reserva_Cant_Noches, r.Id_Regimen, 1 
@@ -540,6 +544,8 @@ WHERE EXISTS(SELECT 1 FROM gd_esquema.Maestra
 	WHERE Id_Reserva = Reserva_Codigo AND DATEADD(DAY, Reserva_Cant_Noches, Reserva_Fecha_Inicio) > GETDATE()
 	AND Factura_Nro IS NULL
 )
+
+SET IDENTITY_INSERT [LA_MAYORIA].Reserva OFF
 
 --TABLA HABITACION_RESERVA
 /*
@@ -833,3 +839,14 @@ INSERT INTO LA_MAYORIA.Forma_Pago(Id_Factura,Id_Tipo_Pago)
 SELECT f.Id_Factura, tp.Id_Tipo_Pago  FROM LA_MAYORIA.Facturacion f
 	INNER JOIN LA_MAYORIA.Tipo_Pago tp
 	ON UPPER(tp.Descripcion) = UPPER('efectivo')
+
+CREATE TABLE [LA_MAYORIA].[Estadia_Cliente](
+	[Id_Estadia][Int] NOT NULL,
+	[Id_Cliente][Int] NOT NULL
+
+	CONSTRAINT [FK_Estadia_Cliente_Id_Estadia] FOREIGN KEY (Id_Estadia)
+		REFERENCES [LA_MAYORIA].[Estadia](Id_Estadia),
+	CONSTRAINT [FK_Estadia_Cliente_Id_Cliente] FOREIGN KEY (Id_Cliente)
+		REFERENCES [LA_MAYORIA].[Clientes](Id_Cliente),
+	CONSTRAINT [UQ_Estadia_Cliente_Id_Estadia_Id_Cliente] UNIQUE (Id_Estadia, Id_Cliente)
+)

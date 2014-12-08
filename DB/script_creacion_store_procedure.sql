@@ -914,6 +914,23 @@ BEGIN
 END
 GO
 
+CREATE PROCEDURE [LA_MAYORIA].[sp_habitacion_person_per_room_by_booking_id](
+@p_habitacion_booking_id int,
+@p_count_person int = 0 OUTPUT
+)
+AS
+BEGIN
+	SELECT @p_count_person = th.Cupo FROM LA_MAYORIA.Habitacion_Reserva hr
+	INNER JOIN LA_MAYORIA.Habitacion h
+		ON hr.Id_Hotel = h.Id_Hotel
+			AND hr.Habitacion_Nro = h.Nro 
+			AND hr.Habitacion_Piso = h.Piso
+	INNER JOIN LA_MAYORIA.Tipo_Habitacion th
+		ON h.Tipo_Habitacion = th.Id_Tipo_Habitacion
+	WHERE hr.Id_Reserva = @p_habitacion_booking_id
+END
+GO
+
 CREATE PROCEDURE [LA_MAYORIA].[sp_regimen_search](
 @p_regimen_description varchar(255) = null
 )
@@ -1102,20 +1119,22 @@ GO
 
 CREATE PROCEDURE [LA_MAYORIA].[sp_estadia_generate_stay](
 @p_stay_booking_id int,
-@p_stay_user_name varchar(20)
+@p_stay_user_name varchar(20),
+@p_stay_id int = 0 OUTPUT
 )
 AS
 BEGIN
 	BEGIN TRANSACTION
 		INSERT INTO LA_MAYORIA.Estadia(Id_Reserva, Check_In, Id_Usuario_Check_In, Check_Out, Id_Usuario_Check_Out)
 		VALUES (@p_stay_booking_id, CAST(GETDATE() AS DATE), @p_stay_user_name, null, null)
+		SET @p_stay_id = @@IDENTITY
 	COMMIT TRANSACTION
 END
 GO
 
 CREATE PROCEDURE [LA_MAYORIA].[sp_estadia_cancel_is_after_date_check_in](
 @p_stay_booking_id int,
-@p_stay_change_to_cancel int OUTPUT
+@p_stay_change_to_cancel int = 0 OUTPUT
 )
 AS
 BEGIN
@@ -1138,5 +1157,70 @@ BEGIN
 
 		COMMIT TRANSACTION
 	END
+END
+GO
+
+CREATE PROCEDURE [LA_MAYORIA].[sp_estadia_is_for_check_in](
+@p_stay_booking_id int,
+@p_stay_is_check_in int = 0 OUTPUT
+)
+AS
+BEGIN
+	IF EXISTS (SELECT 1 FROM LA_MAYORIA.Estadia e
+		WHERE e.Id_Reserva = @p_stay_booking_id)
+		SET @p_stay_is_check_in = 0
+	ELSE
+		SET @p_stay_is_check_in = 1
+END
+GO
+
+CREATE PROCEDURE [LA_MAYORIA].[sp_estadia_exist_full_stay](
+@p_stay_booking_id int,
+@p_stay_exist_full_stay int = 0 OUTPUT
+)
+AS
+BEGIN
+	IF EXISTS (SELECT 1 FROM LA_MAYORIA.Estadia e
+		WHERE e.Id_Reserva = @p_stay_booking_id
+		AND e.Check_In IS NOT NULL
+		AND e.Check_Out IS NOT NULL)
+		SET @p_stay_exist_full_stay = 1
+	ELSE
+		SET @p_stay_exist_full_stay = 0
+END
+GO
+
+CREATE PROCEDURE [LA_MAYORIA].[sp_check_client_search](
+@p_check_client_name varchar(255) = null,
+@p_check_client_lastname varchar(255) = null,
+@p_check_client_document_number varchar(255) = null
+)
+AS
+BEGIN
+	SELECT DISTINCT
+				
+		c.Id_Cliente 'Id Cliente',
+		c.Nombre 'Nombre',
+		c.Apellido 'Apellido',
+		c.Nro_Identificacion 'Nro Documento',
+		c.Mail 'Mail'
+		
+		FROM LA_MAYORIA.Clientes c
+		WHERE
+		( (@p_check_client_name IS NULL) OR (UPPER(c.Nombre) like UPPER(@p_check_client_name) + '%'))
+		AND ((@p_check_client_lastname IS NULL) OR (UPPER(c.Apellido) like UPPER(@p_check_client_lastname) + '%'))
+		AND ((@p_check_client_document_number IS NULL) OR (LTRIM(RTRIM(STR(c.Nro_Identificacion))) like @p_check_client_document_number + '%'))
+		AND (c.Habilitado = 1)
+END
+GO
+
+CREATE PROCEDURE [LA_MAYORIA].[sp_estadia_save_stay_client](
+@p_stay_id int,
+@p_stay_client_id int
+)
+AS
+BEGIN
+	INSERT INTO LA_MAYORIA.Estadia_Cliente (Id_Estadia, Id_Cliente)
+	VALUES (@p_stay_id, @p_stay_client_id)
 END
 GO

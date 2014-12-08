@@ -72,6 +72,8 @@ DROP PROCEDURE LA_MAYORIA.sp_habitacion_data_get_by_id
 
 DROP PROCEDURE LA_MAYORIA.sp_habitacion_save_update
 
+DROP PROCEDURE LA_MAYORIA.sp_habitacion_person_per_room_by_booking_id
+
 DROP PROCEDURE LA_MAYORIA.sp_regimen_search
 
 DROP PROCEDURE LA_MAYORIA.sp_cancelacion_reserva_search
@@ -91,3 +93,11 @@ DROP PROCEDURE LA_MAYORIA.sp_estadia_booking_is_before
 DROP PROCEDURE LA_MAYORIA.sp_estadia_generate_stay
 
 DROP PROCEDURE LA_MAYORIA.sp_estadia_cancel_is_after_date_check_in
+
+DROP PROCEDURE LA_MAYORIA.sp_estadia_is_for_check_in
+
+DROP PROCEDURE LA_MAYORIA.sp_estadia_exist_full_stay
+
+DROP PROCEDURE LA_MAYORIA.sp_check_client_search
+
+DROP PROCEDURE LA_MAYORIA.sp_estadia_save_stay_client

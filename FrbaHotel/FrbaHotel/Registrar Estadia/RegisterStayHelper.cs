@@ -118,7 +118,7 @@ namespace FrbaHotel.Registrar_Estadia
                 return false;
         }
 
-        public static void generateStay(int bookingId)
+        public static Int32 generateStay(int bookingId)
         {
             SqlCommand command = new SqlCommand();
             command.CommandText = "LA_MAYORIA.sp_estadia_generate_stay";
@@ -126,7 +126,12 @@ namespace FrbaHotel.Registrar_Estadia
             command.Parameters.AddWithValue("@p_stay_booking_id", bookingId);
             command.Parameters.AddWithValue("@p_stay_user_name", VarGlobal.usuario.id);
 
+            var returnParameterStayId = command.Parameters.Add(new SqlParameter("@p_stay_id", SqlDbType.Int));
+            returnParameterStayId.Direction = ParameterDirection.InputOutput;
+
             ProcedureHelper.execute(command, "generate stay", false);
+
+            return Convert.ToInt32(returnParameterStayId.Value);
         }
 
         public static bool checkIsMustBeCancelled(int bookingId)
@@ -150,6 +155,68 @@ namespace FrbaHotel.Registrar_Estadia
             else
             {
                 return false;
+            }
+        }
+
+        public static Boolean isForCheckIn(int bookingId)
+        {
+            SqlCommand command = new SqlCommand();
+            command.CommandText = "LA_MAYORIA.sp_estadia_is_for_check_in";
+
+            command.Parameters.AddWithValue("@p_stay_booking_id", bookingId);
+
+            var returnParameterCheckIn = command.Parameters.Add(new SqlParameter("@p_stay_is_check_in", SqlDbType.Bit));
+            returnParameterCheckIn.Direction = ParameterDirection.InputOutput;
+
+            ProcedureHelper.execute(command, "check if checkin", false);
+
+            Int16 checkIn = Convert.ToInt16(returnParameterCheckIn.Value);
+
+            if (checkIn != 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public static Boolean existFullStay(int bookingId)
+        {
+            SqlCommand command = new SqlCommand();
+            command.CommandText = "LA_MAYORIA.sp_estadia_exist_full_stay";
+
+            command.Parameters.AddWithValue("@p_stay_booking_id", bookingId);
+
+            var returnParameterExistFullStay = command.Parameters.Add(new SqlParameter("@p_stay_exist_full_stay", SqlDbType.Bit));
+            returnParameterExistFullStay.Direction = ParameterDirection.InputOutput;
+
+            ProcedureHelper.execute(command, "check if checkin and checkout was release", false);
+
+            Int16 existFullStay = Convert.ToInt16(returnParameterExistFullStay.Value);
+
+            if (existFullStay != 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        internal static void saveStayClients(int stayId, List<int> clientsIds)
+        {
+            foreach (Int32 clientId in clientsIds)
+            {
+                SqlCommand command = new SqlCommand();
+                command.CommandText = "LA_MAYORIA.sp_estadia_save_stay_client";
+
+                command.Parameters.AddWithValue("@p_stay_id", stayId);
+                command.Parameters.AddWithValue("@p_stay_client_id", clientId);
+
+                ProcedureHelper.execute(command, "save client per stay id", false);
             }
         }
     }
