@@ -38,3 +38,4 @@ C:\Users\Administrator\Desktop\Repositorio\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\R
 C:\Users\Administrator\Desktop\Repositorio\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Release\FrbaHotel.Login.FormSeleccionRol.resources
 C:\Users\Administrator\Desktop\Repositorio\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Release\FrbaHotel.Registrar_Estadia.FormRegistrarEstadia.resources
 C:\Users\Administrator\Desktop\Repositorio\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Release\FrbaHotel.Registrar_Estadia.FormRegistrarEstadiaCliente.resources
+C:\Users\Administrator\Desktop\Repositorio\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Release\FrbaHotel.ABM_de_Reserva.FormABMReserva.resources

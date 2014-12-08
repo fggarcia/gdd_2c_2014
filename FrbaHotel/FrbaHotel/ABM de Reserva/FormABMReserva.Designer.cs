@@ -1,4 +1,4 @@
-﻿namespace FrbaHotel.Generar_Modificar_Reserva
+﻿namespace FrbaHotel.ABM_de_Reserva
 {
     partial class FormABMReserva
     {
@@ -77,6 +77,7 @@
             this.buttonBack.TabIndex = 27;
             this.buttonBack.Text = "Volver";
             this.buttonBack.UseVisualStyleBackColor = true;
+            this.buttonBack.Click += new System.EventHandler(this.buttonBack_Click);
             // 
             // dgvReserva
             // 
@@ -94,6 +95,7 @@
             this.buttonSearch.TabIndex = 25;
             this.buttonSearch.Text = "Buscar";
             this.buttonSearch.UseVisualStyleBackColor = true;
+            this.buttonSearch.Click += new System.EventHandler(this.buttonSearch_Click);
             // 
             // buttonClean
             // 
@@ -154,6 +156,7 @@
             this.Controls.Add(this.lblCliente);
             this.Name = "FormABMReserva";
             this.Text = "Form1";
+            this.Load += new System.EventHandler(this.FormABMReserva_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvReserva)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
