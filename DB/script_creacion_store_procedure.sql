@@ -1224,3 +1224,126 @@ BEGIN
 	VALUES (@p_stay_id, @p_stay_client_id)
 END
 GO
+
+CREATE PROCEDURE [LA_MAYORIA].[sp_consumibles_estadias_search](
+
+@p_id_hotel int,
+@p_id_reserva int
+)
+AS
+BEGIN
+	SELECT DISTINCT
+		e.Id_Estadia as 'Estadia'
+		, e.Check_In
+		, e.Check_Out  
+
+	FROM LA_MAYORIA.Estadia e
+	INNER JOIN LA_MAYORIA.Habitacion_Reserva hr
+		ON e.Id_Reserva = hr.Id_Reserva
+	
+	WHERE hr.Id_Hotel = @p_id_hotel
+	AND e.Id_Reserva = @p_id_reserva
+	AND e.Check_Out IS NULL
+END
+GO
+
+CREATE PROCEDURE [LA_MAYORIA].[sp_consumible_filter](
+
+@p_d_filter varchar(255) = ''
+)
+AS
+BEGIN
+	SELECT 
+		c.Id_Codigo as 'id'
+		, c.descripcion
+		, c.precio 
+
+	FROM LA_MAYORIA.Consumible c
+
+	WHERE c.descripcion like ('%' + @p_d_filter + '%') order by 1 asc
+END
+GO
+
+CREATE PROCEDURE [LA_MAYORIA].[sp_consumible_by_estadia_search](
+
+@p_id_estadia int
+)
+AS
+BEGIN
+	SELECT 
+		c.Id_Codigo as 'id'
+		, c.descripcion
+		, cr.Cantidad
+		, CAST(cr.Fecha AS DATE)
+
+	FROM LA_MAYORIA.Consumible_Reserva cr
+
+	INNER JOIN LA_MAYORIA.Consumible c
+		ON cr.Id_Codigo = c.Id_Codigo
+	INNER JOIN LA_MAYORIA.Estadia e
+		ON cr.Id_Estadia = e.Id_Estadia
+
+	WHERE e.Id_Estadia = @p_id_estadia 
+
+	ORDER BY 1 ASC
+END
+GO
+
+CREATE PROCEDURE [LA_MAYORIA].[sp_estadia_consumible_add](
+@p_id_usuario varchar(255),
+@p_id_estadia int,
+@p_id_consumible int,
+@p_cantidad int
+
+)
+AS
+BEGIN
+	BEGIN TRANSACTION
+		IF ( EXISTS(SELECT 1 FROM LA_MAYORIA.Consumible_Reserva cr
+					WHERE 	cr.Id_Estadia = @p_id_estadia
+						AND cr.Id_Codigo = @p_id_consumible
+						AND CAST(cr.Fecha AS DATE) = CAST(GETDATE() AS DATE)
+					)
+		)
+		BEGIN
+			
+				UPDATE LA_MAYORIA.Consumible_Reserva SET Cantidad = Cantidad + @p_cantidad
+				WHERE 	Id_Estadia = @p_id_estadia
+					AND Id_Codigo = @p_id_consumible
+					AND CAST(Fecha AS DATE) = CAST(GETDATE() AS DATE)
+		END
+		ELSE
+		BEGIN
+			INSERT INTO LA_MAYORIA.Consumible_Reserva (Id_Estadia, Id_Codigo, Cantidad, Fecha, Id_Usuario)
+			VALUES (@p_id_estadia, @p_id_consumible,@p_cantidad, GETDATE(), @p_id_usuario)
+		END
+
+	COMMIT TRANSACTION
+END
+GO
+
+CREATE PROCEDURE [LA_MAYORIA].[sp_estadia_consumible_remove](
+@p_id_estadia int,
+@p_id_consumible int
+
+)
+AS
+BEGIN
+	BEGIN TRANSACTION
+		IF ( EXISTS(SELECT 1 FROM LA_MAYORIA.Consumible_Reserva cr
+					WHERE cr.Id_Estadia = @p_id_estadia
+						AND cr.Id_Codigo = @p_id_consumible
+						AND CAST(cr.Fecha AS DATE) = CAST(GETDATE() AS DATE)
+					)
+		)
+		BEGIN
+		
+			DELETE 
+			FROM LA_MAYORIA.Consumible_Reserva
+			WHERE Id_Estadia = @p_id_estadia
+				AND Id_Codigo = @p_id_consumible
+				AND CAST(Fecha AS DATE) = CAST(GETDATE() AS DATE)
+		END
+	COMMIT TRANSACTION
+END
+GO

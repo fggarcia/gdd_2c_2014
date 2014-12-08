@@ -101,3 +101,13 @@ DROP PROCEDURE LA_MAYORIA.sp_estadia_exist_full_stay
 DROP PROCEDURE LA_MAYORIA.sp_check_client_search
 
 DROP PROCEDURE LA_MAYORIA.sp_estadia_save_stay_client
+
+DROP PROCEDURE LA_MAYORIA.sp_consumibles_estadias_search
+
+DROP PROCEDURE LA_MAYORIA.sp_consumible_filter
+
+DROP PROCEDURE LA_MAYORIA.sp_consumible_by_estadia_search
+
+DROP PROCEDURE LA_MAYORIA.sp_estadia_consumible_add
+
+DROP PROCEDURE LA_MAYORIA.sp_estadia_consumible_remove
