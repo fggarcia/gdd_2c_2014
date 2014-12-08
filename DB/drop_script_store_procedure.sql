@@ -80,4 +80,12 @@ DROP PROCEDURE LA_MAYORIA.sp_cancelacion_reserva_cancel
 
 DROP PROCEDURE LA_MAYORIA.sp_estadia_booking_search
 
-DROP PROCEDURE LA_MAYORIA.sp_estadia_booking_status
+DROP PROCEDURE LA_MAYORIA.sp_estadia_booking_is_exist
+
+DROP PROCEDURE LA_MAYORIA.sp_estadia_booking_is_cancel
+
+DROP PROCEDURE LA_MAYORIA.sp_estadia_booking_is_hotel
+
+DROP PROCEDURE LA_MAYORIA.sp_estadia_booking_is_before
+
+DROP PROCEDURE LA_MAYORIA.sp_estadia_generate_stay

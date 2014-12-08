@@ -43,7 +43,41 @@ namespace FrbaHotel.Registrar_Estadia
 
         private void showMessageError(BookingStatus status)
         {
+            if (!status.exist)
+            {
+                MessageBox.Show("La Reserva no existe", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
 
+            if (status.exist && ! status.hotel)
+            {
+                MessageBox.Show("La Reserva existe, pero no en este hotel", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            if (status.cancel)
+            {
+                MessageBox.Show("La Reserva tiene un estado cancelado", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            if (status.before && !status.cancel)
+            {
+                MessageBox.Show("La Reserva ya caduco", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void buttonRegister_Click(object sender, EventArgs e)
+        {
+            if (dgvBooking.CurrentRow != null)
+            {
+                Int32 bookingId = Convert.ToInt32(dgvBooking.CurrentRow.Cells[0].Value.ToString());
+
+                RegisterStayHelper.generateStay(bookingId);
+
+                MessageBox.Show("Se ha generado la estadia correctamente", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                MessageBox.Show("Debe seleccionar una reserva a registrar", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

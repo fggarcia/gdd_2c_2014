@@ -15,11 +15,9 @@ namespace FrbaHotel.Registrar_Estadia
             SqlCommand command = new SqlCommand();
             command.CommandText = "LA_MAYORIA.sp_estadia_booking_search";
 
-            command.Parameters.Add(new SqlParameter("@p_stay_booking_id", SqlDbType.Int));
-            command.Parameters["@p_stay_booking_id"].Value = bookingId;
+            command.Parameters.AddWithValue("@p_stay_booking_id", bookingId);
 
-            command.Parameters.Add(new SqlParameter("@p_stay_hotel_id", SqlDbType.Int));
-            command.Parameters["@p_stay_hotel_id"].Value = VarGlobal.usuario.hotel;
+            command.Parameters.AddWithValue("@p_stay_hotel_id", VarGlobal.usuario.hotel);
 
             DataGridViewHelper.fill(command, dgvRegisterStay);
         }
@@ -28,55 +26,107 @@ namespace FrbaHotel.Registrar_Estadia
         {
             BookingStatus status = new BookingStatus();
 
-            SqlCommand command = new SqlCommand();
-            command.CommandText = "LA_MAYORIA.sp_estadia_booking_search";
-
-            command.Parameters.Add(new SqlParameter("@p_stay_booking_id", SqlDbType.Int));
-            command.Parameters["@p_stay_booking_id"].Value = bookingId;
-
-            command.Parameters.Add(new SqlParameter("@p_stay_hotel_id", SqlDbType.Int));
-            command.Parameters["@p_stay_hotel_id"].Value = VarGlobal.usuario.hotel;
-
-            var returnParameterCancel = command.Parameters.Add(new SqlParameter("@p_stay_booking_cancel", SqlDbType.Bit));
-            returnParameterCancel.Direction = ParameterDirection.Output;
-
-            var returnParameterExist = command.Parameters.Add(new SqlParameter("@p_stay_booking_exist", SqlDbType.Bit));
-            returnParameterExist.Direction = ParameterDirection.Output;
-
-            var returnParameterBefore = command.Parameters.Add(new SqlParameter("@p_stay_booking_before", SqlDbType.Bit));
-            returnParameterBefore.Direction = ParameterDirection.Output;
-
-            var returnParameterHotel = command.Parameters.Add(new SqlParameter("@p_stay_booking_hotel", SqlDbType.Bit));
-            returnParameterHotel.Direction = ParameterDirection.Output;
-
-            ProcedureHelper.execute(command, "check if booking is before today", false);
-
-            Int16 cancel = Convert.ToInt16(returnParameterCancel.Value);
-            Int16 exist = Convert.ToInt16(returnParameterExist.Value);
-            Int16 before = Convert.ToInt16(returnParameterBefore.Value);
-            Int16 hotel = Convert.ToInt16(returnParameterHotel.Value);
-
-            if (cancel == 0)
-                status.cancel = false;
-            else
-                status.cancel = true;
-
-            if (exist == 0)
-                status.exist = false;
-            else
-                status.exist = true;
-
-            if (before == 0)
-                status.before = false;
-            else
-                status.before = true;
-
-            if (hotel == 0)
-                status.hotel = false;
-            else
-                status.hotel = true;
+            status.before = isBefore(bookingId);
+            status.cancel = isCancel(bookingId);
+            status.exist = isExist(bookingId);
+            status.hotel = isHotel(bookingId);
 
             return status;
+        }
+
+        public static Boolean isExist(Int32 bookingId)
+        {
+            SqlCommand command = new SqlCommand();
+            command.CommandText = "LA_MAYORIA.sp_estadia_booking_is_exist";
+
+            command.Parameters.AddWithValue("@p_stay_booking_id", bookingId);
+            command.Parameters.AddWithValue("@p_stay_hotel_id", VarGlobal.usuario.hotel);
+
+            var returnParameterExist = command.Parameters.Add(new SqlParameter("@p_stay_booking_exist", SqlDbType.Bit));
+            returnParameterExist.Direction = ParameterDirection.InputOutput;
+
+            ProcedureHelper.execute(command, "check if booking exist", false);
+
+            Int16 isExist = Convert.ToInt16(returnParameterExist.Value);
+
+            if (isExist != 0)
+                return true;
+            else
+                return false;
+        }
+
+        public static Boolean isCancel(Int32 bookingId)
+        {
+            SqlCommand command = new SqlCommand();
+            command.CommandText = "LA_MAYORIA.sp_estadia_booking_is_cancel";
+
+            command.Parameters.AddWithValue("@p_stay_booking_id", bookingId);
+            command.Parameters.AddWithValue("@p_stay_hotel_id", VarGlobal.usuario.hotel);
+
+            var returnParameterCancel = command.Parameters.Add(new SqlParameter("@p_stay_booking_cancel", SqlDbType.Bit));
+            returnParameterCancel.Direction = ParameterDirection.InputOutput;
+
+            ProcedureHelper.execute(command, "check if booking cancel", false);
+
+            Int16 isCancel = Convert.ToInt16(returnParameterCancel.Value);
+
+            if (isCancel != 0)
+                return true;
+            else
+                return false;
+        }
+
+        public static Boolean isBefore(Int32 bookingId)
+        {
+            SqlCommand command = new SqlCommand();
+            command.CommandText = "LA_MAYORIA.sp_estadia_booking_is_before";
+
+            command.Parameters.AddWithValue("@p_stay_booking_id", bookingId);
+            command.Parameters.AddWithValue("@p_stay_hotel_id", VarGlobal.usuario.hotel);
+
+            var returnParameterBefore = command.Parameters.Add(new SqlParameter("@p_stay_booking_before", SqlDbType.Bit));
+            returnParameterBefore.Direction = ParameterDirection.InputOutput;
+
+            ProcedureHelper.execute(command, "check if booking before", false);
+
+            Int16 isBefore = Convert.ToInt16(returnParameterBefore.Value);
+
+            if (isBefore != 0)
+                return true;
+            else
+                return false;
+        }
+
+        public static Boolean isHotel(Int32 bookingId)
+        {
+            SqlCommand command = new SqlCommand();
+            command.CommandText = "LA_MAYORIA.sp_estadia_booking_is_hotel";
+
+            command.Parameters.AddWithValue("@p_stay_booking_id", bookingId);
+            command.Parameters.AddWithValue("@p_stay_hotel_id", VarGlobal.usuario.hotel);
+
+            var returnParameterHotel = command.Parameters.Add(new SqlParameter("@p_stay_booking_hotel", SqlDbType.Bit));
+            returnParameterHotel.Direction = ParameterDirection.InputOutput;
+
+            ProcedureHelper.execute(command, "check if booking is in this hotel", false);
+
+            Int16 isHotel = Convert.ToInt16(returnParameterHotel.Value);
+
+            if (isHotel != 0)
+                return true;
+            else
+                return false;
+        }
+
+        public static void generateStay(int bookingId)
+        {
+            SqlCommand command = new SqlCommand();
+            command.CommandText = "LA_MAYORIA.sp_estadia_generate_stay";
+
+            command.Parameters.AddWithValue("@p_stay_booking_id", bookingId);
+            command.Parameters.AddWithValue("@p_stay_user_name", VarGlobal.usuario.id);
+
+            ProcedureHelper.execute(command, "generate stay", false);
         }
     }
 }

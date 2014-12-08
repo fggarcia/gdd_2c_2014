@@ -1,0 +1,324 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{BAFE3016-AC06-4C43-ABEF-87F21AB5699B}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>FrbaHotel</RootNamespace>
+    <AssemblyName>FrbaHotel</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ABM de Cliente\Nacionalidad.cs" />
+    <Compile Include="ABM de Cliente\TypeDocument.cs" />
+    <Compile Include="ABM de Cliente\Cliente.cs" />
+    <Compile Include="ABM de Cliente\ClienteHelper.cs" />
+    <Compile Include="ABM de Cliente\FormABMClient.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM de Cliente\FormABMClient.Designer.cs">
+      <DependentUpon>FormABMClient.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABM de Cliente\FormABMClientModify.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM de Cliente\FormABMClientModify.Designer.cs">
+      <DependentUpon>FormABMClientModify.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABM de Habitacion\FormABMHabitacion.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM de Habitacion\FormABMHabitacion.Designer.cs">
+      <DependentUpon>FormABMHabitacion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABM de Habitacion\FormABMHabitacionModify.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM de Habitacion\FormABMHabitacionModify.Designer.cs">
+      <DependentUpon>FormABMHabitacionModify.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABM de Habitacion\FormABMHabitacionPeriod.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM de Habitacion\FormABMHabitacionPeriod.Designer.cs">
+      <DependentUpon>FormABMHabitacionPeriod.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABM de Habitacion\Front.cs" />
+    <Compile Include="ABM de Habitacion\Habitacion.cs" />
+    <Compile Include="ABM de Habitacion\HabitacionHelper.cs" />
+    <Compile Include="ABM de Habitacion\HotelUserHelper.cs" />
+    <Compile Include="ABM de Habitacion\TypeRoom.cs" />
+    <Compile Include="ABM de Hotel\FormABMHotelModify.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM de Hotel\FormABMHotelModify.Designer.cs">
+      <DependentUpon>FormABMHotelModify.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABM de Hotel\FormABMHotelPeriod.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM de Hotel\FormABMHotelPeriod.Designer.cs">
+      <DependentUpon>FormABMHotelPeriod.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABM de Hotel\HotelHelper.cs" />
+    <Compile Include="ABM de Hotel\FormABMHotel.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM de Hotel\FormABMHotel.Designer.cs">
+      <DependentUpon>FormABMHotel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABM de Hotel\Hotel.cs" />
+    <Compile Include="ABM de Hotel\RegimenHotelHelper.cs" />
+    <Compile Include="ABM de Hotel\Star.cs" />
+    <Compile Include="ABM de Regimen\FormABMRegimen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM de Regimen\FormABMRegimen.Designer.cs">
+      <DependentUpon>FormABMRegimen.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABM de Regimen\RegimenHelper.cs" />
+    <Compile Include="ABM de Rol\RolFuncionalityHelper.cs" />
+    <Compile Include="ABM de Rol\FormABMRolModify.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM de Rol\FormABMRolModify.Designer.cs">
+      <DependentUpon>FormABMRolModify.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABM de Rol\FormABMRol.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM de Rol\FormABMRol.Designer.cs">
+      <DependentUpon>FormABMRol.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABM de Rol\Rol.cs" />
+    <Compile Include="ABM de Rol\Roles.cs" />
+    <Compile Include="ABM de Rol\RolHelper.cs" />
+    <Compile Include="ABM de Usuario\UsuariosDatosHelper.cs" />
+    <Compile Include="ABM de Usuario\Documentos.cs" />
+    <Compile Include="ABM de Usuario\FormABMUsuario.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM de Usuario\FormABMUsuario.Designer.cs">
+      <DependentUpon>FormABMUsuario.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABM de Usuario\FormABMUsuarioModify.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM de Usuario\FormABMUsuarioModify.Designer.cs">
+      <DependentUpon>FormABMUsuarioModify.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABM de Usuario\UsuarioDatos.cs" />
+    <Compile Include="ABM de Usuario\UsuarioHelper.cs" />
+    <Compile Include="Cancelar Reserva\CancelationBookingHelper.cs" />
+    <Compile Include="Cancelar Reserva\FormCancelarReserva.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Cancelar Reserva\FormCancelarReserva.Designer.cs">
+      <DependentUpon>FormCancelarReserva.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Common\Period.cs" />
+    <Compile Include="Registrar Estadia\BookingStatus.cs" />
+    <Compile Include="Registrar Estadia\FormRegistrarEstadiaCliente.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Registrar Estadia\FormRegistrarEstadiaCliente.Designer.cs">
+      <DependentUpon>FormRegistrarEstadiaCliente.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Registrar Estadia\RegisterStayHelper.cs" />
+    <Compile Include="Validaciones.cs" />
+    <Compile Include="Common\AppConnections.cs" />
+    <Compile Include="Db\Connection.cs" />
+    <Compile Include="Db\ProcedureHelper.cs" />
+    <Compile Include="FormMenu.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormMenu.Designer.cs">
+      <DependentUpon>FormMenu.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Generar Modificar Reserva\Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Generar Modificar Reserva\Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Hotel\Hoteles.cs" />
+    <Compile Include="Listado Estadistico\Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Listado Estadistico\Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Login\FormLogin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Login\FormLogin.Designer.cs">
+      <DependentUpon>FormLogin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Login\FormSeleccionHotel.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Login\FormSeleccionHotel.Designer.cs">
+      <DependentUpon>FormSeleccionHotel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Login\FormSeleccionRol.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Login\FormSeleccionRol.Designer.cs">
+      <DependentUpon>FormSeleccionRol.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Login\Login.cs" />
+    <Compile Include="Menu\MenuValidateHelper.cs" />
+    <Compile Include="Usuario.cs" />
+    <Compile Include="Menu\OpcionMenu.cs" />
+    <Compile Include="Menu\MenuHelper.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="ABM de Cliente\FormABMClient.resx">
+      <DependentUpon>FormABMClient.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM de Cliente\FormABMClientModify.resx">
+      <DependentUpon>FormABMClientModify.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM de Habitacion\FormABMHabitacion.resx">
+      <DependentUpon>FormABMHabitacion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM de Habitacion\FormABMHabitacionModify.resx">
+      <DependentUpon>FormABMHabitacionModify.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM de Habitacion\FormABMHabitacionPeriod.resx">
+      <DependentUpon>FormABMHabitacionPeriod.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM de Hotel\FormABMHotel.resx">
+      <DependentUpon>FormABMHotel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM de Hotel\FormABMHotelModify.resx">
+      <DependentUpon>FormABMHotelModify.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM de Hotel\FormABMHotelPeriod.resx">
+      <DependentUpon>FormABMHotelPeriod.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM de Regimen\FormABMRegimen.resx">
+      <DependentUpon>FormABMRegimen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM de Rol\FormABMRolModify.resx">
+      <DependentUpon>FormABMRolModify.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM de Rol\FormABMRol.resx">
+      <DependentUpon>FormABMRol.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM de Usuario\FormABMUsuario.resx">
+      <DependentUpon>FormABMUsuario.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM de Usuario\FormABMUsuarioModify.resx">
+      <DependentUpon>FormABMUsuarioModify.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Cancelar Reserva\FormCancelarReserva.resx">
+      <DependentUpon>FormCancelarReserva.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormMenu.resx">
+      <DependentUpon>FormMenu.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Login\FormLogin.resx">
+      <DependentUpon>FormLogin.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Login\FormSeleccionHotel.resx">
+      <DependentUpon>FormSeleccionHotel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Login\FormSeleccionRol.resx">
+      <DependentUpon>FormSeleccionRol.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Registrar Estadia\FormRegistrarEstadia.resx">
+      <DependentUpon>FormRegistrarEstadia.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Registrar Estadia\FormRegistrarEstadiaCliente.resx">
+      <DependentUpon>FormRegistrarEstadiaCliente.cs</DependentUpon>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <None Include="app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="Registrar Consumible\Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Registrar Consumible\Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Registrar Estadia\FormRegistrarEstadia.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Registrar Estadia\FormRegistrarEstadia.Designer.cs">
+      <DependentUpon>FormRegistrarEstadia.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Utils\CheckBoxHelper.cs" />
+    <Compile Include="Utils\ComboBoxHelper.cs" />
+    <Compile Include="Utils\DataGridViewHelper.cs" />
+    <Compile Include="Utils\DateHelper.cs" />
+    <Compile Include="Utils\Encrypt.cs" />
+    <Compile Include="Utils\FormHelper.cs" />
+    <Compile Include="Utils\TextBoxHelper.cs" />
+    <Compile Include="VarGlobal.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

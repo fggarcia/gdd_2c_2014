@@ -1037,41 +1037,78 @@ BEGIN
 END
 GO
 
-CREATE PROCEDURE [LA_MAYORIA].[sp_estadia_booking_status](
+CREATE PROCEDURE [LA_MAYORIA].[sp_estadia_booking_is_exist](
 @p_stay_booking_id int,
 @p_stay_hotel_id int,
-@p_stay_booking_cancel bit = 0 OUTPUT,
-@p_stay_booking_exist bit = 0 OUTPUT,
-@p_stay_booking_before bit = 0 OUTPUT,
-@p_stay_booking_hotel bit = 0 OUTPUT
+@p_stay_booking_exist int = 0 OUTPUT
 )
 AS
 BEGIN
-	SET @p_stay_booking_before = 0
-	SET @p_stay_booking_cancel = 0
 	SET @p_stay_booking_exist = 0
-	SET @p_stay_booking_hotel = 0
 	IF EXISTS(SELECT 1 FROM LA_MAYORIA.Reserva r
 		WHERE r.Id_Reserva = @p_stay_booking_id)
 		SET @p_stay_booking_exist = 1
-	
-	IF EXISTS(SELECT 1 FROM LA_MAYORIA.Reserva r
-		INNER JOIN LA_MAYORIA.Habitacion_Reserva hr
-			ON r.Id_Reserva = hr.Id_Reserva
-		WHERE r.Id_Reserva = @p_stay_booking_id
-			AND hr.Id_Hotel = @p_stay_booking_hotel)
-		SET @p_stay_booking_hotel = 1
+END
+GO
 
-	IF EXISTS(SELECT 1 FROM LA_MAYORIA.Reserva r
-		WHERE r.Id_Reserva = @p_stay_booking_id
-			AND CAST(r.Fecha_Inicio AS DATE) < CAST(GETDATE() AS DATE))
-		SET @p_stay_booking_before = 1
-
+CREATE PROCEDURE [LA_MAYORIA].[sp_estadia_booking_is_cancel](
+@p_stay_booking_id int,
+@p_stay_hotel_id int,
+@p_stay_booking_cancel int = 0 OUTPUT
+)
+AS
+BEGIN
+	SET @p_stay_booking_cancel = 0
 	IF EXISTS(SELECT 1 FROM LA_MAYORIA.Reserva r
 		INNER JOIN LA_MAYORIA.Estado_Reserva er
 			ON r.Estado = er.Id_Estado
 	WHERE r.Id_Reserva = @p_stay_booking_id
 		AND UPPER(er.Descripcion) like '%' + 'CANCELADA' + '%')
 		SET @p_stay_booking_cancel = 1
+END
+GO
+
+CREATE PROCEDURE [LA_MAYORIA].[sp_estadia_booking_is_before](
+@p_stay_booking_id int,
+@p_stay_hotel_id int,
+@p_stay_booking_before int = 0 OUTPUT
+)
+AS
+BEGIN
+	SET @p_stay_booking_before = 0
+	IF EXISTS(SELECT 1 FROM LA_MAYORIA.Reserva r
+		WHERE r.Id_Reserva = @p_stay_booking_id
+			AND CAST(r.Fecha_Inicio AS DATE) < CAST(GETDATE() AS DATE))
+		SET @p_stay_booking_before = 1
+END
+GO
+
+CREATE PROCEDURE [LA_MAYORIA].[sp_estadia_booking_is_hotel](
+@p_stay_booking_id int,
+@p_stay_hotel_id int,
+@p_stay_booking_hotel int = 0 OUTPUT
+)
+AS
+BEGIN
+	SET @p_stay_booking_hotel = 0
+	IF EXISTS(SELECT 1 FROM LA_MAYORIA.Reserva r
+		INNER JOIN LA_MAYORIA.Habitacion_Reserva hr
+			ON r.Id_Reserva = hr.Id_Reserva
+		WHERE r.Id_Reserva = @p_stay_booking_id
+			AND hr.Id_Hotel = @p_stay_booking_hotel)
+		SET @p_stay_booking_hotel = 1
+END
+GO
+
+CREATE PROCEDURE [LA_MAYORIA].[sp_estadia_generate_stay](
+@p_stay_booking_id int,
+@p_stay_user_name varchar(20)
+)
+AS
+BEGIN
+	BEGIN TRANSACTION
+		INSERT INTO LA_MAYORIA.Estadia(Id_Reserva, Check_In, Id_Usuario_Check_In, Check_Out, Id_Usuario_Check_Out)
+		VALUES (@p_stay_booking_id, CAST(GETDATE() AS DATE), @p_stay_user_name, null, null)
+	COMMIT TRANSACTION
 END
 GO
