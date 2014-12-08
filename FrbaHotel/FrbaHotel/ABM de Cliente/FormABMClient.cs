@@ -68,7 +68,7 @@ namespace FrbaHotel.ABM_de_Cliente
         {
             if (dgvClient.CurrentRow != null)
             {
-                FormABMClientModify formABMClientModify = new FormABMClientModify(true, dgvClient.CurrentRow.Cells[0].Value.ToString());
+                FormABMClientModify formABMClientModify = new FormABMClientModify(true, dgvClient.CurrentRow.Cells[0].Value.ToString(), null);
                 formABMClientModify.MdiParent = this.MdiParent;
                 MdiParent.Size = formABMClientModify.Size;
                 formABMClientModify.Show();
@@ -124,7 +124,7 @@ namespace FrbaHotel.ABM_de_Cliente
 
         private void buttonCreate_Click(object sender, EventArgs e)
         {
-            FormABMClientModify formABMClientModify = new FormABMClientModify(false, null);
+            FormABMClientModify formABMClientModify = new FormABMClientModify(false, null, null);
             formABMClientModify.MdiParent = this.MdiParent;
             MdiParent.Size = formABMClientModify.Size;
             formABMClientModify.Show();

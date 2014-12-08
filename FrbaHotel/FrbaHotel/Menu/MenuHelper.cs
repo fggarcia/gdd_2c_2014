@@ -90,6 +90,14 @@ namespace FrbaHotel
                     func.folder = "Registrar_Consumible";
                     func.form = "FormABMConsumibles";
                     break;
+                case "Facturar Publicaciones":
+                    func.folder = "Facturar_Publicaciones";
+                    func.form = "FormFacturarPublicaciones";
+                    break;
+                case "ABM de Reserva":
+                    func.folder = "ABM_de_Reserva";
+                    func.form = "FormABMReserva";
+                    break;
             }
             return func;
         }

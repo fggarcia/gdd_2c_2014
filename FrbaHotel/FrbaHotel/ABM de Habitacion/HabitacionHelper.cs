@@ -179,5 +179,22 @@ namespace FrbaHotel.ABM_de_Habitacion
                 return false;
             }
         }
+
+        public static Int32 countPersonPerRoomByBooking(Int32 bookingId)
+        {
+            SqlCommand sp_habitacion_person_per_room_by_booking_id = new SqlCommand();
+            sp_habitacion_person_per_room_by_booking_id.CommandType = CommandType.StoredProcedure;
+            sp_habitacion_person_per_room_by_booking_id.CommandText = "LA_MAYORIA.sp_habitacion_person_per_room_by_booking_id";
+
+            sp_habitacion_person_per_room_by_booking_id.Parameters.AddWithValue("@p_habitacion_booking_id", bookingId);
+
+            var returnParameterPersonPerRoom = 
+                sp_habitacion_person_per_room_by_booking_id.Parameters.Add(new SqlParameter("@p_count_person", SqlDbType.Bit));
+            returnParameterPersonPerRoom.Direction = ParameterDirection.InputOutput;
+
+            ProcedureHelper.execute(sp_habitacion_person_per_room_by_booking_id, "return person per room", false);
+
+            return Convert.ToInt32(returnParameterPersonPerRoom.Value);
+        }
     }
 }

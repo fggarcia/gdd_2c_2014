@@ -171,13 +171,22 @@
     <Compile Include="Registrar Consumible\FormRegistrarConsumibles.Designer.cs">
       <DependentUpon>FormRegistrarConsumibles.cs</DependentUpon>
     </Compile>
+    <Compile Include="Facturar Publicaciones\FormFacturarPublicaciones.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Facturar Publicaciones\FormFacturarPublicaciones.Designer.cs">
+      <DependentUpon>FormFacturarPublicaciones.cs</DependentUpon>
+    </Compile>
     <Compile Include="Registrar Estadia\BookingStatus.cs" />
+    <Compile Include="Registrar Estadia\CheckClientHelper.cs" />
     <Compile Include="Registrar Estadia\FormRegistrarEstadiaCliente.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Registrar Estadia\FormRegistrarEstadiaCliente.Designer.cs">
       <DependentUpon>FormRegistrarEstadiaCliente.cs</DependentUpon>
     </Compile>
+    <Compile Include="ABM de Reserva\Reserva.cs" />
+    <Compile Include="ABM de Reserva\ReservaHelper.cs" />
     <Compile Include="Registrar Estadia\RegisterStayHelper.cs" />
     <Compile Include="Validaciones.cs" />
     <Compile Include="Common\AppConnections.cs" />
@@ -189,11 +198,11 @@
     <Compile Include="FormMenu.Designer.cs">
       <DependentUpon>FormMenu.cs</DependentUpon>
     </Compile>
-    <Compile Include="Generar Modificar Reserva\Form1.cs">
+    <Compile Include="ABM de Reserva\FormABMReserva.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Generar Modificar Reserva\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="ABM de Reserva\FormABMReserva.Designer.cs">
+      <DependentUpon>FormABMReserva.cs</DependentUpon>
     </Compile>
     <Compile Include="Hotel\Hoteles.cs" />
     <Compile Include="Listado Estadistico\Form1.cs">
@@ -269,8 +278,14 @@
     <EmbeddedResource Include="Cancelar Reserva\FormCancelarReserva.resx">
       <DependentUpon>FormCancelarReserva.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Facturar Publicaciones\FormFacturarPublicaciones.resx">
+      <DependentUpon>FormFacturarPublicaciones.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormMenu.resx">
       <DependentUpon>FormMenu.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM de Reserva\FormABMReserva.resx">
+      <DependentUpon>FormABMReserva.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Login\FormLogin.resx">
       <DependentUpon>FormLogin.cs</DependentUpon>
@@ -295,9 +310,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Registrar Estadia\FormRegistrarEstadia.resx">
       <DependentUpon>FormRegistrarEstadia.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Registrar Estadia\FormRegistrarEstadiaCliente.resx">
-      <DependentUpon>FormRegistrarEstadiaCliente.cs</DependentUpon>
     </EmbeddedResource>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>

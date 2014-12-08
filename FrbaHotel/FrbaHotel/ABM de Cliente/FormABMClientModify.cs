@@ -8,11 +8,13 @@ namespace FrbaHotel.ABM_de_Cliente
     {
         private String client { get; set; }
         private Boolean edit { get; set; }
+        private Form from;
 
-        public FormABMClientModify(Boolean edit, String client)
+        public FormABMClientModify(Boolean edit, String client, Form from)
         {
             this.edit = edit;
             this.client = client;
+            this.from = from;
             InitializeComponent();
         }
 
@@ -23,11 +25,21 @@ namespace FrbaHotel.ABM_de_Cliente
 
         private void closeWindow()
         {
-            FormABMClient formABMClient = new FormABMClient();
-            formABMClient.MdiParent = this.MdiParent;
-            MdiParent.Size = formABMClient.Size;
-            this.Close();
-            formABMClient.Show();
+            if (from != null)
+            {
+                from.MdiParent = this.MdiParent;
+                MdiParent.Size = from.Size;
+                this.Close();
+                from.Show();
+            }
+            else
+            {
+                FormABMClient formABMClient = new FormABMClient();
+                formABMClient.MdiParent = this.MdiParent;
+                MdiParent.Size = formABMClient.Size;
+                this.Close();
+                formABMClient.Show();
+            }
         }
 
         private void buttonAccept_Click(object sender, EventArgs e)
