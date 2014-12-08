@@ -11,6 +11,7 @@ namespace FrbaHotel.Generar_Modificar_Reserva
         public Int32 id_hotel { get; set; }
         public DateTime fecha_inicio { get; set; }
         public Int32 tipo_regimen { get; set; }
-        
+  
     }
+   
 }

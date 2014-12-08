@@ -68,6 +68,7 @@
             this.buttonCreate.TabIndex = 28;
             this.buttonCreate.Text = "Crear Reserva";
             this.buttonCreate.UseVisualStyleBackColor = true;
+            this.buttonCreate.Click += new System.EventHandler(this.buttonCreate_Click);
             // 
             // buttonBack
             // 
@@ -95,7 +96,6 @@
             this.buttonSearch.TabIndex = 25;
             this.buttonSearch.Text = "Buscar";
             this.buttonSearch.UseVisualStyleBackColor = true;
-            this.buttonSearch.Click += new System.EventHandler(this.buttonSearch_Click);
             // 
             // buttonClean
             // 

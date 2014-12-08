@@ -33,7 +33,6 @@ C:\Users\Administrator\Desktop\Repositorio\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\R
 C:\Users\Administrator\Desktop\Repositorio\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Release\FrbaHotel.Login.FormSeleccionHotel.resources
 C:\Users\Administrator\Desktop\Repositorio\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Release\FrbaHotel.Login.FormSeleccionRol.resources
 C:\Users\Administrator\Desktop\Repositorio\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Release\FrbaHotel.Registrar_Estadia.FormRegistrarEstadia.resources
-C:\Users\Administrator\Desktop\Repositorio\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Release\FrbaHotel.Registrar_Estadia.FormRegistrarEstadiaCliente.resources
 C:\Documents and Settings\UsuarioAdmin\Mis documentos\tp2c2014\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Release\FrbaHotel.ABM_de_Cliente.FormABMClient.resources
 C:\Documents and Settings\UsuarioAdmin\Mis documentos\tp2c2014\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Release\FrbaHotel.ABM_de_Cliente.FormABMClientModify.resources
 C:\Documents and Settings\UsuarioAdmin\Mis documentos\tp2c2014\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Release\FrbaHotel.ABM_de_Habitacion.FormABMHabitacion.resources
@@ -58,3 +57,7 @@ C:\Users\Administrator\Desktop\Repositorio\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\R
 C:\Documents and Settings\UsuarioAdmin\Mis documentos\tp2c2014\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Release\FrbaHotel.ABM_de_Reserva.FormABMReserva.resources
 C:\Documents and Settings\UsuarioAdmin\Mis documentos\tp2c2014\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Release\FrbaHotel.Registrar_Consumible.FormABMConsumibles.resources
 C:\Documents and Settings\UsuarioAdmin\Mis documentos\tp2c2014\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Release\FrbaHotel.Registrar_Consumible.FormRegistrarConsumibles.resources
+C:\Users\Administrator\Desktop\Repositorio\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Release\FrbaHotel.Facturar_Publicaciones.FormFacturarPublicaciones.resources
+C:\Users\Administrator\Desktop\Repositorio\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Release\FrbaHotel.Registrar_Consumible.FormABMConsumibles.resources
+C:\Users\Administrator\Desktop\Repositorio\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Release\FrbaHotel.Registrar_Consumible.FormRegistrarConsumibles.resources
+C:\Users\Administrator\Desktop\Repositorio\gdd_2c_2014\FrbaHotel\FrbaHotel\obj\Release\FrbaHotel.ABM_de_Reserva.FormAltaReserva.resources

@@ -116,6 +116,12 @@
       <DependentUpon>FormABMRegimen.cs</DependentUpon>
     </Compile>
     <Compile Include="ABM de Regimen\RegimenHelper.cs" />
+    <Compile Include="ABM de Reserva\FormAltaReserva.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM de Reserva\FormAltaReserva.Designer.cs">
+      <DependentUpon>FormAltaReserva.cs</DependentUpon>
+    </Compile>
     <Compile Include="ABM de Rol\RolFuncionalityHelper.cs" />
     <Compile Include="ABM de Rol\FormABMRolModify.cs">
       <SubType>Form</SubType>
@@ -262,6 +268,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ABM de Regimen\FormABMRegimen.resx">
       <DependentUpon>FormABMRegimen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM de Reserva\FormAltaReserva.resx">
+      <DependentUpon>FormAltaReserva.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ABM de Rol\FormABMRolModify.resx">
       <DependentUpon>FormABMRolModify.cs</DependentUpon>

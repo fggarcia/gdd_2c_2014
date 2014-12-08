@@ -25,13 +25,17 @@ namespace FrbaHotel.ABM_de_Reserva
             ReservaHelper.search(VarGlobal.usuario.hotel, dgvReserva);
         }
 
-        private void buttonSearch_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void buttonBack_Click(object sender, EventArgs e)
         {
+            this.Close();
+        }
+
+        private void buttonCreate_Click(object sender, EventArgs e)
+        {
+            FormAltaReserva formAltaReserva = new FormAltaReserva();
+            formAltaReserva.MdiParent = this.MdiParent;
+            MdiParent.Size = formAltaReserva.Size;
+            formAltaReserva.Show();
             this.Close();
         }
  

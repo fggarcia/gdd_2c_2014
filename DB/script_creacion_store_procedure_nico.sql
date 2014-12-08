@@ -17,3 +17,14 @@ BEGIN
 END
 GO
 
+CREATE PROCEDURE [LA_MAYORIA].[sp_hotel_regimen_retrieve](
+@p_hotel_id int = null
+)
+AS
+BEGIN
+	SELECT distinct r.Descripcion,r.Precio
+	from LA_MAYORIA.Regimen_Hotel rh, LA_MAYORIA.Regimen r
+	where	rh.Id_Regimen=r.Id_Regimen
+	and		rh.Id_Hotel=@p_hotel_id
+END
+GO

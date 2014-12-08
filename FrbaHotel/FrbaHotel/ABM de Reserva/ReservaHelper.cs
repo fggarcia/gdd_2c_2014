@@ -25,5 +25,20 @@ namespace FrbaHotel.ABM_de_Reserva
 
             DataGridViewHelper.fill(command, dgvReserva);
         }
-    }
+
+        public static void search_regimen(Int32 hotel, DataGridView dgvReserva)
+        {
+            SqlCommand command = new SqlCommand();
+            command.CommandText = "LA_MAYORIA.sp_hotel_regimen_retrieve";
+
+            command.Parameters.Add(new SqlParameter("@p_hotel_id", SqlDbType.Int));
+            if (VarGlobal.usuario.hotel.Equals(0))
+                Validaciones.validAndRequiredInt32(VarGlobal.usuario.hotel.ToString(), "Numero de hotel incorrecto");
+            else
+                command.Parameters["@p_hotel_id"].Value = VarGlobal.usuario.hotel;
+
+            DataGridViewHelper.fill(command, dgvReserva);
+        }
+
+      }
 }
