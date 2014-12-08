@@ -38,6 +38,9 @@ namespace FrbaHotel.Registrar_Estadia
             {
                 BookingStatus status = RegisterStayHelper.bookingStatus(bookingId);
                 showMessageError(status);
+                Boolean isBookingMustBeCancelForNoPresentation = RegisterStayHelper.checkIsMustBeCancelled(bookingId);
+                if (isBookingMustBeCancelForNoPresentation)
+                    MessageBox.Show("Se cancelo la reserva por pasarse del tiempo del checkIn", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -60,7 +63,7 @@ namespace FrbaHotel.Registrar_Estadia
 
             if (status.before && !status.cancel)
             {
-                MessageBox.Show("La Reserva ya caduco", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("La fecha de reserva todavia es superior al dia actual", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

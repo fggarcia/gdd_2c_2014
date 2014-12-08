@@ -89,3 +89,5 @@ DROP PROCEDURE LA_MAYORIA.sp_estadia_booking_is_hotel
 DROP PROCEDURE LA_MAYORIA.sp_estadia_booking_is_before
 
 DROP PROCEDURE LA_MAYORIA.sp_estadia_generate_stay
+
+DROP PROCEDURE LA_MAYORIA.sp_estadia_cancel_is_after_date_check_in

@@ -1112,3 +1112,31 @@ BEGIN
 	COMMIT TRANSACTION
 END
 GO
+
+CREATE PROCEDURE [LA_MAYORIA].[sp_estadia_cancel_is_after_date_check_in](
+@p_stay_booking_id int,
+@p_stay_change_to_cancel int OUTPUT
+)
+AS
+BEGIN
+	SET @p_stay_change_to_cancel = 0
+	IF EXISTS(SELECT 1 FROM LA_MAYORIA.Reserva r
+		WHERE r.Id_Reserva = @p_stay_booking_id
+		AND CAST(r.Fecha_Inicio AS DATE) > CAST(GETDATE() AS DATE)
+		)
+	BEGIN
+		Declare @cancel_no_show int
+		SELECT @cancel_no_show = Id_Estado FROM LA_MAYORIA.Estado_Reserva
+			WHERE Descripcion = 'Reserva Cancelada Por No-Show'
+
+		BEGIN TRANSACTION
+
+		UPDATE LA_MAYORIA.Reserva SET Estado = @cancel_no_show
+			WHERE Id_Reserva = @p_stay_booking_id
+
+		SET @p_stay_change_to_cancel = 1
+
+		COMMIT TRANSACTION
+	END
+END
+GO

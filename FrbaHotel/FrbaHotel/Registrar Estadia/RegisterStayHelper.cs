@@ -128,5 +128,29 @@ namespace FrbaHotel.Registrar_Estadia
 
             ProcedureHelper.execute(command, "generate stay", false);
         }
+
+        public static bool checkIsMustBeCancelled(int bookingId)
+        {
+            SqlCommand command = new SqlCommand();
+            command.CommandText = "LA_MAYORIA.sp_estadia_cancel_is_after_date_check_in";
+
+            command.Parameters.AddWithValue("@p_stay_booking_id", bookingId);
+
+            var returnParameterHotel = command.Parameters.Add(new SqlParameter("@p_stay_change_to_cancel", SqlDbType.Bit));
+            returnParameterHotel.Direction = ParameterDirection.InputOutput;
+
+            ProcedureHelper.execute(command, "cancel if checkin past", false);
+
+            Int16 isCancel = Convert.ToInt16(returnParameterHotel.Value);
+
+            if (isCancel != 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }
