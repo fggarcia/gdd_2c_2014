@@ -1190,6 +1190,23 @@ BEGIN
 END
 GO
 
+CREATE PROCEDURE [LA_MAYORIA].[sp_estadia_generate_checkout](
+@p_stay_booking_id int,
+@p_stay_user_name varchar(20)
+)
+AS
+BEGIN
+	Declare @stay_id int
+	SELECT @stay_id = e.Id_Estadia FROM LA_MAYORIA.Estadia e
+		WHERE e.Id_Reserva = @p_stay_booking_id
+	BEGIN TRANSACTION
+		UPDATE LA_MAYORIA.Estadia SET Check_Out = CAST(GETDATE() AS DATE),
+			Id_Usuario_Check_Out = @p_stay_user_name
+		WHERE Id_Estadia = @stay_id
+	COMMIT TRANSACTION
+END
+GO
+
 CREATE PROCEDURE [LA_MAYORIA].[sp_check_client_search](
 @p_check_client_name varchar(255) = null,
 @p_check_client_lastname varchar(255) = null,

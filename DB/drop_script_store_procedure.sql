@@ -98,6 +98,8 @@ DROP PROCEDURE LA_MAYORIA.sp_estadia_is_for_check_in
 
 DROP PROCEDURE LA_MAYORIA.sp_estadia_exist_full_stay
 
+DROP PROCEDURE LA_MAYORIA.sp_estadia_generate_checkout
+
 DROP PROCEDURE LA_MAYORIA.sp_check_client_search
 
 DROP PROCEDURE LA_MAYORIA.sp_estadia_save_stay_client

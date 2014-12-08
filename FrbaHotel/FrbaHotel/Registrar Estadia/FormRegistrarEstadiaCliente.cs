@@ -97,6 +97,7 @@ namespace FrbaHotel.Registrar_Estadia
                     RegisterStayHelper.saveStayClients(stayId, getClientsIds());
 
                     MessageBox.Show("Se ha generado la estadia correctamente", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    this.closeWindow();
                 }
                 else
                 {
@@ -104,6 +105,15 @@ namespace FrbaHotel.Registrar_Estadia
                 }
                 
             }
+        }
+
+        private void closeWindow()
+        {
+            FormRegistrarEstadia formRegistrarEstadia = new FormRegistrarEstadia();
+            formRegistrarEstadia.MdiParent = this.MdiParent;
+            MdiParent.Size = formRegistrarEstadia.Size;
+            formRegistrarEstadia.Show();
+            this.Close();
         }
 
         private List<Int32> getClientsIds()

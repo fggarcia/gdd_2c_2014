@@ -109,7 +109,19 @@ namespace FrbaHotel.Registrar_Estadia
 
         private void buttonCheckOut_Click(object sender, EventArgs e)
         {
-
+            if (dgvBooking.CurrentRow != null)
+            {
+                Int32 bookingId = Convert.ToInt32(dgvBooking.CurrentRow.Cells[0].Value);
+                RegisterStayHelper.checkout(bookingId);
+                MessageBox.Show("Se genero el checkout de la reserva correctamente", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                TextBoxHelper.clean(this);
+                DataGridViewHelper.clean(dgvBooking);
+                this.buttonCheckOut.Enabled = false;
+            }
+            else
+            {
+                MessageBox.Show("Debe seleccionar un reserva para generarle el checkout", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void buttonBack_Click(object sender, EventArgs e)

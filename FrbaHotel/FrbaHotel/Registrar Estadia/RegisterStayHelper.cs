@@ -206,7 +206,7 @@ namespace FrbaHotel.Registrar_Estadia
             }
         }
 
-        internal static void saveStayClients(int stayId, List<int> clientsIds)
+        public static void saveStayClients(int stayId, List<int> clientsIds)
         {
             foreach (Int32 clientId in clientsIds)
             {
@@ -218,6 +218,17 @@ namespace FrbaHotel.Registrar_Estadia
 
                 ProcedureHelper.execute(command, "save client per stay id", false);
             }
+        }
+
+        public static void checkout(Int32 bookingId)
+        {
+            SqlCommand command = new SqlCommand();
+            command.CommandText = "LA_MAYORIA.sp_estadia_generate_checkout";
+
+            command.Parameters.AddWithValue("@p_stay_booking_id", bookingId);
+            command.Parameters.AddWithValue("@p_stay_user_name", VarGlobal.usuario.id);
+
+            ProcedureHelper.execute(command, "generate checkout for booking", false);
         }
     }
 }
