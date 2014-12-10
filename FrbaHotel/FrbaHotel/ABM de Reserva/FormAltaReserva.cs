@@ -21,6 +21,7 @@ namespace FrbaHotel.ABM_de_Reserva
             this.ControlBox = false;
             this.WindowState = FormWindowState.Maximized;
             ReservaHelper.search_regimen(VarGlobal.usuario.hotel, dgvRegimen);
+            ReservaHelper.search_tipo_hab(VarGlobal.usuario.hotel, dgvTipoHabitacion);
         }
 
         private void button_volver_Click(object sender, EventArgs e)

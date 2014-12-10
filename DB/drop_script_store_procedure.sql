@@ -113,3 +113,7 @@ DROP PROCEDURE LA_MAYORIA.sp_consumible_by_estadia_search
 DROP PROCEDURE LA_MAYORIA.sp_estadia_consumible_add
 
 DROP PROCEDURE LA_MAYORIA.sp_estadia_consumible_remove
+
+DROP PROCEDURE LA_MAYORIA.sp_reserva_listar
+
+DROP PROCEDURE LA_MAYORIA.sp_tipo_habitacion_available

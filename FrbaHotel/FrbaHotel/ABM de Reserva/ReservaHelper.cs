@@ -49,10 +49,18 @@ namespace FrbaHotel.ABM_de_Reserva
             command.CommandText = "LA_MAYORIA.sp_hotel_regimen_retrieve";
 
             command.Parameters.Add(new SqlParameter("@p_hotel_id", SqlDbType.Int));
-            if (VarGlobal.usuario.hotel.Equals(0))
-                Validaciones.validAndRequiredInt32(VarGlobal.usuario.hotel.ToString(), "Numero de hotel incorrecto");
-            else
-                command.Parameters["@p_hotel_id"].Value = VarGlobal.usuario.hotel;
+            command.Parameters["@p_hotel_id"].Value = VarGlobal.usuario.hotel;
+
+            DataGridViewHelper.fill(command, dgvReserva);
+        }
+
+        public static void search_tipo_hab(Int32 hotel, DataGridView dgvReserva)
+        {
+            SqlCommand command = new SqlCommand();
+            command.CommandText = "LA_MAYORIA.sp_tipo_habitacion_available";
+
+            command.Parameters.Add(new SqlParameter("@p_hotel_id", SqlDbType.Int));
+            command.Parameters["@p_hotel_id"].Value = VarGlobal.usuario.hotel;
 
             DataGridViewHelper.fill(command, dgvReserva);
         }
