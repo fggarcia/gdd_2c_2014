@@ -1107,12 +1107,11 @@ CREATE PROCEDURE [LA_MAYORIA].[sp_estadia_booking_is_hotel](
 )
 AS
 BEGIN
-	SET @p_stay_booking_hotel = 0
 	IF EXISTS(SELECT 1 FROM LA_MAYORIA.Reserva r
 		INNER JOIN LA_MAYORIA.Habitacion_Reserva hr
 			ON r.Id_Reserva = hr.Id_Reserva
 		WHERE r.Id_Reserva = @p_stay_booking_id
-			AND hr.Id_Hotel = @p_stay_booking_hotel)
+			AND hr.Id_Hotel = @p_stay_hotel_id)
 		SET @p_stay_booking_hotel = 1
 END
 GO
@@ -1361,6 +1360,248 @@ BEGIN
 				AND Id_Codigo = @p_id_consumible
 				AND CAST(Fecha AS DATE) = CAST(GETDATE() AS DATE)
 		END
+	COMMIT TRANSACTION
+END
+GO
+
+CREATE PROCEDURE [LA_MAYORIA].[sp_facturar_estadia_booking_search](
+@p_charge_stay_booking_id int,
+@p_charge_stay_hotel_id int
+)
+AS
+BEGIN
+	SELECT DISTINCT
+		e.Id_Reserva 'Nro Reserva',
+		e.Id_Estadia 'Id Estadia',
+		e.Check_In 'Check In',
+		e.Check_Out 'Check Out',
+		r.Estadia 'Estadia',
+		c.Id_Cliente 'Id Cliente',
+		c.Nombre 'Nombre',
+		c.Apellido 'Apellido'
+
+	FROM LA_MAYORIA.Estadia e
+	INNER JOIN LA_MAYORIA.Reserva r
+		ON r.Id_Reserva = e.Id_Reserva
+	INNER JOIN LA_MAYORIA.Reserva_Cliente rc
+		ON r.Id_Reserva = rc.Id_Reserva
+	INNER JOIN LA_MAYORIA.Clientes c
+		ON rc.Id_Cliente = c.Id_Cliente
+	INNER JOIN LA_MAYORIA.Habitacion_Reserva hr
+		ON hr.Id_Reserva = e.Id_Reserva
+	WHERE e.Check_In IS NOT NULL
+		AND e.Check_Out IS NOT NULL
+		AND e.Id_Reserva = @p_charge_stay_booking_id
+		AND hr.Id_Hotel = @p_charge_stay_hotel_id
+		AND NOT EXISTS (SELECT 1 FROM LA_MAYORIA.Facturacion f WHERE f.Id_Estadia = e.Id_Estadia)
+END
+GO
+
+CREATE PROCEDURE [LA_MAYORIA].[sp_facturar_estadia_is_check_in](
+@p_charge_stay_booking_id int,
+@p_charge_stay_is_check_in int = 0 OUTPUT
+)
+AS
+BEGIN
+	IF EXISTS (SELECT 1 FROM LA_MAYORIA.Estadia e
+		WHERE e.Id_Reserva = @p_charge_stay_booking_id
+		AND e.Check_In IS NOT NULL
+		AND e.Check_Out IS NULL)
+		SET @p_charge_stay_is_check_in = 1
+	ELSE
+		SET @p_charge_stay_is_check_in = 0
+END
+GO
+
+CREATE PROCEDURE [LA_MAYORIA].[sp_facturar_estadia_is_exist](
+@p_charge_stay_booking_id int,
+@p_charge_stay_is_exist int = 0 OUTPUT
+)
+AS
+BEGIN
+	IF EXISTS (SELECT 1 FROM LA_MAYORIA.Estadia e
+		WHERE e.Id_Reserva = @p_charge_stay_booking_id
+	)
+		SET @p_charge_stay_is_exist = 1
+	ELSE
+		SET @p_charge_stay_is_exist = 0
+END
+GO
+
+CREATE PROCEDURE [LA_MAYORIA].[sp_facturar_estadia_was_charged](
+@p_charge_stay_booking_id int,
+@p_charge_stay_was_charged int = 0 OUTPUT
+)
+AS
+BEGIN
+	IF EXISTS (SELECT 1 FROM LA_MAYORIA.Estadia e
+		INNER JOIN LA_MAYORIA.Facturacion f
+			ON e.Id_Estadia = f.Id_Estadia
+		WHERE e.Id_Reserva = @p_charge_stay_booking_id
+	)
+		SET @p_charge_stay_was_charged = 1
+	ELSE
+		SET @p_charge_stay_was_charged = 0
+END
+GO
+
+CREATE PROCEDURE LA_MAYORIA.[sp_facturar_estadia_get_charge](
+@p_charge_stay_stay_id int
+)
+AS
+BEGIN
+	SELECT 
+		c.Descripcion, 
+		cr.Cantidad, 
+		c.Precio 
+		FROM LA_MAYORIA.Estadia e 
+		INNER JOIN LA_MAYORIA.Consumible_Reserva cr 
+			ON e.Id_Estadia = cr.Id_Estadia
+		INNER JOIN LA_MAYORIA.Consumible c
+			ON c.Id_Codigo = cr.Id_Codigo
+		WHERE e.Id_Estadia = @p_charge_stay_stay_id
+	UNION
+	SELECT 
+		'Estadia por: ' + RTRIM(LTRIM(STR(DATEDIFF(DAY, e.Check_In, e.Check_Out) + 1))) + ' dias. Regimen ' + re.Descripcion,
+		1,
+		(re.Precio * th.Cupo) + (he.Cantidad_Estrellas * he.recarga)
+		FROM LA_MAYORIA.Estadia e 
+		INNER JOIN LA_MAYORIA.Reserva r
+			ON e.Id_Reserva = r.Id_Reserva 
+		INNER JOIN LA_MAYORIA.Habitacion_Reserva hr
+			ON e.Id_Reserva = hr.Id_Reserva
+		INNER JOIN LA_MAYORIA.Habitacion h
+			ON h.Id_Hotel = hr.Id_Hotel
+				AND h.Piso = hr.Habitacion_Piso
+				AND h.Nro = hr.Habitacion_Nro
+		INNER JOIN LA_MAYORIA.Tipo_Habitacion th
+			ON h.Tipo_Habitacion = th.Id_Tipo_Habitacion
+		INNER JOIN LA_MAYORIA.Hotel_Estrellas he
+			ON he.Id_Hotel = h.Id_Hotel
+		INNER JOIN LA_MAYORIA.Regimen re
+			ON re.Id_Regimen = r.Tipo_Regimen
+		WHERE e.Id_Estadia = @p_charge_stay_stay_id
+	UNION
+	SELECT
+		'Descuento por regimen: ' + re.Descripcion,
+		1,
+		(0 - SUM(cr.Cantidad * c.precio))
+		FROM LA_MAYORIA.Estadia e
+		INNER JOIN LA_MAYORIA.Reserva r
+			ON r.Id_Reserva = e.Id_Reserva
+		INNER JOIN LA_MAYORIA.Regimen re
+			ON r.Tipo_Regimen = re.Id_Regimen
+		INNER JOIN LA_MAYORIA.Consumible_Reserva cr
+			ON cr.Id_Estadia = e.Id_Estadia
+		INNER JOIN LA_MAYORIA.Consumible c
+			ON cr.Id_Codigo = c.Id_Codigo
+		WHERE UPPER(LTRIM(RTRIM(re.Descripcion))) like '%' + 'ALL INCLUSIVE' + '%'
+			AND e.Id_Estadia = @p_charge_stay_stay_id
+	GROUP BY re.Descripcion
+	UNION
+	SELECT
+		'Recargo por retirarse: ' + LTRIM(STR(r.Estadia  - (DATEDIFF(DAY, e.Check_In, e.Check_Out) + 1))) + ' dias antes',
+		1,
+		0
+		FROM LA_MAYORIA.Estadia e
+		INNER JOIN LA_MAYORIA.Reserva r
+			ON e.Id_Reserva = r.Id_Reserva
+		WHERE r.Estadia  - (DATEDIFF(DAY, e.Check_In, e.Check_Out) + 1) > 0
+		AND e.Id_Estadia = @p_charge_stay_stay_id
+	ORDER BY 3 DESC
+END
+GO
+
+CREATE PROCEDURE [LA_MAYORIA].[sp_facturar_estadia_charge](
+@p_charge_stay_stay_id int,
+@p_charge_stay_client_id int,
+@p_charge_stay_number_card int,
+@p_charge_stay_type_pay varchar(20)
+)
+AS
+BEGIN
+	Declare @charge_stay int
+	SELECT @charge_stay = (re.Precio * th.Cupo) + (he.Cantidad_Estrellas * he.recarga)
+		FROM LA_MAYORIA.Estadia e 
+		INNER JOIN LA_MAYORIA.Reserva r
+			ON e.Id_Reserva = r.Id_Reserva 
+		INNER JOIN LA_MAYORIA.Habitacion_Reserva hr
+			ON e.Id_Reserva = hr.Id_Reserva
+		INNER JOIN LA_MAYORIA.Habitacion h
+			ON h.Id_Hotel = hr.Id_Hotel
+				AND h.Piso = hr.Habitacion_Piso
+				AND h.Nro = hr.Habitacion_Nro
+		INNER JOIN LA_MAYORIA.Tipo_Habitacion th
+			ON h.Tipo_Habitacion = th.Id_Tipo_Habitacion
+		INNER JOIN LA_MAYORIA.Hotel_Estrellas he
+			ON he.Id_Hotel = h.Id_Hotel
+		INNER JOIN LA_MAYORIA.Regimen re
+			ON re.Id_Regimen = r.Tipo_Regimen
+		WHERE e.Id_Estadia = @p_charge_stay_stay_id
+
+	Declare @consumable int = 0
+	SELECT @consumable = SUM(cr.Cantidad * c.precio)
+		FROM LA_MAYORIA.Estadia e
+		INNER JOIN LA_MAYORIA.Consumible_Reserva cr
+			ON cr.Id_Estadia = e.Id_Estadia
+		INNER JOIN LA_MAYORIA.Consumible c
+			ON cr.Id_Codigo = c.Id_Codigo
+		WHERE e.Id_Estadia = @p_charge_stay_stay_id
+
+	Declare @allInclusiveConsumable int
+	IF EXISTS (SELECT 1 FROM
+		LA_MAYORIA.Estadia e
+		INNER JOIN LA_MAYORIA.Reserva r
+			ON r.Id_Reserva = e.Id_Reserva
+		INNER JOIN LA_MAYORIA.Regimen re
+			ON r.Tipo_Regimen = re.Id_Regimen
+		WHERE UPPER(LTRIM(RTRIM(re.Descripcion))) like '%' + 'ALL INCLUSIVE' + '%'
+			AND e.Id_Estadia = @p_charge_stay_stay_id)
+		SET @allInclusiveConsumable = 0 - @consumable
+	ELSE
+		SET @allInclusiveConsumable = 0
+
+	Declare @day_diff_stop_stay int
+
+	SELECT @day_diff_stop_stay = (r.Estadia  - (DATEDIFF(DAY, e.Check_In, e.Check_Out) + 1))
+		FROM LA_MAYORIA.Estadia e
+		INNER JOIN LA_MAYORIA.Reserva r
+			ON e.Id_Reserva = r.Id_Reserva
+		WHERE e.Id_Estadia = @p_charge_stay_stay_id
+
+	BEGIN TRANSACTION
+		Declare @invoice int
+		INSERT INTO LA_MAYORIA.Facturacion(Id_Estadia, Id_Cliente, Total_Factura, Total_Estadia, Total_Consumibles, Fecha_Facturacion)
+		VALUES (@p_charge_stay_stay_id, @p_charge_stay_client_id, @charge_stay + @consumable + @allInclusiveConsumable,
+			@charge_stay, @consumable + @allInclusiveConsumable, CAST(GETDATE() AS DATE))
+		SET @invoice = @@IDENTITY
+
+		--Estadia
+		INSERT INTO LA_MAYORIA.Facturacion_Detalle(Id_Factura, Id_Estadia, Descripcion, Precio, Cantidad)
+		VALUES (@invoice, @p_charge_stay_stay_id, 'estadia', @charge_stay, 1)
+
+		--Recargo retirarse antes
+		IF (@day_diff_stop_stay != 0)
+			INSERT INTO LA_MAYORIA.Facturacion_Detalle (Id_Factura, Id_Estadia, Descripcion, Precio, Cantidad)
+			VALUES (@invoice, @p_charge_stay_stay_id, 
+				'Recargo por retirarse: ' + LTRIM(STR(@day_diff_stop_stay)) + ' dias antes', 0, 1)
+
+		--Consumibles
+		INSERT INTO LA_MAYORIA.Facturacion_Detalle (Id_Factura, Id_Estadia, Descripcion, Precio, Cantidad)
+		SELECT @invoice, @p_charge_stay_stay_id, c.Descripcion, c.Precio, cr.Cantidad
+		FROM LA_MAYORIA.Estadia e 
+		INNER JOIN LA_MAYORIA.Consumible_Reserva cr 
+			ON e.Id_Estadia = cr.Id_Estadia
+		INNER JOIN LA_MAYORIA.Consumible c
+			ON c.Id_Codigo = cr.Id_Codigo
+		WHERE e.Id_Estadia = @p_charge_stay_stay_id
+
+		--Descuento all inclusive
+		IF (@allInclusiveConsumable < 0)
+			INSERT INTO LA_MAYORIA.Facturacion_Detalle (Id_Factura, Id_Estadia, Descripcion, Precio, Cantidad)
+			VALUES (@invoice, @p_charge_stay_stay_id, 
+				'Descuento por regimen', @allInclusiveConsumable, 1)
+
 	COMMIT TRANSACTION
 END
 GO

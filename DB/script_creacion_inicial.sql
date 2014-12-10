@@ -112,13 +112,12 @@ INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (1, 6)
 INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (1, 7)
 INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (1, 8)
 INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (1, 9)
-INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (2, 9)
-INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (3, 9)
 INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (2, 8)
 INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (2, 9)
 INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (2,10)
 INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (2,11)
 INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (2,12)
+INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (3, 9)
 
 --TABLA DOCUMENTOS
 /*
@@ -701,7 +700,7 @@ SELECT Id_Estadia, Consumible_Codigo, Item_Factura_Cantidad, Estadia_Fecha_Inici
 	Tabla con el registro completa de la factura, sin el detalle
 */
 CREATE TABLE [LA_MAYORIA].[Facturacion](
-	[Id_Factura][numeric](18,0) NOT NULL,
+	[Id_Factura][numeric](18,0)IDENTITY(1,1) NOT NULL,
 	[Id_Estadia][Int] NOT NULL,
 	[Id_Cliente][Int] NOT NULL,
 	[Total_Factura][numeric](18,2) NOT NULL DEFAULT 0.0,
@@ -715,6 +714,8 @@ CREATE TABLE [LA_MAYORIA].[Facturacion](
 	CONSTRAINT [FK_Facturacion_Id_Cliente] FOREIGN KEY(Id_Cliente)
 		REFERENCES [LA_MAYORIA].[Clientes](Id_Cliente)
 )
+
+SET IDENTITY_INSERT [LA_MAYORIA].Facturacion ON
 
 --INSERTO LA FACTURAS DE LOS QUE SON NO ALL INCLUSIVE
 INSERT INTO LA_MAYORIA.Facturacion (Id_Factura, Id_Estadia, Id_Cliente, Total_Factura, Total_Estadia,
@@ -737,7 +738,7 @@ SELECT m.Factura_Nro, e.Id_Estadia, c.Id_Cliente, m.Factura_Total + m.Item_Factu
 INSERT INTO LA_MAYORIA.Facturacion (Id_Factura, Id_Estadia, Id_Cliente, Total_Factura, Total_Estadia,
 	Total_Consumibles,Fecha_Facturacion)
 SELECT m.Factura_Nro, e.Id_Estadia, c.Id_Cliente, 0 + m.Item_Factura_Monto, 
-	0, m.Factura_Total, m.Factura_Fecha 
+	m.Factura_Total, 0, m.Factura_Fecha 
 	FROM gd_esquema.Maestra m 
 	INNER JOIN LA_MAYORIA.Clientes c
 		ON m.Cliente_Pasaporte_Nro = c.Nro_Identificacion
@@ -749,6 +750,8 @@ SELECT m.Factura_Nro, e.Id_Estadia, c.Id_Cliente, 0 + m.Item_Factura_Monto,
 	WHERE m.Factura_Total IS NOT NULL
 		AND m.Consumible_Codigo IS NULL
 		AND UPPER(m.Regimen_Descripcion) = UPPER('All Inclusive')
+
+SET IDENTITY_INSERT [LA_MAYORIA].Facturacion OFF
 
 --TABLA FACTURACION_DETALLE
 /*

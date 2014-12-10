@@ -113,3 +113,15 @@ DROP PROCEDURE LA_MAYORIA.sp_consumible_by_estadia_search
 DROP PROCEDURE LA_MAYORIA.sp_estadia_consumible_add
 
 DROP PROCEDURE LA_MAYORIA.sp_estadia_consumible_remove
+
+DROP PROCEDURE LA_MAYORIA.sp_facturar_estadia_booking_search
+
+DROP PROCEDURE LA_MAYORIA.sp_facturar_estadia_is_check_in
+
+DROP PROCEDURE LA_MAYORIA.sp_facturar_estadia_is_exist
+
+DROP PROCEDURE LA_MAYORIA.sp_facturar_estadia_was_charged
+
+DROP PROCEDURE LA_MAYORIA.sp_facturar_estadia_get_charge
+
+DROP PROCEDURE LA_MAYORIA.sp_facturar_estadia_charge
