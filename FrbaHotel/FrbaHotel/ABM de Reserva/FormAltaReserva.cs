@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using FrbaHotel.Common;
 
 namespace FrbaHotel.ABM_de_Reserva
 {
@@ -27,6 +28,11 @@ namespace FrbaHotel.ABM_de_Reserva
         private void button_volver_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void button_consultar_Click(object sender, EventArgs e)
+        {
+            dTHasta.Value.Subtract(dTDesde.Value);
         }
 
     
