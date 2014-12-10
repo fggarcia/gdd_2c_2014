@@ -105,6 +105,7 @@
             this.button_volver.TabIndex = 9;
             this.button_volver.Text = "Volver";
             this.button_volver.UseVisualStyleBackColor = true;
+            this.button_volver.Click += new System.EventHandler(this.button_volver_Click);
             // 
             // FormAltaReserva
             // 

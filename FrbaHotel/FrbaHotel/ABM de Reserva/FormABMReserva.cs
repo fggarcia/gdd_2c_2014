@@ -22,7 +22,8 @@ namespace FrbaHotel.ABM_de_Reserva
             this.ControlBox = false;
             this.FormBorderStyle = FormBorderStyle.None;
             this.WindowState = FormWindowState.Maximized;
-            ReservaHelper.search(VarGlobal.usuario.hotel, dgvReserva);
+            Reserva reserva = this.getDataToSearch();
+            ReservaHelper.search(reserva, dgvReserva);
         }
 
         private void buttonBack_Click(object sender, EventArgs e)
@@ -38,6 +39,34 @@ namespace FrbaHotel.ABM_de_Reserva
             formAltaReserva.Show();
             this.Close();
         }
- 
-    }
+
+        private Reserva getDataToSearch()
+        {
+            Reserva reserva = new Reserva();
+
+                reserva.nombre = txtNombre.Text;
+                reserva.apellido = txtApellido.Text;
+                if (TxtNroReserva.Text!=String.Empty)
+                    reserva.id = int.Parse(TxtNroReserva.Text); 
+                reserva.id_hotel = VarGlobal.usuario.hotel;
+            
+
+            return reserva;
+        }
+
+        private void buttonSearch_Click(object sender, EventArgs e)
+        {
+            Reserva reserva = this.getDataToSearch();
+            ReservaHelper.search(reserva, dgvReserva);
+        }
+
+        private void buttonClean_Click(object sender, EventArgs e)
+        {
+            txtNombre.Text = "";
+            txtApellido.Text = "";
+            Reserva reserva = this.getDataToSearch();
+            ReservaHelper.search(reserva, dgvReserva);
+        }
+
+   }
 }

@@ -12,16 +12,33 @@ namespace FrbaHotel.ABM_de_Reserva
 {
     public class ReservaHelper
     {
-        public static void search(Int32 hotel, DataGridView dgvReserva)
+        public static void search(Reserva reserva, DataGridView dgvReserva)
         {
             SqlCommand command = new SqlCommand();
+            command.CommandType = CommandType.StoredProcedure;
+            
             command.CommandText = "LA_MAYORIA.sp_reserva_listar";
 
             command.Parameters.Add(new SqlParameter("@p_hotel_id", SqlDbType.Int));
-            if (VarGlobal.usuario.hotel.Equals(0))
-                Validaciones.validAndRequiredInt32(VarGlobal.usuario.hotel.ToString(), "Numero de hotel incorrecto");
+            command.Parameters["@p_hotel_id"].Value = reserva.id_hotel;
+            
+            command.Parameters.Add(new SqlParameter("@p_nombre", SqlDbType.VarChar,255));
+
+            if (reserva.nombre == string.Empty)
+                command.Parameters["@p_nombre"].Value = null;
             else
-                command.Parameters["@p_hotel_id"].Value = VarGlobal.usuario.hotel;
+                command.Parameters["@p_nombre"].Value = reserva.nombre;
+
+
+            command.Parameters.Add(new SqlParameter("@p_apellido", SqlDbType.VarChar, 255));
+
+           if (reserva.apellido == string.Empty)
+                command.Parameters["@p_apellido"].Value = null;
+            else
+                command.Parameters["@p_apellido"].Value = reserva.apellido;
+
+            /*command.Parameters.Add(new SqlParameter("@p_res_id", SqlDbType.Int));
+            command.Parameters["@p_res_id"].Value = reserva.id;*/
 
             DataGridViewHelper.fill(command, dgvReserva);
         }

@@ -23,6 +23,11 @@ namespace FrbaHotel.ABM_de_Reserva
             ReservaHelper.search_regimen(VarGlobal.usuario.hotel, dgvRegimen);
         }
 
+        private void button_volver_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
     
     }
 }
