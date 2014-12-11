@@ -13,6 +13,34 @@ BEGIN
 END
 GO
 
+CREATE PROCEDURE [LA_MAYORIA].[sp_password_check_ok](
+@p_id varchar(255) = null,
+@p_pass varchar(255) = null,
+@p_ok int = 0 OUTPUT
+)
+AS
+BEGIN
+	IF EXISTS(SELECT 1 FROM LA_MAYORIA.Usuario
+		WHERE Id_Usuario = @p_id
+		AND Password = @p_pass)
+		SET @p_ok = 1
+	ELSE
+		SET @p_ok = 0
+END
+GO
+
+CREATE PROCEDURE [LA_MAYORIA].[sp_password_change](
+@p_id varchar(255) = null,
+@p_pass varchar(255) = null
+)
+AS
+BEGIN
+	UPDATE LA_MAYORIA.Usuario
+		SET Password = @p_pass
+	WHERE Id_Usuario = @p_id
+END
+GO
+
 CREATE PROCEDURE [LA_MAYORIA].[sp_login_check_password](
 @p_id varchar(255) = null,
 @p_pass varchar(255) = null,
@@ -1603,5 +1631,128 @@ BEGIN
 				'Descuento por regimen', @allInclusiveConsumable, 1)
 
 	COMMIT TRANSACTION
+END
+GO
+
+CREATE PROCEDURE [LA_MAYORIA].[sp_estadistic_top_5_hotel_canceled](
+@p_estadistic_from datetime,
+@p_estadistic_to datetime
+)
+AS
+BEGIN
+	Declare @truncateFrom datetime = CAST(@p_estadistic_from AS DATE)
+	Declare @truncateTo datetime = CAST(@p_estadistic_to AS DATE)
+	
+	SELECT TOP 5 
+		hr.Id_Hotel 'Id Hotel',
+		COUNT(*)  'Reservas Canceladas'
+	FROM LA_MAYORIA.Reserva r
+	INNER JOIN LA_MAYORIA.Habitacion_Reserva hr
+		ON r.Id_Reserva = hr.Id_Reserva
+	INNER JOIN LA_MAYORIA.Estado_Reserva er
+		ON r.Estado = er.Id_Estado
+	WHERE UPPER(er.Descripcion) LIKE '%' + 'CANCELADA' + '%'
+	AND r.Fecha_Inicio BETWEEN @truncateFrom AND @truncateTo
+	GROUP BY hr.Id_Hotel
+	ORDER BY 2 DESC
+END
+GO
+
+CREATE PROCEDURE [LA_MAYORIA].[sp_estadistic_top_5_hotel_consumable_charge](
+@p_estadistic_from datetime,
+@p_estadistic_to datetime
+)
+AS
+BEGIN
+	Declare @truncateFrom datetime = CAST(@p_estadistic_from AS DATE)
+	Declare @truncateTo datetime = CAST(@p_estadistic_to AS DATE)
+
+	SELECT TOP 5 
+		hr.Id_Hotel 'Id Hotel',
+		SUM(c.Precio) 'Consumibles Facturados'
+	FROM LA_MAYORIA.Consumible_Reserva cr
+	INNER JOIN LA_MAYORIA.Consumible c
+		ON cr.Id_Codigo = c.Id_Codigo
+	INNER JOIN LA_MAYORIA.Estadia e
+		ON e.Id_Estadia = cr.Id_Estadia
+	INNER JOIN LA_MAYORIA.Habitacion_Reserva hr
+		ON e.Id_Reserva = hr.Id_Reserva
+	INNER JOIN LA_MAYORIA.Facturacion f 
+		ON f.Id_Estadia = e.Id_Estadia
+	WHERE f.Fecha_Facturacion BETWEEN @truncateFrom AND @truncateTo
+	GROUP BY hr.Id_Hotel
+	ORDER BY 2 DESC
+END
+GO
+
+CREATE PROCEDURE [LA_MAYORIA].[sp_estadistic_top_5_hotel_more_days_out](
+@p_estadistic_from datetime,
+@p_estadistic_to datetime
+)
+AS
+BEGIN
+	Declare @truncateFrom datetime = CAST(@p_estadistic_from AS DATE)
+	Declare @truncateTo datetime = CAST(@p_estadistic_to AS DATE)
+
+	SELECT TOP 5
+		hbh.Id_Hotel 'Id Hotel',
+		SUM(DATEDIFF(DAY, hbh.Fecha_Inicio, hbh.Fecha_Fin)) 'Días'
+	FROM LA_MAYORIA.Historial_Baja_Hotel hbh
+	WHERE ( 
+		(hbh.Fecha_Inicio BETWEEN @truncateFrom AND @truncateTo) 
+		OR (hbh.Fecha_Fin BETWEEN @truncateFrom AND @truncateTo)
+	)
+	GROUP BY hbh.Id_Hotel
+	ORDER BY 2 DESC
+END
+GO
+
+CREATE PROCEDURE [LA_MAYORIA].[sp_estadistic_top_5_room_hotel_most_occupied](
+@p_estadistic_from datetime,
+@p_estadistic_to datetime
+)
+AS
+BEGIN
+	Declare @truncateFrom datetime = CAST(@p_estadistic_from AS DATE)
+	Declare @truncateTo datetime = CAST(@p_estadistic_to AS DATE)
+
+	SELECT TOP 5
+		hr.Habitacion_Nro 'Habitacion',
+		hr.Habitacion_Piso 'Piso',
+		hr.Id_Hotel 'Id Hotel',
+		SUM(DATEDIFF(DAY, e.Check_In, e.Check_Out)) 'Días',
+		COUNT(1) 'Veces'
+	FROM LA_MAYORIA.Estadia e
+	INNER JOIN LA_MAYORIA.Habitacion_Reserva hr
+		ON e.Id_Reserva = hr.Id_Reserva
+	WHERE ( 
+		(e.Check_In BETWEEN @truncateFrom AND @truncateTo) 
+		OR (e.Check_Out BETWEEN @truncateFrom AND @truncateTo)
+	)
+	GROUP BY hr.Id_Hotel, hr.Habitacion_Piso, hr.Habitacion_Nro
+	ORDER BY 4 DESC, 5 DESC
+END
+GO
+
+CREATE PROCEDURE [LA_MAYORIA].[sp_estadistic_top_5_client_more_points](
+@p_estadistic_from datetime,
+@p_estadistic_to datetime
+)
+AS
+BEGIN
+	Declare @truncateFrom datetime = CAST(@p_estadistic_from AS DATE)
+	Declare @truncateTo datetime = CAST(@p_estadistic_to AS DATE)
+
+	SELECT TOP 5
+		c.Id_Cliente 'Id Cliente',
+		c.Nombre 'Nombre',
+		c.Apellido 'Apellido',
+		CONVERT(INT,SUM((f.Total_Estadia / 10) +  (f.Total_Consumibles / 5))) 'Puntos'
+	FROM LA_MAYORIA.Facturacion f
+	INNER JOIN LA_MAYORIA.Clientes c
+		ON f.Id_Cliente = c.Id_Cliente
+	WHERE f.Fecha_Facturacion BETWEEN @truncateFrom AND @truncateTo
+	GROUP BY c.Id_Cliente, c.Nombre, c.Apellido
+	ORDER BY 4 DESC
 END
 GO

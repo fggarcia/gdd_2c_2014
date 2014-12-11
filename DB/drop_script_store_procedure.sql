@@ -2,6 +2,10 @@ DROP PROCEDURE LA_MAYORIA.sp_login_check_valid_user
 
 DROP PROCEDURE LA_MAYORIA.sp_login_check_password
 
+DROP PROCEDURE LA_MAYORIA.sp_password_check_ok
+
+DROP PROCEDURE LA_MAYORIA.sp_password_change
+
 DROP PROCEDURE LA_MAYORIA.sp_rol_exist_one_by_user
 
 DROP PROCEDURE LA_MAYORIA.sp_hotel_exist_one_by_user
@@ -125,3 +129,13 @@ DROP PROCEDURE LA_MAYORIA.sp_facturar_estadia_was_charged
 DROP PROCEDURE LA_MAYORIA.sp_facturar_estadia_get_charge
 
 DROP PROCEDURE LA_MAYORIA.sp_facturar_estadia_charge
+
+DROP PROCEDURE LA_MAYORIA.sp_estadistic_top_5_hotel_canceled
+
+DROP PROCEDURE LA_MAYORIA.sp_estadistic_top_5_hotel_consumable_charge
+
+DROP PROCEDURE LA_MAYORIA.sp_estadistic_top_5_hotel_more_days_out
+
+DROP PROCEDURE LA_MAYORIA.sp_estadistic_top_5_room_hotel_most_occupied
+
+DROP PROCEDURE LA_MAYORIA.sp_estadistic_top_5_client_more_points

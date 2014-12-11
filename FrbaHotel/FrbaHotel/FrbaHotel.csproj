@@ -171,6 +171,7 @@
     </Compile>
     <Compile Include="Facturar Publicaciones\StayStatus.cs" />
     <Compile Include="Facturar Publicaciones\TypePay.cs" />
+    <Compile Include="Listado Estadistico\EstadisticHelper.cs" />
     <Compile Include="Registrar Consumible\Consumible.cs" />
     <Compile Include="Registrar Consumible\ConsumiblesFuncionalityHelper.cs" />
     <Compile Include="Registrar Consumible\ConsumiblesHelper.cs" />
@@ -203,6 +204,13 @@
     <Compile Include="ABM de Reserva\Reserva.cs" />
     <Compile Include="ABM de Reserva\ReservaHelper.cs" />
     <Compile Include="Registrar Estadia\RegisterStayHelper.cs" />
+    <Compile Include="Seguridad\FormCambiarPassword.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Seguridad\FormCambiarPassword.Designer.cs">
+      <DependentUpon>FormCambiarPassword.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Seguridad\PasswordHelper.cs" />
     <Compile Include="Validaciones.cs" />
     <Compile Include="Common\AppConnections.cs" />
     <Compile Include="Db\Connection.cs" />
@@ -220,11 +228,11 @@
       <DependentUpon>FormABMReserva.cs</DependentUpon>
     </Compile>
     <Compile Include="Hotel\Hoteles.cs" />
-    <Compile Include="Listado Estadistico\Form1.cs">
+    <Compile Include="Listado Estadistico\FormListadoEstadistico.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Listado Estadistico\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Listado Estadistico\FormListadoEstadistico.Designer.cs">
+      <DependentUpon>FormListadoEstadistico.cs</DependentUpon>
     </Compile>
     <Compile Include="Login\FormLogin.cs">
       <SubType>Form</SubType>
@@ -308,6 +316,9 @@
     <EmbeddedResource Include="ABM de Reserva\FormABMReserva.resx">
       <DependentUpon>FormABMReserva.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Listado Estadistico\FormListadoEstadistico.resx">
+      <DependentUpon>FormListadoEstadistico.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Login\FormLogin.resx">
       <DependentUpon>FormLogin.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -331,6 +342,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Registrar Estadia\FormRegistrarEstadia.resx">
       <DependentUpon>FormRegistrarEstadia.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Seguridad\FormCambiarPassword.resx">
+      <DependentUpon>FormCambiarPassword.cs</DependentUpon>
     </EmbeddedResource>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>

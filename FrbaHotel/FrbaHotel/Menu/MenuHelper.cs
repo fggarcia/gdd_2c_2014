@@ -51,8 +51,8 @@ namespace FrbaHotel
             switch (id)
             {
                 case "Login y Seguridad":
-                    func.folder = "Login";
-                    func.form = "Form_Login";
+                    func.folder = "Seguridad";
+                    func.form = "FormCambiarPassword";
                     break;
                 case "ABM de Rol":
                     func.folder = "ABM_de_Rol";
@@ -97,6 +97,10 @@ namespace FrbaHotel
                 case "ABM de Reserva":
                     func.folder = "ABM_de_Reserva";
                     func.form = "FormABMReserva";
+                    break;
+                case "Listado Estadistico":
+                    func.folder = "Listado_Estadistico";
+                    func.form = "FormListadoEstadistico";
                     break;
             }
             return func;

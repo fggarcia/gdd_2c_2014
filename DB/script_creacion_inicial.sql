@@ -70,7 +70,7 @@ CREATE TABLE [LA_MAYORIA].[Funcionalidad](
 	CONSTRAINT UQ_Funcionalidad_Id_Funcionalidad UNIQUE(Id_Funcionalidad)
 )
 
---INSERT INTO LA_MAYORIA.Funcionalidad(Id_Funcionalidad,Descripcion) VALUES(1,'Login y Seguridad')
+INSERT INTO LA_MAYORIA.Funcionalidad(Id_Funcionalidad,Descripcion) VALUES(1,'Login y Seguridad')
 INSERT INTO LA_MAYORIA.Funcionalidad(Id_Funcionalidad,Descripcion) VALUES(2,'ABM de Rol')
 INSERT INTO LA_MAYORIA.Funcionalidad(Id_Funcionalidad,Descripcion) VALUES(3,'ABM de Usuario')
 INSERT INTO LA_MAYORIA.Funcionalidad(Id_Funcionalidad,Descripcion) VALUES(4,'ABM de Hotel')
@@ -82,6 +82,7 @@ INSERT INTO LA_MAYORIA.Funcionalidad(Id_Funcionalidad,Descripcion) VALUES(9,'Can
 INSERT INTO LA_MAYORIA.Funcionalidad(Id_Funcionalidad,Descripcion) VALUES(10,'Registrar Estadía')
 INSERT INTO LA_MAYORIA.Funcionalidad(Id_Funcionalidad,Descripcion) VALUES(11,'Registrar Consumibles')
 INSERT INTO LA_MAYORIA.Funcionalidad(Id_Funcionalidad,Descripcion) VALUES(12,'Facturar Publicaciones')
+INSERT INTO LA_MAYORIA.Funcionalidad(Id_Funcionalidad,Descripcion) VALUES(13,'Listado Estadistico')
 
 --TABLA ROL_FUNCIONALIDAD
 /*
@@ -103,7 +104,7 @@ CREATE TABLE [LA_MAYORIA].[Rol_Funcionalidad](
 	CONSTRAINT UQ_Rol_Funcionalidad_Id_Rol_Id_Funcionalidad UNIQUE(Id_Rol,Id_Funcionalidad)
 )
 
---INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (1, 1)
+INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (1, 1)
 INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (1, 2)
 INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (1, 3)
 INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (1, 4)
@@ -112,6 +113,8 @@ INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (1, 6)
 INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (1, 7)
 INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (1, 8)
 INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (1, 9)
+INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (1, 13)
+INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (2, 1)
 INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (2, 8)
 INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (2, 9)
 INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (2,10)
@@ -647,7 +650,8 @@ CREATE TABLE [LA_MAYORIA].[Estadia](
 
 --Migro las reservas completadas
 INSERT INTO LA_MAYORIA.Estadia (Id_Reserva, Check_In, Id_Usuario_Check_In, Check_Out, Id_Usuario_Check_Out)
-SELECT DISTINCT m.Reserva_Codigo, m.Estadia_Fecha_Inicio, 'admin', m.Factura_Fecha, 'admin' 
+SELECT DISTINCT m.Reserva_Codigo, m.Estadia_Fecha_Inicio, 'admin', 
+	DATEADD(DAY, m.Reserva_Cant_Noches, CAST(m.Estadia_Fecha_Inicio AS DATE)), 'admin' 
 	FROM gd_esquema.Maestra m
 	WHERE m.Estadia_Fecha_Inicio IS NOT NULL 
 	AND m.Factura_Fecha IS NOT NULL
@@ -859,3 +863,42 @@ CREATE TABLE [LA_MAYORIA].[Estadia_Cliente](
 		REFERENCES [LA_MAYORIA].[Clientes](Id_Cliente),
 	CONSTRAINT [UQ_Estadia_Cliente_Id_Estadia_Id_Cliente] UNIQUE (Id_Estadia, Id_Cliente)
 )
+
+CREATE TABLE [LA_MAYORIA].[Estadistica](
+	[Id_Estadistica][int]IDENTITY(1,1) NOT NULL,
+	[Store_Procedure][varchar](100) NOT NULL,
+	[Descripcion][varchar](100) NOT NULL
+)
+
+INSERT INTO LA_MAYORIA.Estadistica (Store_Procedure, Descripcion) VALUES ('sp_estadistic_top_5_hotel_canceled', 
+	'TOP 5 HOTELES MAS CANCELADOS')
+INSERT INTO LA_MAYORIA.Estadistica (Store_Procedure, Descripcion) VALUES ('sp_estadistic_top_5_hotel_consumable_charge', 
+	'TOP 5 HOTELES MAS CONSUMIBLES FACTURARON')
+INSERT INTO LA_MAYORIA.Estadistica (Store_Procedure, Descripcion) VALUES ('sp_estadistic_top_5_hotel_more_days_out', 
+	'TOP 5 HOTELES MAYOR CANTIDAD DE DIAS FUERA DE SERVICIO')
+INSERT INTO LA_MAYORIA.Estadistica (Store_Procedure, Descripcion) VALUES ('sp_estadistic_top_5_room_hotel_most_occupied', 
+	'TOP 5 HABITACIONES MAYOR DÍAS - VECES OCUPADAS')
+INSERT INTO LA_MAYORIA.Estadistica (Store_Procedure, Descripcion) VALUES ('sp_estadistic_top_5_client_more_points', 
+	'TOP 5 CLIENTES CON MAYOR PUNTOS')
+
+CREATE TABLE [LA_MAYORIA].[Trimestre](
+	[Id_Trimestre][Int]IDENTITY(1,1) NOT NULL,
+	[Fechas][varchar](20) NOT NULL,
+	[Descripcion][varchar](30) NOT NULL
+)
+
+INSERT INTO LA_MAYORIA.Trimestre (Fechas, Descripcion) VALUES ('1,1;31,3','1° TRIMESTRE')
+INSERT INTO LA_MAYORIA.Trimestre (Fechas, Descripcion) VALUES ('1,4;30,6','2° TRIMESTRE')
+INSERT INTO LA_MAYORIA.Trimestre (Fechas, Descripcion) VALUES ('1,7;30,9','3° TRIMESTRE')
+INSERT INTO LA_MAYORIA.Trimestre (Fechas, Descripcion) VALUES ('1,10;31,12','4° TRIMESTRE')
+
+CREATE TABLE [LA_MAYORIA].[Ano](
+	[Id_Ano][INT]IDENTITY(1,1) NOT NULL,
+	[Ano][Int] NOT NULL
+
+	CONSTRAINT [UQ_Ano_Ano] UNIQUE (Ano)
+)
+
+INSERT INTO LA_MAYORIA.Ano (Ano) VALUES (2013)
+INSERT INTO LA_MAYORIA.Ano (Ano) VALUES (2014)
+INSERT INTO LA_MAYORIA.Ano (Ano) VALUES (2015)
