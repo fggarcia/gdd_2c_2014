@@ -54,45 +54,47 @@ create procedure [LA_MAYORIA].[sp_reserva_occupied](
 @p_hotel_id int,
 @p_tipo_hab varchar(255),
 @p_fecha_desde date,
-@p_fecha_hasta date)
+@p_fecha_hasta date,
+@p_total int output)
 
 as 
 begin
 
-select COUNT(*)--res.Id_Reserva,est.Check_In,est.Check_Out,thab.Descripcion
-from LA_MAYORIA.Reserva res,
-	LA_MAYORIA.Habitacion_Reserva hres,
-	LA_MAYORIA.Habitacion hab,
-	LA_MAYORIA.Estadia est,
-	LA_MAYORIA.Tipo_Habitacion thab
+set @p_total=( select COUNT(*)
+				from LA_MAYORIA.Reserva res,
+				LA_MAYORIA.Habitacion_Reserva hres,
+				LA_MAYORIA.Habitacion hab,
+				LA_MAYORIA.Estadia est,
+				LA_MAYORIA.Tipo_Habitacion thab
 
-where	res.Id_Reserva=hres.Id_Reserva
-and		hres.Habitacion_Nro=hab.Nro
-and		hres.Habitacion_Piso=hab.Piso
-and		est.Id_Reserva=res.Id_Reserva
-and		hres.Id_Hotel=hab.Id_Hotel
-and		hab.Tipo_Habitacion=thab.Id_Tipo_Habitacion
-and		thab.Descripcion=@p_tipo_hab
-and		hres.Id_Hotel=@p_hotel_id
-and		est.Check_In=@p_fecha_desde
-and		est.Check_Out=@p_fecha_hasta
+				where	res.Id_Reserva=hres.Id_Reserva
+				and		hres.Habitacion_Nro=hab.Nro
+				and		hres.Habitacion_Piso=hab.Piso
+				and		est.Id_Reserva=res.Id_Reserva
+				and		hres.Id_Hotel=hab.Id_Hotel
+				and		hab.Tipo_Habitacion=thab.Id_Tipo_Habitacion
+				and		thab.Descripcion=@p_tipo_hab
+				and		hres.Id_Hotel=@p_hotel_id
+				and		est.Check_In=@p_fecha_desde
+				and		est.Check_Out=@p_fecha_hasta)
 end
 go
 
 create procedure [LA_MAYORIA].[sp_room_type_total](
 @p_hotel_id int,
-@tipo_habitacion varchar(255)
+@p_tipo_habitacion varchar(255),
+@p_total int output
 )
 as
 begin
 
-select distinct COUNT(thab.Id_Tipo_Habitacion)
-from LA_MAYORIA.Habitacion hab,
-	LA_MAYORIA.Tipo_Habitacion thab
+set @p_total = (select distinct COUNT(thab.Id_Tipo_Habitacion)
+					from LA_MAYORIA.Habitacion hab,
+						LA_MAYORIA.Tipo_Habitacion thab
 
-where	hab.Id_Hotel=@p_hotel_id
-and		hab.Tipo_Habitacion=thab.Id_Tipo_Habitacion
-and		thab.Descripcion=@tipo_habitacion
-group by thab.Descripcion
+					where	hab.Id_Hotel=@p_hotel_id
+					and		hab.Tipo_Habitacion=thab.Id_Tipo_Habitacion
+					and		thab.Descripcion=@p_tipo_habitacion
+					group by thab.Descripcion)
 end
 go

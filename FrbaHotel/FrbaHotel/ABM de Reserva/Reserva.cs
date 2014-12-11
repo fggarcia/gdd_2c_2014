@@ -12,6 +12,8 @@ namespace FrbaHotel.ABM_de_Reserva
         public String nombre {get;set;}
         public String apellido { get; set; }
         public DateTime fecha_inicio { get; set; }
+        public DateTime fecha_fin { get; set; }
+        public String tipo_habitacion { get; set; }
         public Int32 tipo_regimen { get; set; }
 
         

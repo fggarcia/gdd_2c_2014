@@ -65,5 +65,42 @@ namespace FrbaHotel.ABM_de_Reserva
             DataGridViewHelper.fill(command, dgvReserva);
         }
 
+        public static int search_occupied(Reserva reserva)
+        {
+            SqlCommand command = new SqlCommand();
+            command.CommandText = "LA_MAYORIA.sp_reserva_occupied";
+
+            command.Parameters.Add(new SqlParameter("@p_hotel_id", SqlDbType.Int));
+            command.Parameters["@p_hotel_id"].Value = reserva.id_hotel;
+            command.Parameters.Add(new SqlParameter("@p_tipo_hab", SqlDbType.VarChar,255));
+            command.Parameters["@p_tipo_hab"].Value = reserva.tipo_habitacion;
+            command.Parameters.Add(new SqlParameter("@p_fecha_desde", SqlDbType.DateTime));
+            command.Parameters["@p_fecha_desde"].Value = reserva.fecha_inicio;
+            command.Parameters.Add(new SqlParameter("@p_fecha_hasta", SqlDbType.DateTime));
+            command.Parameters["@p_fecha_hasta"].Value = reserva.fecha_fin;
+            var returnParameter_occupied = command.Parameters.Add(new SqlParameter("@p_total", SqlDbType.Int));
+            returnParameter_occupied.Direction = ParameterDirection.Output;
+            ProcedureHelper.execute(command, "chequear ocupacion hotel", false);
+            int ocupacion = Convert.ToInt16(command.Parameters["@p_total"].Value);
+            return ocupacion;
+        }
+
+        public static int search_room_quantity(Reserva reserva)
+        {
+            SqlCommand command = new SqlCommand();
+            command.CommandText = "LA_MAYORIA.sp_room_type_total";
+
+            command.Parameters.Add(new SqlParameter("@p_hotel_id", SqlDbType.Int));
+            command.Parameters["@p_hotel_id"].Value = reserva.id_hotel;
+            command.Parameters.Add(new SqlParameter("@p_tipo_habitacion", SqlDbType.VarChar, 255));
+            command.Parameters["@p_tipo_habitacion"].Value = reserva.tipo_habitacion;
+            var returnParameter_occupied = command.Parameters.Add(new SqlParameter("@p_total", SqlDbType.Int));
+            returnParameter_occupied.Direction = ParameterDirection.Output;
+            ProcedureHelper.execute(command, "chequear total habitaciones de un tipo", false);
+            int cantidad = Convert.ToInt16(command.Parameters["@p_total"].Value);
+            return cantidad;
+        }
+
+
       }
 }

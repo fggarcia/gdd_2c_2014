@@ -32,9 +32,24 @@ namespace FrbaHotel.ABM_de_Reserva
 
         private void button_consultar_Click(object sender, EventArgs e)
         {
-            dTHasta.Value.Subtract(dTDesde.Value);
+            Reserva reserva = this.getdataConsulta();
+            int ocupacion=ReservaHelper.search_occupied(reserva);
+            int cantidad = ReservaHelper.search_room_quantity(reserva);
+            if (ocupacion < cantidad)
+                MessageBox.Show("Hay disponibilidad de Habitacion");
+
         }
 
-    
+        private Reserva getdataConsulta()
+        {
+            Reserva reserva = new Reserva();
+
+            reserva.id_hotel = VarGlobal.usuario.hotel;
+            reserva.fecha_inicio = dTDesde.Value;
+            reserva.fecha_fin = dTHasta.Value;
+            reserva.tipo_habitacion = dgvTipoHabitacion.CurrentRow.Cells[0].Value.ToString();
+            return reserva;
+        }
+
     }
 }
