@@ -36,7 +36,10 @@
             this.label4 = new System.Windows.Forms.Label();
             this.button_consultar = new System.Windows.Forms.Button();
             this.button_volver = new System.Windows.Forms.Button();
+            this.dgvTipoHabitacion = new System.Windows.Forms.DataGridView();
+            this.label3 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgvRegimen)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvTipoHabitacion)).BeginInit();
             this.SuspendLayout();
             // 
             // dTDesde
@@ -76,13 +79,13 @@
             this.dgvRegimen.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvRegimen.Location = new System.Drawing.Point(12, 148);
             this.dgvRegimen.Name = "dgvRegimen";
-            this.dgvRegimen.Size = new System.Drawing.Size(422, 134);
+            this.dgvRegimen.Size = new System.Drawing.Size(335, 134);
             this.dgvRegimen.TabIndex = 6;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(188, 121);
+            this.label4.Location = new System.Drawing.Point(155, 122);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(77, 13);
             this.label4.TabIndex = 7;
@@ -96,6 +99,7 @@
             this.button_consultar.TabIndex = 8;
             this.button_consultar.Text = "Consultar";
             this.button_consultar.UseVisualStyleBackColor = true;
+            this.button_consultar.Click += new System.EventHandler(this.button_consultar_Click);
             // 
             // button_volver
             // 
@@ -105,12 +109,32 @@
             this.button_volver.TabIndex = 9;
             this.button_volver.Text = "Volver";
             this.button_volver.UseVisualStyleBackColor = true;
+            this.button_volver.Click += new System.EventHandler(this.button_volver_Click);
+            // 
+            // dgvTipoHabitacion
+            // 
+            this.dgvTipoHabitacion.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvTipoHabitacion.Location = new System.Drawing.Point(363, 148);
+            this.dgvTipoHabitacion.Name = "dgvTipoHabitacion";
+            this.dgvTipoHabitacion.Size = new System.Drawing.Size(167, 150);
+            this.dgvTipoHabitacion.TabIndex = 10;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(406, 122);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(82, 13);
+            this.label3.TabIndex = 11;
+            this.label3.Text = "Tipo Habitacion";
             // 
             // FormAltaReserva
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(446, 325);
+            this.ClientSize = new System.Drawing.Size(559, 325);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.dgvTipoHabitacion);
             this.Controls.Add(this.button_volver);
             this.Controls.Add(this.button_consultar);
             this.Controls.Add(this.label4);
@@ -123,6 +147,7 @@
             this.Text = "FormAltaReserva";
             this.Load += new System.EventHandler(this.FormAltaReserva_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvRegimen)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvTipoHabitacion)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -138,5 +163,7 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button button_consultar;
         private System.Windows.Forms.Button button_volver;
+        private System.Windows.Forms.DataGridView dgvTipoHabitacion;
+        private System.Windows.Forms.Label label3;
     }
 }

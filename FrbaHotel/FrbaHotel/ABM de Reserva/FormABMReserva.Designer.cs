@@ -35,10 +35,12 @@
             this.dgvReserva = new System.Windows.Forms.DataGridView();
             this.buttonSearch = new System.Windows.Forms.Button();
             this.buttonClean = new System.Windows.Forms.Button();
-            this.txtCliente = new System.Windows.Forms.TextBox();
+            this.txtNombre = new System.Windows.Forms.TextBox();
             this.lblCliente = new System.Windows.Forms.Label();
             this.TxtNroReserva = new System.Windows.Forms.TextBox();
             this.lblNroreserva = new System.Windows.Forms.Label();
+            this.txtApellido = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgvReserva)).BeginInit();
             this.SuspendLayout();
             // 
@@ -96,6 +98,7 @@
             this.buttonSearch.TabIndex = 25;
             this.buttonSearch.Text = "Buscar";
             this.buttonSearch.UseVisualStyleBackColor = true;
+            this.buttonSearch.Click += new System.EventHandler(this.buttonSearch_Click);
             // 
             // buttonClean
             // 
@@ -105,26 +108,27 @@
             this.buttonClean.TabIndex = 24;
             this.buttonClean.Text = "Limpiar";
             this.buttonClean.UseVisualStyleBackColor = true;
+            this.buttonClean.Click += new System.EventHandler(this.buttonClean_Click);
             // 
-            // txtCliente
+            // txtNombre
             // 
-            this.txtCliente.Location = new System.Drawing.Point(177, 30);
-            this.txtCliente.Name = "txtCliente";
-            this.txtCliente.Size = new System.Drawing.Size(121, 20);
-            this.txtCliente.TabIndex = 17;
+            this.txtNombre.Location = new System.Drawing.Point(177, 30);
+            this.txtNombre.Name = "txtNombre";
+            this.txtNombre.Size = new System.Drawing.Size(121, 20);
+            this.txtNombre.TabIndex = 17;
             // 
             // lblCliente
             // 
             this.lblCliente.AutoSize = true;
             this.lblCliente.Location = new System.Drawing.Point(106, 33);
             this.lblCliente.Name = "lblCliente";
-            this.lblCliente.Size = new System.Drawing.Size(39, 13);
+            this.lblCliente.Size = new System.Drawing.Size(44, 13);
             this.lblCliente.TabIndex = 16;
-            this.lblCliente.Text = "Cliente";
+            this.lblCliente.Text = "Nombre";
             // 
             // TxtNroReserva
             // 
-            this.TxtNroReserva.Location = new System.Drawing.Point(177, 66);
+            this.TxtNroReserva.Location = new System.Drawing.Point(402, 30);
             this.TxtNroReserva.Name = "TxtNroReserva";
             this.TxtNroReserva.Size = new System.Drawing.Size(121, 20);
             this.TxtNroReserva.TabIndex = 32;
@@ -132,17 +136,35 @@
             // lblNroreserva
             // 
             this.lblNroreserva.AutoSize = true;
-            this.lblNroreserva.Location = new System.Drawing.Point(106, 69);
+            this.lblNroreserva.Location = new System.Drawing.Point(331, 33);
             this.lblNroreserva.Name = "lblNroreserva";
             this.lblNroreserva.Size = new System.Drawing.Size(62, 13);
             this.lblNroreserva.TabIndex = 31;
             this.lblNroreserva.Text = "N° Reserva";
+            // 
+            // txtApellido
+            // 
+            this.txtApellido.Location = new System.Drawing.Point(177, 65);
+            this.txtApellido.Name = "txtApellido";
+            this.txtApellido.Size = new System.Drawing.Size(121, 20);
+            this.txtApellido.TabIndex = 33;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(106, 65);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(44, 13);
+            this.label1.TabIndex = 34;
+            this.label1.Text = "Apellido";
             // 
             // FormABMReserva
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1010, 487);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.txtApellido);
             this.Controls.Add(this.TxtNroReserva);
             this.Controls.Add(this.lblNroreserva);
             this.Controls.Add(this.buttonModify);
@@ -152,7 +174,7 @@
             this.Controls.Add(this.dgvReserva);
             this.Controls.Add(this.buttonSearch);
             this.Controls.Add(this.buttonClean);
-            this.Controls.Add(this.txtCliente);
+            this.Controls.Add(this.txtNombre);
             this.Controls.Add(this.lblCliente);
             this.Name = "FormABMReserva";
             this.Text = "Form1";
@@ -172,9 +194,11 @@
         private System.Windows.Forms.DataGridView dgvReserva;
         private System.Windows.Forms.Button buttonSearch;
         private System.Windows.Forms.Button buttonClean;
-        private System.Windows.Forms.TextBox txtCliente;
+        private System.Windows.Forms.TextBox txtNombre;
         private System.Windows.Forms.Label lblCliente;
         private System.Windows.Forms.TextBox TxtNroReserva;
         private System.Windows.Forms.Label lblNroreserva;
+        private System.Windows.Forms.TextBox txtApellido;
+        private System.Windows.Forms.Label label1;
     }
 }

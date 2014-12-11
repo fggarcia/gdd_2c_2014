@@ -139,3 +139,13 @@ DROP PROCEDURE LA_MAYORIA.sp_estadistic_top_5_hotel_more_days_out
 DROP PROCEDURE LA_MAYORIA.sp_estadistic_top_5_room_hotel_most_occupied
 
 DROP PROCEDURE LA_MAYORIA.sp_estadistic_top_5_client_more_points
+
+--NICO
+
+DROP PROCEDURE LA_MAYORIA.sp_reserva_listar
+
+DROP PROCEDURE LA_MAYORIA.sp_tipo_habitacion_available
+
+DROP PROCEDURE LA_MAYORIA.sp_room_type_total
+
+DROP PROCEDURE LA_MAYORIA.sp_reserva_occupied
