@@ -44,6 +44,7 @@ namespace FrbaHotel.ABM_de_Reserva
 
                         MessageBox.Show("Hay disponibilidad de Habitacion");
 
+
                     else
                         MessageBox.Show("No hay disponibilidad de Habitacion. Elija otro rango de fechas u otro tipo de habitacion");
                 

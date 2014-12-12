@@ -408,7 +408,6 @@ SELECT TOP 1 @nroHabitacion = h.Nro, @nroPiso = h.Piso, @nroHotel = h.Id_Hotel
 		end
 			
 	END
-	ELSE
-		--ALGUN PARAMETRO DE SALIDA QUE INFORME QUE FUE MAL
+	
 	COMMIT TRANSACTION
 end
