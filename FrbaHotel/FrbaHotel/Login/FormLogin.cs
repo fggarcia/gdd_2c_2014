@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.Security.Cryptography;
 using FrbaHotel.Common;
 using System.Data.SqlClient;
+using FrbaHotel.ABM_de_Rol;
 
 namespace FrbaHotel.Login
 {
@@ -57,6 +58,21 @@ namespace FrbaHotel.Login
                     MessageBox.Show("Contactese con el administrador para limpiar su clave");
                 }
             }
+        }
+
+        private void button_LoginHuesped_Click(object sender, EventArgs e)
+        {
+            Usuario usuario = new Usuario();
+            usuario.hotel = 0;
+            usuario.id = "guest";
+            Rol rol = new Rol(3, "guest");
+            usuario.rol = rol;
+
+            VarGlobal.usuario = usuario;
+            FormMenu formMenu = new FormMenu();
+            this.Hide();
+            formMenu.ShowDialog();
+            this.Close();
         }
     }
 }
