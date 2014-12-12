@@ -159,6 +159,8 @@ namespace FrbaHotel.ABM_de_Reserva
 
             command.Parameters.Add(new SqlParameter("@p_hotel_id", SqlDbType.Int));
             command.Parameters["@p_hotel_id"].Value = reserva.id_hotel;
+            command.Parameters.Add(new SqlParameter("@p_id_usuario", SqlDbType.VarChar,20));
+            command.Parameters["@p_id_usuario"].Value = VarGlobal.usuario.id;
             //command.Parameters.Add(new SqlParameter("@p_checkin", SqlDbType.DateTime));
             //command.Parameters["@p_checkin"].Value = reserva.fecha_inicio;
             command.Parameters.AddWithValue("@p_checkin", reserva.fecha_inicio);
@@ -179,5 +181,46 @@ namespace FrbaHotel.ABM_de_Reserva
             MessageBox.Show("Los cambios fueron guardados");
 
         }
+
+        public static void fillHotel(ComboBox comboHotel)
+        {
+            ComboBoxHelper.fill(comboHotel, "LA_MAYORIA.Hotel h",
+                "h.Id_Hotel", "h.Id_Hotel", null, null);
+        }
+
+        public static void reservar(Reserva reserva)
+        {
+           
+            
+            SqlCommand command = new SqlCommand();
+            command.CommandText = "LA_MAYORIA.sp_assign_room";
+
+            command.Parameters.Add(new SqlParameter("@p_hotel_id", SqlDbType.Int));
+            command.Parameters["@p_hotel_id"].Value = reserva.id_hotel;
+            command.Parameters.Add(new SqlParameter("@p_id_usuario", SqlDbType.VarChar, 20));
+            command.Parameters["@p_id_usuario"].Value = VarGlobal.usuario.id;
+            command.Parameters.Add(new SqlParameter("@p_client_id", SqlDbType.Int));
+            command.Parameters["@p_client_id"].Value = reserva.clienteId;
+            //command.Parameters.Add(new SqlParameter("@p_checkin", SqlDbType.DateTime));
+            //command.Parameters["@p_checkin"].Value = reserva.fecha_inicio;
+            command.Parameters.AddWithValue("@p_checkin", reserva.fecha_inicio);
+            command.Parameters.Add(new SqlParameter("@p_id_reserva", SqlDbType.Int));
+            command.Parameters["@p_id_reserva"].Value = reserva.id;
+            command.Parameters.Add(new SqlParameter("@p_stay", SqlDbType.Int));
+            Int32 days = Convert.ToInt32((reserva.fecha_fin - reserva.fecha_inicio).TotalDays);
+            command.Parameters["@p_stay"].Value = days;
+            command.Parameters.Add(new SqlParameter("@p_tipo_habitacion", SqlDbType.VarChar, 255));
+            command.Parameters["@p_tipo_habitacion"].Value = reserva.tipo_habitacion;
+            command.Parameters.Add(new SqlParameter("@p_regimen", SqlDbType.VarChar, 255));
+            command.Parameters["@p_regimen"].Value = reserva.tipo_regimen;
+            command.Parameters.Add(new SqlParameter("@p_update", SqlDbType.Bit));
+            command.Parameters["@p_update"].Value = 0;
+
+            ProcedureHelper.execute(command, "update reserva", false);
+
+            MessageBox.Show("Los cambios fueron guardados");
+
+        }
+      
       }
 }

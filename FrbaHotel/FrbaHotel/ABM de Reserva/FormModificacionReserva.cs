@@ -95,5 +95,10 @@ namespace FrbaHotel.ABM_de_Reserva
 
             return reserva;
         }
+
+        private void FormModificacionReserva_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

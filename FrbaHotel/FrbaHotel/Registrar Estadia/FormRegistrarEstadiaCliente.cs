@@ -197,5 +197,10 @@ namespace FrbaHotel.Registrar_Estadia
             MdiParent.Size = formABMClientModify.Size;
             formABMClientModify.Show();
         }
+
+        private void dgvClient_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
     }
 }

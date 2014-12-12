@@ -177,6 +177,7 @@
             this.Controls.Add(this.label1);
             this.Name = "FormModificacionReserva";
             this.Text = "FormModificacionReserva";
+            this.Load += new System.EventHandler(this.FormModificacionReserva_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvTipoHabitacion)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvRegimen)).EndInit();
             this.ResumeLayout(false);

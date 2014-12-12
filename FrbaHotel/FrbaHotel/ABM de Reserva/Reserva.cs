@@ -19,6 +19,7 @@ namespace FrbaHotel.ABM_de_Reserva
         public Int32 piso_hab { get; set; }
         public String tipo_regimen { get; set; }
         public String estado { get; set; }
+        public Int32 clienteId { get; set; }
 
   
     }

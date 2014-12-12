@@ -352,6 +352,9 @@
     <EmbeddedResource Include="Registrar Estadia\FormRegistrarEstadia.resx">
       <DependentUpon>FormRegistrarEstadia.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Registrar Estadia\FormRegistrarEstadiaCliente.resx">
+      <DependentUpon>FormRegistrarEstadiaCliente.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Seguridad\FormCambiarPassword.resx">
       <DependentUpon>FormCambiarPassword.cs</DependentUpon>
     </EmbeddedResource>

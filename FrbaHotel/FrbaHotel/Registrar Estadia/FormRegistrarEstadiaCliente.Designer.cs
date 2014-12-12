@@ -89,6 +89,7 @@
             this.dgvClient.Name = "dgvClient";
             this.dgvClient.Size = new System.Drawing.Size(315, 150);
             this.dgvClient.TabIndex = 4;
+            this.dgvClient.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvClient_CellContentClick);
             // 
             // buttonClean
             // 
