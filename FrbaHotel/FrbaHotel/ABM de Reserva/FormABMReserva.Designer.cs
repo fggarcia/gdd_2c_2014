@@ -52,6 +52,7 @@
             this.buttonModify.TabIndex = 30;
             this.buttonModify.Text = "Modificar Reserva";
             this.buttonModify.UseVisualStyleBackColor = true;
+            this.buttonModify.Click += new System.EventHandler(this.buttonModify_Click);
             // 
             // buttonDelete
             // 

@@ -122,6 +122,12 @@
     <Compile Include="ABM de Reserva\FormAltaReserva.Designer.cs">
       <DependentUpon>FormAltaReserva.cs</DependentUpon>
     </Compile>
+    <Compile Include="ABM de Reserva\FormModificacionReserva.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM de Reserva\FormModificacionReserva.Designer.cs">
+      <DependentUpon>FormModificacionReserva.cs</DependentUpon>
+    </Compile>
     <Compile Include="ABM de Rol\RolFuncionalityHelper.cs" />
     <Compile Include="ABM de Rol\FormABMRolModify.cs">
       <SubType>Form</SubType>
@@ -288,6 +294,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ABM de Reserva\FormAltaReserva.resx">
       <DependentUpon>FormAltaReserva.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM de Reserva\FormModificacionReserva.resx">
+      <DependentUpon>FormModificacionReserva.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ABM de Rol\FormABMRolModify.resx">
       <DependentUpon>FormABMRolModify.cs</DependentUpon>

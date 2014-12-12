@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using FrbaHotel.Common;
+	
 
 namespace FrbaHotel.ABM_de_Reserva
 {
@@ -32,12 +33,26 @@ namespace FrbaHotel.ABM_de_Reserva
 
         private void button_consultar_Click(object sender, EventArgs e)
         {
-            Reserva reserva = this.getdataConsulta();
-            int ocupacion=ReservaHelper.search_occupied(reserva);
-            int cantidad = ReservaHelper.search_room_quantity(reserva);
-            if (ocupacion < cantidad)
-                MessageBox.Show("Hay disponibilidad de Habitacion");
+            if ((dTDesde.Value > DateTime.Now) && (dTHasta.Value > DateTime.Now))
 
+            {
+                
+                
+                    Reserva reserva = this.getdataConsulta();
+                    int disponible = ReservaHelper.check_hotel_availability(reserva);
+                    if (disponible == 1)
+
+                        MessageBox.Show("Hay disponibilidad de Habitacion");
+
+                    else
+                        MessageBox.Show("No hay disponibilidad de Habitacion. Elija otro rango de fechas u otro tipo de habitacion");
+                
+            }
+            else
+            {
+                MessageBox.Show("Verificar las fechas Desde y Hasta");
+            }
+                
         }
 
         private Reserva getdataConsulta()

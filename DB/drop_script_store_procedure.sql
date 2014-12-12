@@ -149,3 +149,5 @@ DROP PROCEDURE LA_MAYORIA.sp_tipo_habitacion_available
 DROP PROCEDURE LA_MAYORIA.sp_room_type_total
 
 DROP PROCEDURE LA_MAYORIA.sp_reserva_occupied
+
+drop procedure LA_MAYORIA.sp_get_reserva

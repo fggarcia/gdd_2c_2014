@@ -68,5 +68,14 @@ namespace FrbaHotel.ABM_de_Reserva
             ReservaHelper.search(reserva, dgvReserva);
         }
 
+        private void buttonModify_Click(object sender, EventArgs e)
+        {
+            FormModificacionReserva formModificacionReserva = new FormModificacionReserva();
+            formModificacionReserva.MdiParent = this.MdiParent;
+            MdiParent.Size = formModificacionReserva.Size;
+            formModificacionReserva.Show();
+            this.Close();
+        }
+
    }
 }
