@@ -1,6 +1,3 @@
-USE GD2C2014
-GO
-
 CREATE PROCEDURE [LA_MAYORIA].[sp_reserva_listar](
 @p_hotel_id int,
 @p_nombre varchar(255)=null,
@@ -171,10 +168,8 @@ end
 close reserva
 
 deallocate reserva
+go
 
-go
-drop function LA_MAYORIA.check_availability
-go
 CREATE FUNCTION LA_MAYORIA.check_availability(
 @p_hotel_id as int,
 @p_floor_id as int,
@@ -259,9 +254,6 @@ BEGIN
 END
 GO
 
-drop procedure LA_MAYORIA.sp_check_hotel_availability
-go
-
 CREATE PROCEDURE LA_MAYORIA.sp_check_hotel_availability(
 @p_hotel_id int,
 @p_checkin datetime,
@@ -335,19 +327,17 @@ BEGIN
 		SET @p_availability = 0
 END
 GO
- 
-drop procedure LA_MAYORIA.sp_assign_room
-go
-		
+ 		
 create procedure [LA_MAYORIA].[sp_assign_room](
 @p_hotel_id as int,
+@p_id_usuario as varchar (20),
+@p_client_id as int,
 @p_id_reserva as int,
 @p_checkin as Datetime,
 @p_stay as int,
 @p_tipo_habitacion as varchar(255),
 @p_regimen as varchar (255),
-@p_update as bit,
-@p_id_usuario varchar(20)
+@p_update as bit
 )
 
 as
@@ -383,7 +373,6 @@ SELECT TOP 1 @nroHabitacion = h.Nro, @nroPiso = h.Piso, @nroHotel = h.Id_Hotel
 											from LA_MAYORIA.Regimen reg
 											where @p_regimen=reg.Descripcion)
 					, @estado, @p_id_usuario)
-			
 			SET @idReserva = @@IDENTITY --EL NUMERO DE RESERVA QUE GENERA
 			
 			INSERT INTO LA_MAYORIA.Habitacion_Reserva (Id_Hotel, Id_Reserva, Habitacion_Nro, Habitacion_Piso)
@@ -399,7 +388,7 @@ SELECT TOP 1 @nroHabitacion = h.Nro, @nroPiso = h.Piso, @nroHotel = h.Id_Hotel
 					Estado=(select est.Id_Estado
 							from LA_MAYORIA.Estado_Reserva est
 							where UPPER(est.Descripcion)=UPPER('Reserva Modificada')),
-					Id_Usuario = @p_id_usuario
+							Id_Usuario = @p_id_usuario
 			where LA_MAYORIA.Reserva.Id_Reserva=@p_id_reserva
 			
 			update LA_MAYORIA.Habitacion_Reserva

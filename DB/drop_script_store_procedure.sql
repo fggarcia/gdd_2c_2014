@@ -144,10 +144,19 @@ DROP PROCEDURE LA_MAYORIA.sp_estadistic_top_5_client_more_points
 
 DROP PROCEDURE LA_MAYORIA.sp_reserva_listar
 
-DROP PROCEDURE LA_MAYORIA.sp_tipo_habitacion_available
+DROP PROCEDURE LA_MAYORIA.sp_hotel_regimen_retrieve
 
-DROP PROCEDURE LA_MAYORIA.sp_room_type_total
+DROP PROCEDURE LA_MAYORIA.sp_tipo_habitacion_available
 
 DROP PROCEDURE LA_MAYORIA.sp_reserva_occupied
 
-drop procedure LA_MAYORIA.sp_get_reserva
+DROP PROCEDURE LA_MAYORIA.sp_room_type_total
+
+DROP PROCEDURE LA_MAYORIA.sp_get_reserva
+
+DROP FUNCTION LA_MAYORIA.check_availability
+
+drop procedure LA_MAYORIA.sp_check_hotel_availability
+
+drop procedure LA_MAYORIA.sp_assign_room
+
