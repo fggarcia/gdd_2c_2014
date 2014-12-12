@@ -710,7 +710,8 @@ CREATE TABLE [LA_MAYORIA].[Facturacion](
 	[Total_Factura][numeric](18,2) NOT NULL DEFAULT 0.0,
 	[Total_Estadia][numeric](18,2) NOT NULL DEFAULT 0.0,
 	[Total_Consumibles][numeric](18,2) NOT NULL DEFAULT 0.0,
-	[Fecha_Facturacion] datetime NOT NULL
+	[Fecha_Facturacion] datetime NOT NULL,
+	[]
 
 	CONSTRAINT [PK_Facturacion_Id_Factura] PRIMARY KEY(Id_Factura),
 	CONSTRAINT [FK_Facturacion_Id_Estadia] FOREIGN KEY(Id_Estadia)
@@ -817,32 +818,17 @@ CREATE TABLE [LA_MAYORIA].[Tipo_Pago](
 INSERT INTO LA_MAYORIA.Tipo_Pago(Descripcion) VALUES('Efectivo')
 INSERT INTO LA_MAYORIA.Tipo_Pago(Descripcion) VALUES('Tarjeta Credito')
 
---TABLA DETALLE TARJETA
-/*
-	Tabla de detalles de las tarjetas de credito
-*/
-CREATE TABLE [LA_MAYORIA].[Detalle_Tarjeta](
-	[Id_Detalle_Tarjeta][Int]IDENTITY(1,1) NOT NULL,
-	[Nro_Tarjeta][numeric](16,0) NOT NULL,
-	[Cant_Cuota][Int] NOT NULL,
-
-	CONSTRAINT [PK_Detalle_Tarjeta_Id_Detalle_Tarjeta] PRIMARY KEY (Id_Detalle_Tarjeta),
-	CONSTRAINT [UQ_Detalle_Tarjeta_Nro_Tarjeta] UNIQUE (Nro_Tarjeta)
-)
-
 --TABLA FORMA PAGO
 /*
 	Tabla donde se almacenan los tipos de pagos respecto de cada factura
 */
 CREATE TABLE [LA_MAYORIA].[Forma_Pago](
 	[Id_Factura][numeric](18,0) NOT NULL,
-	[Id_Detalle_Tarjeta][Int] NULL,
 	[Id_Tipo_Pago][Int] NOT NULL,
+	[Tarjeta_Numero][Int] NULL,
 
 	CONSTRAINT [FK_Forma_Pago_Id_Factura] FOREIGN KEY(Id_Factura)
 	REFERENCES [LA_MAYORIA].[Facturacion](Id_Factura),
-	CONSTRAINT [FK_Forma_Pago_Id_Detalle_Tarjeta] FOREIGN KEY(Id_Detalle_Tarjeta)
-	REFERENCES [LA_MAYORIA].[Detalle_Tarjeta](Id_Detalle_Tarjeta),
 	CONSTRAINT [FK_Forma_Pago_Id_Tipo_Pago] FOREIGN KEY(Id_Tipo_Pago)
 	REFERENCES [LA_MAYORIA].[Tipo_Pago](Id_Tipo_Pago)
 )
@@ -853,6 +839,9 @@ SELECT f.Id_Factura, tp.Id_Tipo_Pago  FROM LA_MAYORIA.Facturacion f
 	INNER JOIN LA_MAYORIA.Tipo_Pago tp
 	ON UPPER(tp.Descripcion) = UPPER('efectivo')
 
+/*
+	TABLA QUE ALMACENA POR ESTADIA LOS INTEGRANTES QUE SE REGISTRARON
+*/
 CREATE TABLE [LA_MAYORIA].[Estadia_Cliente](
 	[Id_Estadia][Int] NOT NULL,
 	[Id_Cliente][Int] NOT NULL
