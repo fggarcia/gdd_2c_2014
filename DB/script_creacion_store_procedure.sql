@@ -1630,6 +1630,21 @@ BEGIN
 			VALUES (@invoice, @p_charge_stay_stay_id, 
 				'Descuento por regimen', @allInclusiveConsumable, 1)
 
+		IF (UPPER(LTRIM(RTRIM(@p_charge_stay_type_pay))) = 'EFECTIVO')
+		BEGIN
+			Declare @typePay int
+			SELECT @typePay = Id_Tipo_Pago FROM LA_MAYORIA.Tipo_Pago WHERE UPPER(Descripcion) = UPPER(LTRIM(RTRIM(@p_charge_stay_type_pay)))
+			INSERT INTO LA_MAYORIA.Forma_Pago(Id_Factura, Id_Tipo_Pago, Tarjeta_Numero)
+			VALUES (@invoice, @typePay, null)
+		END
+		ELSE
+		BEGIN
+			Declare @creditCardTypeID int
+			SELECT @creditCardTypeID = Id_Tipo_Pago FROM LA_MAYORIA.Tipo_Pago WHERE UPPER(Descripcion) = UPPER('Tarjeta Credito')
+			INSERT INTO LA_MAYORIA.Forma_Pago(Id_Factura, Id_Tipo_Pago, Tarjeta_Numero)
+			VALUES (@invoice, @creditCardTypeID, @p_charge_stay_number_card)
+		END
+
 	COMMIT TRANSACTION
 END
 GO

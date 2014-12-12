@@ -70,7 +70,6 @@
             this.textbox_password.PasswordChar = '*';
             this.textbox_password.Size = new System.Drawing.Size(100, 20);
             this.textbox_password.TabIndex = 2;
-            //this.textbox_password.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
             // label_Title
             // 
@@ -110,8 +109,9 @@
             this.button_LoginHuesped.TabIndex = 7;
             this.button_LoginHuesped.Text = "Login de Huespedes";
             this.button_LoginHuesped.UseVisualStyleBackColor = true;
+            this.button_LoginHuesped.Click += new System.EventHandler(this.button_LoginHuesped_Click);
             // 
-            // Form_Login
+            // FormLogin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -124,7 +124,7 @@
             this.Controls.Add(this.textbox_password);
             this.Controls.Add(this.lbl_usuario);
             this.Controls.Add(this.textBox_usuario);
-            this.Name = "Form_Login";
+            this.Name = "FormLogin";
             this.Text = "Form1";
             this.ResumeLayout(false);
             this.PerformLayout();
