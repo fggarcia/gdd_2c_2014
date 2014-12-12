@@ -346,7 +346,8 @@ create procedure [LA_MAYORIA].[sp_assign_room](
 @p_stay as int,
 @p_tipo_habitacion as varchar(255),
 @p_regimen as varchar (255),
-@p_update as bit
+@p_update as bit,
+@p_id_usuario varchar(20)
 )
 
 as
@@ -377,11 +378,11 @@ SELECT TOP 1 @nroHabitacion = h.Nro, @nroPiso = h.Piso, @nroHotel = h.Id_Hotel
 			WHERE UPPER(Descripcion) = UPPER('Reserva Correcta')
 		if (@p_update=0)
 		begin
-			INSERT INTO LA_MAYORIA.Reserva (Fecha_Inicio, Estadia, Tipo_Regimen, Estado)
+			INSERT INTO LA_MAYORIA.Reserva (Fecha_Inicio, Estadia, Tipo_Regimen, Estado, Id_Usuario)
 			VALUES (@p_checkin, @p_stay, (select reg.Id_Regimen
 											from LA_MAYORIA.Regimen reg
 											where @p_regimen=reg.Descripcion)
-					, @estado)
+					, @estado, @p_id_usuario)
 			
 			SET @idReserva = @@IDENTITY --EL NUMERO DE RESERVA QUE GENERA
 			
@@ -397,7 +398,8 @@ SELECT TOP 1 @nroHabitacion = h.Nro, @nroPiso = h.Piso, @nroHotel = h.Id_Hotel
 					where reg.Descripcion=@p_regimen),
 					Estado=(select est.Id_Estado
 							from LA_MAYORIA.Estado_Reserva est
-							where UPPER(est.Descripcion)=UPPER('Reserva Modificada'))
+							where UPPER(est.Descripcion)=UPPER('Reserva Modificada')),
+					Id_Usuario = @p_id_usuario
 			where LA_MAYORIA.Reserva.Id_Reserva=@p_id_reserva
 			
 			update LA_MAYORIA.Habitacion_Reserva

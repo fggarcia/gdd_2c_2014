@@ -111,7 +111,6 @@ INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (1, 4)
 INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (1, 5)
 INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (1, 6)
 INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (1, 7)
-INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (1, 8)
 INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (1, 9)
 INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (1, 13)
 INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (2, 1)
@@ -120,6 +119,7 @@ INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (2, 9)
 INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (2,10)
 INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (2,11)
 INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (2,12)
+INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (3, 8)
 INSERT INTO LA_MAYORIA.Rol_Funcionalidad(Id_Rol, Id_Funcionalidad) VALUES (3, 9)
 
 --TABLA DOCUMENTOS
@@ -518,19 +518,22 @@ CREATE TABLE [LA_MAYORIA].[Reserva](
 	[Fecha_Inicio][datetime] NOT NULL,
 	[Estadia][Int] NOT NULL,
 	[Tipo_Regimen][Int] NOT NULL,
-	[Estado][Int] NOT NULL
+	[Estado][Int] NOT NULL,
+	[Id_Usuario][varchar](20) NOT NULL
 
 	CONSTRAINT [FK_Reserva_Tipo_Regimen] FOREIGN KEY (Tipo_Regimen)
 		REFERENCES [LA_MAYORIA].[Regimen](Id_Regimen),
 	CONSTRAINT [FK_Reserva_Estado] FOREIGN KEY (Estado)
 		REFERENCES [LA_MAYORIA].[Estado_Reserva](Id_Estado),
-	CONSTRAINT [PK_Reservar_Id_Reserva] PRIMARY KEY (Id_Reserva)
+	CONSTRAINT [PK_Reservar_Id_Reserva] PRIMARY KEY (Id_Reserva),
+	CONSTRAINT [FK_Reserva_Id_Usuario] FOREIGN KEY (Id_Usuario)
+		REFERENCES [LA_MAYORIA].[Usuario](Id_Usuario)
 )
 
 SET IDENTITY_INSERT [LA_MAYORIA].Reserva ON
 
-INSERT INTO LA_MAYORIA.Reserva(Id_Reserva, Fecha_Inicio, Estadia, Tipo_Regimen, Estado)
-SELECT m.Reserva_Codigo, m.Reserva_Fecha_Inicio, m.Reserva_Cant_Noches, r.Id_Regimen, 1 
+INSERT INTO LA_MAYORIA.Reserva(Id_Reserva, Fecha_Inicio, Estadia, Tipo_Regimen, Estado, Id_Usuario)
+SELECT m.Reserva_Codigo, m.Reserva_Fecha_Inicio, m.Reserva_Cant_Noches, r.Id_Regimen, 1, 'admin' 
 	FROM gd_esquema.Maestra m 
 	INNER JOIN LA_MAYORIA.Regimen r
 	ON UPPER(LTRIM(RTRIM(m.Regimen_Descripcion))) = UPPER(LTRIM(RTRIM(r.Descripcion)))
@@ -710,8 +713,7 @@ CREATE TABLE [LA_MAYORIA].[Facturacion](
 	[Total_Factura][numeric](18,2) NOT NULL DEFAULT 0.0,
 	[Total_Estadia][numeric](18,2) NOT NULL DEFAULT 0.0,
 	[Total_Consumibles][numeric](18,2) NOT NULL DEFAULT 0.0,
-	[Fecha_Facturacion] datetime NOT NULL,
-	[]
+	[Fecha_Facturacion] datetime NOT NULL
 
 	CONSTRAINT [PK_Facturacion_Id_Factura] PRIMARY KEY(Id_Factura),
 	CONSTRAINT [FK_Facturacion_Id_Estadia] FOREIGN KEY(Id_Estadia)
